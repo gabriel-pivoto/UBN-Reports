@@ -1,50 +1,84 @@
 const express = require("express")
 const app = express()
 const port = 5000
-const {db}= require('./firebase.js')
+const { db } = require('./firebase.js')
 const { FieldValue } = require("firebase-admin/firestore")
 app.use(express.json())
 
-//pegar todas as correspondências no banco de dados na collection estados no doc cidades
-app.get('/cidades',async (req,res)=>{
-    const cidadeRef = db.collection('estados').doc('cidades')
-    const doc = await cidadeRef.get()
-    if(!doc.exists){
-        return res.sendStatus(400)
+//pegar todas as correspondências no banco de dados das ocorrencias
+app.get('/cidades', async (req, res) => {
+    try {
+        const ocorrenciaRef = db.collection('ocorrencias');
+        const docs = await ocorrenciaRef.get();
+        var resposta = "";
+        var contador = 0;
+        docs.forEach(doc => {
+            if (contador > 0)
+                resposta += ",";
+            resposta += JSON.stringify(doc.id) + ":" + JSON.stringify(doc.data());
+            contador++;
+        })
+        resposta = '{' + resposta + "}";
+        res.status(200).send(JSON.parse(resposta))
+    } catch (err) {
+        res.status(500)
     }
-    res.status(200).send(doc.data())
+})
+//verificar se o id existe
+app.get('/verficarExistencia', async (req, res) => {
+    try {
+        const { id } = req.body
+        const ocorrenciaRef = db.collection('ocorrencias').doc(`${id}`)
+        const doc = await ocorrenciaRef.get()
+        if (!doc.exists) {
+            return res.send(false)
+        }
+        return res.send(true)
+    } catch (err) {
+        res.status(500);
+    }
+})
+//adicionar uma ocorrencia no banco de dados
+app.post('/addOcorrencia', async (req, res) => {
+    try {
+        const{id,ocorrencia}=req.body;
+        const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
+        const res2 = await cidadeRef.set({
+            "ocorrencia": ocorrencia
+        },
+            { merge: true }
+        )
+        res.status(200).send("ocorrencia criada")
+    } catch (err) {
+        res.status(500)
+    }
 })
 
-//adicionar uma cidade e uma ocorrência no banco de dados na collection estados no doc cidades
-app.post('/addcidade',async (req,res)=>{
-const {nome,ocorrencia}=req.body
-const cidadeRef = db.collection('estados').doc('cidades')
-const res2 = await cidadeRef.set({
-    [nome]:ocorrencia},
-    {merge:true}
-)
-res.status(200).send("ocorrencia criada")
+//alterar uma ocorrencia de dados
+app.patch("/alterarOcorrencia", async (req, res) => {
+    try {
+        const { id, novaOcorrencia } = req.body
+        const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
+        const res2 = await cidadeRef.set({
+            "ocorrencia": novaOcorrencia
+        }, { merge: true })
+        res.status(200).send("ocorrencia alterada")
+    } catch (err) {
+        res.status(500)
+    }
 })
 
-//alterar uma ocorrência de uma cidade no banco de dados na collection estados no doc cidades
-app.patch("/alterarOcorrencia",async (req,res)=>{
-const {nome,novaOcorrencia}=req.body
-const cidadeRef = db.collection('estados').doc('cidades')
-const res2 = await cidadeRef.set({
-    [nome]:novaOcorrencia
-},{merge:true})
-res.status(200).send("ocorrencia alterada")
-})
-
-//deletar uma ocorrência de uma cidade no banco de dados na collection estados no doc cidades
-app.delete("/cidade",async(req,res)=>{
-const {nome}=req.body
-const cidadeRef = db.collection('estados').doc('cidades')
-const res2 = await cidadeRef.update({
-    [nome]:FieldValue.delete()
-})
-res.status(200).send("ocorrencia deletada")
+//deletar uma ocorrência no banco de dados
+app.delete("/cidade", async (req, res) => {
+    try {
+        const { id } = req.body
+        const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
+        await cidadeRef.delete()
+        res.status(200).send("ocorrencia deletada")
+    } catch (err) {
+        res.status(500)
+    }
 })
 
 //inicializando o server na porta 5000
-app.listen(port,()=>console.log(`Server foi iniciado na porta: ${port}`))
+app.listen(port, () => console.log(`Server foi iniciado na porta: ${port}`))
