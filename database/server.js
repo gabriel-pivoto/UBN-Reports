@@ -1,13 +1,25 @@
 require('dotenv').config()
 const express = require("express")
+const cors = require('cors');
 const app = express()
 const port = 5000
 const { db } = require('./firebase.js')
 const { FieldValue } = require("firebase-admin/firestore")
+
+const corsOption = {
+    credentials: true,
+    origin: '*'
+}
+app.use(cors(corsOption));
 app.use(express.json())
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 //pegar todas as correspondências no banco de dados das ocorrencias
-app.get('/ocorrencias', async (req, res) => {
+app.get('/ocorrencias',async (req, res) => {
     try {
         const ocorrenciaRef = db.collection('ocorrencias');
         const docs = await ocorrenciaRef.get();
@@ -36,18 +48,18 @@ app.get('/verficarExistencia', async (req, res) => {
         }
         return res.send(true)
     } catch (err) {
-        res.status(500);
+        res.status(500)
     }
 })
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const{id,ocorrencia,longitude,latitude}=req.body;
+        const { id, ocorrencia, longitude, latitude } = req.body;
         const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
         const res2 = await cidadeRef.set({
             "ocorrencia": ocorrencia,
-            "latitude":latitude,
-            "longitude":longitude
+            "latitude": latitude,
+            "longitude": longitude
         },
             { merge: true }
         )
