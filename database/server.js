@@ -42,10 +42,12 @@ app.get('/verficarExistencia', async (req, res) => {
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const{id,ocorrencia}=req.body;
+        const{id,ocorrencia,longitude,latitude}=req.body;
         const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
         const res2 = await cidadeRef.set({
-            "ocorrencia": ocorrencia
+            "ocorrencia": ocorrencia,
+            "latitude":latitude,
+            "longitude":longitude
         },
             { merge: true }
         )
