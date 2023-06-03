@@ -6,7 +6,7 @@ const { FieldValue } = require("firebase-admin/firestore")
 app.use(express.json())
 
 //pegar todas as correspondências no banco de dados das ocorrencias
-app.get('/cidades', async (req, res) => {
+app.get('/ocorrencias', async (req, res) => {
     try {
         const ocorrenciaRef = db.collection('ocorrencias');
         const docs = await ocorrenciaRef.get();
@@ -69,7 +69,7 @@ app.patch("/alterarOcorrencia", async (req, res) => {
 })
 
 //deletar uma ocorrência no banco de dados
-app.delete("/cidade", async (req, res) => {
+app.delete("/ocorrencia", async (req, res) => {
     try {
         const { id } = req.body
         const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
