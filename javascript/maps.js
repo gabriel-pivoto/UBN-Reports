@@ -1,5 +1,4 @@
-
-const firebaseConfig = {
+const firebaseConfig2 = {
          apiKey: "AIzaSyAubbk47k7Zd9KDMJWCxe3X8MaNfblrS4o",
          authDomain: "fetin-teste.firebaseapp.com",
          databaseURL: "https://fetin-teste-default-rtdb.firebaseio.com",
@@ -9,7 +8,7 @@ const firebaseConfig = {
          appId: "1:88230584865:web:46ee3be503d24f603bb960"
 };
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig2);
 database = firebase.database();
 const db = firebase.firestore();
 
@@ -131,5 +130,16 @@ const db = firebase.firestore();
       console.error("Erro ao buscar os dados do Cloud Firestore:", error);
     });
       }
+
+      // Obtém referência ao botão "Logout"
+      document.addEventListener("DOMContentLoaded", function() {
+        const logoutButton = document.getElementById("logout-button");
+
+        logoutButton.addEventListener("click", function() {
+          // Redireciona para a página desejada
+          window.location.href = "../html/authentication.html";
+        });
+      });
+
 
       
