@@ -1,30 +1,22 @@
-const firebaseConfig2 = {
-         apiKey: "AIzaSyAubbk47k7Zd9KDMJWCxe3X8MaNfblrS4o",
-         authDomain: "fetin-teste.firebaseapp.com",
-         databaseURL: "https://fetin-teste-default-rtdb.firebaseio.com",
-         projectId: "fetin-teste",
-         storageBucket: "fetin-teste.appspot.com",
-         messagingSenderId: "88230584865",
-         appId: "1:88230584865:web:46ee3be503d24f603bb960"
-};
-
-firebase.initializeApp(firebaseConfig2);
-database = firebase.database();
-const db = firebase.firestore();
+const requisicao = new XMLHttpRequest();
 
       let map;
       let marker;
       let geocoder;
       let responseDiv;
       let response;
+      var novarequisicao = false;
 
       function initMap() {
         map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 8,
-          center: { lat: -34.397, lng: 150.644 },
+          zoom: 14,
+          center: { lat: -22.26, lng: -45.71 },
           mapTypeControl: false,
         });
         geocoder = new google.maps.Geocoder();
+        
+
+        const modal = document.querySelector("dialog");
 
         const inputText = document.createElement("input");
         inputText.type = "text";
@@ -39,6 +31,17 @@ const db = firebase.firestore();
         clearButton.type = "button";
         clearButton.value = "Clear";
         clearButton.classList.add("button", "button-secondary");
+
+        const createRequest = document.createElement("input");
+        createRequest.type = "button";
+        createRequest.value = "New Request";
+        createRequest.classList.add("button", "button-third");
+
+        const cancelar = document.getElementById("cancelar");
+        const confirmar = document.getElementById("confirmar");
+
+        
+
 
         response = document.createElement("pre");
         response.id = "response";
@@ -55,15 +58,21 @@ const db = firebase.firestore();
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
-        map.controls[google.maps.ControlPosition.LEFT_TOP].push(instructionsElement);
+        // map.controls[google.maps.ControlPosition.LEFT_TOP].push(instructionsElement);
         map.controls[google.maps.ControlPosition.LEFT_TOP].push(responseDiv);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(createRequest);
 
         marker = new google.maps.Marker({
           map,
         });
 
         map.addListener("click", (e) => {
-          geocode({ location: e.latLng });
+          if(novarequisicao == true){
+            geocode({ location: e.latLng });
+            novarequisicao = false;
+
+            modal.showModal();
+          }          
         });
 
         submitButton.addEventListener("click", () =>
@@ -74,12 +83,59 @@ const db = firebase.firestore();
           clear();
         });
 
+
+        createRequest.addEventListener("click", () => {
+          newrequest();
+        });
+
+        cancelar.addEventListener("click", () => {
+          cancel();
+        });
+
+        confirmar.addEventListener("click", () =>{
+            Confirm();
+
+            
+        })
+
+        
+
         clear();
+      }
+
+       function Confirm(){
+
+        requisicao.open("POST","http://localhost:5000/addOcorrencia",true)
+        requisicao.setRequestHeader("Content-type","application/json","Access-Control-Allow-Origin")
+        requisicao.send(JSON.stringify({
+              "id": Math.floor(Math.random() * 1000000) + 1,
+            "ocorrencia":document.getElementById("problem").value,
+            "latitude":document.getElementById("lat").value,
+            "longitude":document.getElementById("lng").value,
+            "Endereco": document.getElementById("addres").value
+}))
+        console.log();
+      
+        const modal = document.querySelector("dialog");
+        modal.close();
+      }
+
+    
+      function cancel(){
+        const modal = document.querySelector("dialog");
+
+        modal.close();
       }
 
       function clear() {
         marker.setMap(null);
       }
+
+      
+      function newrequest(){
+        novarequisicao = true;
+      }
+
 
       function geocode(request) {
         clear();
@@ -93,53 +149,26 @@ const db = firebase.firestore();
             marker.setMap(map);
             response.innerText = JSON.stringify(result, null, 2);
       
-            // Armazena os dados no Firebase Realtime Database
             const data = {
-                address: results[0].formatted_address,
-                location: {
-                  lat: results[0].geometry.location.lat(),
-                  lng: results[0].geometry.location.lng(),
-                },
-              };
+              address: results[0].formatted_address,
+              location: {
+                lat: results[0].geometry.location.lat(),
+                lng: results[0].geometry.location.lng(),
+              },
+            };
+
+
             
-              db.collection("ocorrencias").add(data)
-                .then(() => {
-                  console.log("Dados salvos no Cloud Firestore");
-                })
-                .catch((error) => {
-                  console.error("Erro ao salvar os dados no Cloud Firestore:", error);
-                });
-            return results;
-          });
-          
-          const occurrencesRef = db.collection("ocorrencias");
+            document.getElementById("addres").value = data.address;
+            document.getElementById("problem").value = "Insira seu problema aqui";
+            document.getElementById("lat").value = data.location.lat;
+            document.getElementById("lng").value = data.location.lng;   
 
-  occurrencesRef
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.location) {
-          const { lat, lng } = data.location;
-          console.log("Latitude:", lat);
-          console.log("Longitude:", lng);
-        }
-      });
-    })
-    .catch((error) => {
-      console.error("Erro ao buscar os dados do Cloud Firestore:", error);
-    });
-      }
-
-      // Obtém referência ao botão "Logout"
-      document.addEventListener("DOMContentLoaded", function() {
-        const logoutButton = document.getElementById("logout-button");
-
-        logoutButton.addEventListener("click", function() {
-          // Redireciona para a página desejada
-          window.location.href = "../html/authentication.html";
-        });
-      });
+          }
+        )}
 
 
-      
+        
+        
+
+       

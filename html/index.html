@@ -23,13 +23,22 @@
   </head>
   <body>
 
-    <div id="profile">
-      <button id="logout-button" class="button button-primary">Logout</button>
-    </div>
-    
+    <dialog>
+      <h2>Nova Requisição</h2>
+      <p>Problema: <input id="problem"></p>
+      <p>Endereço: <input id="addres"></p>
+      <p>Latitude: <input id="lat"></p>
+      <p>Longitude: <input id="lng"></p>
+      <button id= "cancelar" onclick="cancel()">Cancelar</button>
+      <button id ="confirmar" onclick="Confirm()">Confirmar</button>
+    </dialog>
+
 
      <div id="map"></div>
-    <!-- <button id="save-button" class="button button-primary">Save</button> -->
+
+
+     
+
     
      
     
