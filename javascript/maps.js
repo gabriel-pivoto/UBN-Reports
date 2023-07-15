@@ -2,6 +2,7 @@ const requisicao = new XMLHttpRequest();
 
 let map;
 let marker;
+let markers;
 let geocoder;
 let responseDiv;
 let response;
@@ -129,9 +130,20 @@ function Confirm() {
     "Endereco": document.getElementById("addres").value
   }))
 
-
   const modal = document.querySelector("dialog");
   modal.close();
+}
+
+
+
+
+function PegarUmaOcorrencia(id){
+  requisicao.open("GET", "http://localhost:5000/pegar/ocorrencia/"+id)
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin")
+  requisicao.onload = function teste() {
+      console.log(requisicao.response)
+  }
+  requisicao.send();
 }
 
 
@@ -196,12 +208,9 @@ function marcador(endereco, posicao, ocorrencia, id) {
 
   })
   markers.addListener("click", () => {
-    console.log(id);
+    PegarUmaOcorrencia(id);
     });
-  
 
-  console.log(markers);
-  console.log(ocorrencia);
 }
 
 

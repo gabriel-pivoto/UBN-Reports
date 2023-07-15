@@ -51,6 +51,21 @@ app.get('/verficarExistencia', async (req, res) => {
         res.status(500)
     }
 })
+
+//procurar uma requisição pelo id
+app.get('/pegar/ocorrencia/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+        const ocorrenciaRef = db.collection('ocorrencias').doc(`${id}`)
+        const doc = await ocorrenciaRef.get()
+        if (!doc.exists) {
+            return res.send(false)
+        }
+        return res.status(200).send(doc.data())
+    } catch (err) {
+        res.status(500)
+    }
+})
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
