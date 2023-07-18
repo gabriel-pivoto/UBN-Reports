@@ -12,14 +12,14 @@ const corsOption = {
 }
 app.use(cors(corsOption));
 app.use(express.json())
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-  });
+});
 
 //pegar todas as correspondências no banco de dados das ocorrencias
-app.get('/ocorrencias',async (req, res) => {
+app.get('/ocorrencias', async (req, res) => {
     try {
         const ocorrenciaRef = db.collection('ocorrencias');
         const docs = await ocorrenciaRef.get();
@@ -41,14 +41,14 @@ app.get('/ocorrencias',async (req, res) => {
 //verificar se o login e senha batem com algum valor já existente no banco de dados, retorna true caso encontre algo e false caso não encontre
 app.get('/login/:email/:senha', async (req, res) => {
     try {
-        const { email ,senha} = req.params
+        const { email, senha } = req.params
         const contaRef = db.collection('contas')
-        const snapshot = await contaRef.where('email', '==', email).where('senha','==',senha).get();
+        const snapshot = await contaRef.where('email', '==', email).where('senha', '==', senha).get();
         if (snapshot.empty) {
             return res.send(false);
-          } 
-          return res.send(true);
-        
+        }
+        return res.send(true);
+
     } catch (err) {
         res.status(500)
     }
@@ -73,7 +73,7 @@ app.get('/verficarExistencia/ocorrencia/:id', async (req, res) => {
 //verificar se a conta existe retorna false se os dois parametros ainda não existirem e retorna true caso existirem em algum lugar
 app.get('/verficarExistencia/conta/:cpf/:email', async (req, res) => {
     try {
-        const { cpf ,email} = req.params
+        const { cpf, email } = req.params
         const contaRef = db.collection('contas')
         const doc = await contaRef.doc(`${cpf}`).get()
         if (doc.exists) {
@@ -82,13 +82,34 @@ app.get('/verficarExistencia/conta/:cpf/:email', async (req, res) => {
         const snapshot = await contaRef.where('email', '==', email).get();
         if (!snapshot.empty) {
             return res.send(true);
-          } 
-          return res.send(false);
-        
+        }
+        return res.send(false);
+
     } catch (err) {
         res.status(500)
     }
 })
+
+//verificar o histórico de requisições do usuário
+app.get('/hitoricoReq/:cpf', async (req, res) => {
+    try {
+        const { cpf } = req.params
+        const contaRef = db.collection('ocorrencias')
+        const snapshot = await contaRef.where('cpf', '==', cpf).get();
+        if (snapshot.empty) {
+            return res.send(false);
+        }
+
+        snapshot.forEach(doc => {
+            console.log(doc.id, '=>', doc.data());
+        });
+        return res.send(false);
+
+    } catch (err) {
+        res.status(500)
+    }
+})
+
 
 
 
@@ -109,13 +130,14 @@ app.get('/pegar/ocorrencia/:id', async (req, res) => {
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const { id, ocorrencia, longitude, latitude, Endereco } = req.body;
+        const { id, ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
         const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
         const res2 = await cidadeRef.set({
             "ocorrencia": ocorrencia,
             "latitude": latitude,
             "longitude": longitude,
-            "Endereco": Endereco
+            "Endereco": Endereco,
+            "cpf":cpf
         },
             { merge: true }
         )
@@ -128,14 +150,14 @@ app.post('/addOcorrencia', async (req, res) => {
 //adicionar uma conta no banco de dados
 app.post('/addConta', async (req, res) => {
     try {
-        const { email,senha, user,  cpf, adm} = req.body;
+        const { email, senha, user, cpf, adm } = req.body;
         const contaRef = db.collection('contas').doc(`${cpf}`)
         const res2 = await contaRef.set({
             "email": email,
             "senha": senha,
-            "user":user,
+            "user": user,
             "cpf": cpf,
-            "adm":adm
+            "adm": adm
         },
             { merge: true }
         )
