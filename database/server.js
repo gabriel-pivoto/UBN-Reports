@@ -37,10 +37,28 @@ app.get('/ocorrencias',async (req, res) => {
         res.status(500)
     }
 })
-//verificar se o id existe
-app.get('/verficarExistencia', async (req, res) => {
+
+//verificar se o login e senha batem com algum valor já existente no banco de dados, retorna true caso encontre algo e false caso não encontre
+app.get('/login/:email/:senha', async (req, res) => {
     try {
-        const { id } = req.body
+        const { email ,senha} = req.params
+        const contaRef = db.collection('contas')
+        const snapshot = await contaRef.where('email', '==', email).where('senha','==',senha).get();
+        if (snapshot.empty) {
+            return res.send(false);
+          } 
+          return res.send(true);
+        
+    } catch (err) {
+        res.status(500)
+    }
+})
+
+
+//verificar se o id existe
+app.get('/verficarExistencia/ocorrencia/:id', async (req, res) => {
+    try {
+        const { id } = req.params
         const ocorrenciaRef = db.collection('ocorrencias').doc(`${id}`)
         const doc = await ocorrenciaRef.get()
         if (!doc.exists) {
@@ -51,6 +69,28 @@ app.get('/verficarExistencia', async (req, res) => {
         res.status(500)
     }
 })
+
+//verificar se a conta existe retorna false se os dois parametros ainda não existirem e retorna true caso existirem em algum lugar
+app.get('/verficarExistencia/conta/:cpf/:email', async (req, res) => {
+    try {
+        const { cpf ,email} = req.params
+        const contaRef = db.collection('contas')
+        const doc = await contaRef.doc(`${cpf}`).get()
+        if (doc.exists) {
+            return res.send(true)
+        }
+        const snapshot = await contaRef.where('email', '==', email).get();
+        if (!snapshot.empty) {
+            return res.send(true);
+          } 
+          return res.send(false);
+        
+    } catch (err) {
+        res.status(500)
+    }
+})
+
+
 
 //procurar uma requisição pelo id
 app.get('/pegar/ocorrencia/:id', async (req, res) => {
@@ -80,6 +120,26 @@ app.post('/addOcorrencia', async (req, res) => {
             { merge: true }
         )
         res.status(200).send("ocorrencia criada")
+    } catch (err) {
+        res.status(500)
+    }
+})
+
+//adicionar uma conta no banco de dados
+app.post('/addConta', async (req, res) => {
+    try {
+        const { email,senha, user,  cpf, adm} = req.body;
+        const contaRef = db.collection('contas').doc(`${cpf}`)
+        const res2 = await contaRef.set({
+            "email": email,
+            "senha": senha,
+            "user":user,
+            "cpf": cpf,
+            "adm":adm
+        },
+            { merge: true }
+        )
+        res.status(200).send("conta criada")
     } catch (err) {
         res.status(500)
     }
