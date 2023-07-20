@@ -10,6 +10,8 @@ let responseDiv;
 let response;
 var novarequisicao = false;
 let Contaexistente = false; 
+let cpf = "";
+let Entrou = false;
 
 // Função de inicialização do mapa
 function initMap() {
@@ -107,12 +109,9 @@ function initMap() {
     cancel();
   });
 
-  // Evento de clique no botão "Confirmar" para enviar a ocorrência para o servidor
-  confirmar.addEventListener("click", () => {
-    Confirm();
-  });
-
+  
   confirmarCadastro.addEventListener("click", () => {
+    console.log("birirbir");
     ConfirmarCadastroFunc();
   })
 
@@ -127,22 +126,30 @@ function initMap() {
 
 // Função para enviar a ocorrência para o servidor
 function Confirm() {
-  // Criação da requisição POST para adicionar a ocorrência
-  requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
-  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  console.log(cpf);
+  if(cpf != ""){
+// Criação da requisição POST para adicionar a ocorrência
+requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
+requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
-  // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-  requisicao.send(JSON.stringify({
-    "id": Math.floor(Math.random() * 1000000) + 1,
-    "ocorrencia": document.getElementById("problem").value,
-    "latitude": document.getElementById("lat").value,
-    "longitude": document.getElementById("lng").value,
-    "Endereco": document.getElementById("addres").value
-  }));
+// Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
+requisicao.send(JSON.stringify({
+  "id": Math.floor(Math.random() * 1000000) + 1,
+  "ocorrencia": document.getElementById("problem").value,
+  "latitude": document.getElementById("lat").value,
+  "longitude": document.getElementById("lng").value,
+  "Endereco": document.getElementById("addres").value,
+  "cpf": cpf
+}));
 
-  // Fechar o modal de confirmação
-  const modal = document.querySelector("dialog");
-  modal.close();
+// Fechar o modal de confirmação
+const modal = document.querySelector("dialog");
+modal.close();
+  }else{
+    alert("Favor entrar antes de cadastar um novo problema!");
+    
+  }
+  
 }
 
 // Função para pegar uma ocorrência do servidor
@@ -198,9 +205,13 @@ function PegarUmaOcorrencia(id) {
 // Função para cancelar a adição da ocorrência
 function cancel() {
   const modal = document.querySelector("dialog");
-
+  const dialogLogin = document.getElementById("LogIn");
+  const dialogregister = document.getElementById("register");
+  dialogregister.close();
+  dialogLogin.close();
   modal.close();
 }
+
 
 // Função para limpar o marcador do mapa
 function clear() {
@@ -314,17 +325,11 @@ function register() {
 
 
 
-function cancelar() {
-  const dialogLogin = document.getElementById("LogIn");
-  const dialogregister = document.getElementById("register");
-  dialogregister.close();
-  dialogLogin.close();
-}
 
 
  function ConfirmarCadastroFunc() {
   
-   
+   console.log("sdds dela");
 
     requisicao.open("POST", "http://localhost:5000/addConta", true);
     requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
@@ -350,32 +355,45 @@ function cancelar() {
     }
 
     if(Contaexistente){
+      const dialogLogin = document.getElementById("register");
+      dialogLogin.close();
       alert("Conta criada!");
     }
     else{
       alert("Conta já existente!");
     }
 
-
+    
 }
 
 
-//  function existeconta(){
-  
-  
-//   requisicao.open("GET", "http://localhost:5000/verficarExistencia/conta/" + document.getElementById("cdu").value + "/" + document.getElementById("email").value, true);
-//   requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+function logIn(){
+  Entrou = false;
+  cpf = "";
+  const requisicao = new XMLHttpRequest();
+  requisicao.open("GET", "http://localhost:5000/login/"+ document.getElementById("cpfLogin").value+ "/" + document.getElementById("senhalogin").value);
+  requisicao.setRequestHeader("Content-type", "application/json");
 
-//   requisicao.onload = function () {
-//     if (requisicao.status === 200) {
-//       const responseObj = requisicao.response;
-//       Contaexistente = responseObj;
-//       return Contaexistente;
-//     } else {
-//       console.log("Erro na requisição. Código de status:", requisicao.status);
-//     }
-//   } 
-//    requisicao.send();
+  // Manipulação do retorno da requisição
+  requisicao.onload = function () {
+    if (requisicao.status === 200) {
+      const responseObj = JSON.parse(requisicao.response);
+      Entrou = responseObj;
+      if(Entrou){
+          cpf = document.getElementById("cpfLogin").value;
+          const dialogLogin = document.getElementById("LogIn");
+          dialogLogin.close();
+      }else{
+          alert("CPF ou senha incorretos");
+      }
+      
+      }else {
+        console.log("Erro na requisição. Código de status:", requisicao.status);
+        alert("Preencha todos os campos corretamente!");
+      }
+    } 
+    requisicao.send();
+  }
 
- 
-//  }
+  // Envio da requisição
+  

@@ -39,11 +39,11 @@ app.get('/ocorrencias', async (req, res) => {
 })
 
 //verificar se o login e senha batem com algum valor já existente no banco de dados, retorna true caso encontre algo e false caso não encontre
-app.get('/login/:email/:senha', async (req, res) => {
+app.get('/login/:cpf/:senha', async (req, res) => {
     try {
-        const { email, senha } = req.params
+        const { cpf, senha } = req.params
         const contaRef = db.collection('contas')
-        const snapshot = await contaRef.where('email', '==', email).where('senha', '==', senha).get();
+        const snapshot = await contaRef.where('cpf', '==', cpf).where('senha', '==', senha).get();
         if (snapshot.empty) {
             return res.send(false);
         }

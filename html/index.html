@@ -30,7 +30,7 @@
       <p>Latitude: <input id="lat"></p>
       <p>Longitude: <input id="lng"></p>
       <button id= "cancelar" onclick="cancel()">Cancelar</button>
-      <button id ="confirmar" onclick="Confirm()">Confirmar</button>
+      <button onclick="Confirm()">Confirmar</button>
     </dialog>
 
     
@@ -51,10 +51,11 @@
 
     <dialog id="LogIn">
       <h2>Entrar</h2>
-      <p>cpf: <input id="cpf"></p>
-      <p>Senha: <input id="password"></p>
-      <button id= "cancelar" onclick="cancelar()">Cancelar</button>
-      <button id ="confirmar" onclick="ConfirmarLogin()">Confirmar</button>
+      <p>cpf: <input id="cpfLogin"></p>
+      <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
+      
+      <button onclick="cancel()">Cancelar</button>
+      <button onclick="logIn()" >Confirmar</button>
     </dialog>
 
     <dialog id="register">
@@ -62,9 +63,9 @@
       <p>Nome: <input id="name"></p>
       <p>cpf: <input id="cdu"></p>
       <p>email: <input id="email"></p>
-      <p>Senha: <input id="senha"></p>
-      <button id="cancelarCadastro" onclick="cancelar()">Cancelar</button>
-      <button id="confirmarCadastro" onclick="ConfirmarCadastroFunc()">Confirmar</button>
+      <p>Senha: <input id="senha" type="password" autocomplete="current-password" required></p>
+      <button onclick="cancel()">Cancelar</button>
+      <button id="confirmarCadastro" >Confirmar</button>
     </dialog>
 
 
