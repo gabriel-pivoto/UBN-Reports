@@ -1,5 +1,7 @@
+// Criação de uma instância XMLHttpRequest para realizar requisições HTTP
 const requisicao = new XMLHttpRequest();
 
+// Declaração de variáveis globais
 let map;
 let marker;
 let markers;
@@ -7,19 +9,23 @@ let geocoder;
 let responseDiv;
 let response;
 var novarequisicao = false;
+let Contaexistente = false; 
 
-
+// Função de inicialização do mapa
 function initMap() {
+  // Criação do objeto de mapa do Google Maps
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 14,
     center: { lat: -22.26, lng: -45.71 },
     mapTypeControl: false,
+    fullscreenControl: false,
   });
+
+  // Inicialização do geocoder do Google Maps para conversão entre coordenadas e endereços
   geocoder = new google.maps.Geocoder();
 
-
+  // Criação dos elementos HTML para interação com o mapa
   const modal = document.querySelector("dialog");
-
   const inputText = document.createElement("input");
   inputText.type = "text";
   inputText.placeholder = "Enter a location";
@@ -39,19 +45,13 @@ function initMap() {
   createRequest.value = "New Request";
   createRequest.classList.add("button", "button-third");
 
-
   const botaopegar = document.createElement("input");
   botaopegar.type = "button";
   botaopegar.value = "Pegar";
   botaopegar.classList.add("button", "button-third");
 
-
-
   const cancelar = document.getElementById("cancelar");
   const confirmar = document.getElementById("confirmar");
-
-
-
 
   response = document.createElement("pre");
   response.id = "response";
@@ -65,18 +65,19 @@ function initMap() {
   instructionsElement.innerHTML =
     "<strong>Instructions</strong>: Enter an address in the textbox to geocode or click on the map to reverse geocode.";
 
+  // Adiciona os elementos ao mapa
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
-  // map.controls[google.maps.ControlPosition.LEFT_TOP].push(instructionsElement);
-  map.controls[google.maps.ControlPosition.LEFT_TOP].push(responseDiv);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(createRequest);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(botaopegar);
 
+  // Criação do marcador do Google Maps
   marker = new google.maps.Marker({
     map,
   });
 
+  // Evento de clique no mapa para realizar uma requisição de geocodificação reversa
   map.addListener("click", (e) => {
     if (novarequisicao == true) {
       geocode({ location: e.latLng });
@@ -86,67 +87,80 @@ function initMap() {
     }
   });
 
-
+  // Evento de clique no botão de "Geocode" para realizar uma requisição de geocodificação
   submitButton.addEventListener("click", () =>
     geocode({ address: inputText.value })
   );
 
+  // Evento de clique no botão "Clear" para limpar o marcador do mapa
   clearButton.addEventListener("click", () => {
     clear();
   });
 
-
+  // Evento de clique no botão "New Request" para criar uma nova requisição de geocodificação
   createRequest.addEventListener("click", () => {
     newrequest();
   });
 
+  // Evento de clique no botão "Cancelar" para fechar o modal de confirmação
   cancelar.addEventListener("click", () => {
     cancel();
   });
 
+  // Evento de clique no botão "Confirmar" para enviar a ocorrência para o servidor
   confirmar.addEventListener("click", () => {
     Confirm();
+  });
 
-
+  confirmarCadastro.addEventListener("click", () => {
+    ConfirmarCadastroFunc();
   })
 
+  // Evento de clique no botão "Pegar" para buscar as ocorrências do servidor
   botaopegar.addEventListener("click", () => {
     pegar();
-  })
+  });
 
-
-
+  // Limpa o marcador do mapa inicialmente
   clear();
 }
 
+// Função para enviar a ocorrência para o servidor
 function Confirm() {
+  // Criação da requisição POST para adicionar a ocorrência
+  requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
-  requisicao.open("POST", "http://localhost:5000/addOcorrencia", true)
-  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin")
+  // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
   requisicao.send(JSON.stringify({
     "id": Math.floor(Math.random() * 1000000) + 1,
     "ocorrencia": document.getElementById("problem").value,
     "latitude": document.getElementById("lat").value,
     "longitude": document.getElementById("lng").value,
     "Endereco": document.getElementById("addres").value
-  }))
+  }));
 
+  // Fechar o modal de confirmação
   const modal = document.querySelector("dialog");
   modal.close();
 }
 
+// Função para pegar uma ocorrência do servidor
 function PegarUmaOcorrencia(id) {
-  requisicao.open("GET", "http://localhost:5000/pegar/ocorrencia/" + id)
-  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin")
-  requisicao.onload = function teste() {
-    let ocorrencia = JSON.parse(requisicao.response)
+  // Criação da requisição GET para buscar uma ocorrência específica
+  requisicao.open("GET", "http://localhost:5000/pegar/ocorrencia/" + id);
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
-    let position = new google.maps.LatLng(ocorrencia.latitude, ocorrencia.longitude)
+  // Manipulação do retorno da requisição
+  requisicao.onload = function teste() {
+    let ocorrencia = JSON.parse(requisicao.response);
+
+    let position = new google.maps.LatLng(ocorrencia.latitude, ocorrencia.longitude);
     contentString =
       '<div id="content">' +
       '<div id="siteNotice">' +
       "</div>" +
-      '<h1 id="firstHeading" class="firstHeading">'+ocorrencia.ocorrencia+'</h1>' +
+      '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + '</h1>' +
       '<div id="bodyContent">' +
       "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
       "sandstone rock formation in the southern part of the " +
@@ -163,47 +177,55 @@ function PegarUmaOcorrencia(id) {
       "(last visited June 22, 2009).</p>" +
       "</div>" +
       "</div>";
+
+    // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
       position: position,
       ariaLabel: ocorrencia.ocorrencia,
     });
+
+    // Abre a infowindow no mapa
     infowindow.open({
       map
-    })
+    });
   }
+
+  // Envio da requisição
   requisicao.send();
 }
 
-
+// Função para cancelar a adição da ocorrência
 function cancel() {
   const modal = document.querySelector("dialog");
 
   modal.close();
 }
 
+// Função para limpar o marcador do mapa
 function clear() {
   marker.setMap(null);
 }
 
-
+// Função para criar uma nova requisição de geocodificação
 function newrequest() {
   novarequisicao = true;
 }
 
+// Função para buscar as ocorrências do servidor
 function pegar() {
+  // Criação da requisição GET para buscar as ocorrências
   const requisicao = new XMLHttpRequest();
-
   requisicao.open("GET", "http://localhost:5000/ocorrencias");
   requisicao.setRequestHeader("Content-type", "application/json");
 
+  // Manipulação do retorno da requisição
   requisicao.onload = function () {
     if (requisicao.status === 200) {
       const responseObj = JSON.parse(requisicao.response);
 
       for (let key in responseObj) {
         const value = responseObj[key];
-        // Acessar os valores específicos dentro de cada objeto
         const endereco = value.Endereco;
         const latitude = value.latitude;
         const longitude = value.longitude;
@@ -211,36 +233,34 @@ function pegar() {
 
         let posicao = new google.maps.LatLng(latitude, longitude);
 
-
-
-
+        // Chamada da função marcador para criar um marcador no mapa para cada ocorrência
         marcador(endereco, posicao, ocorrencia, key);
-
       }
     } else {
       console.log("Erro na requisição. Código de status:", requisicao.status);
     }
   };
 
+  // Envio da requisição
   requisicao.send();
 }
+
+// Função para criar um marcador no mapa
 function marcador(endereco, posicao, ocorrencia, id) {
   markers = new google.maps.Marker({
     position: posicao,
     map: map,
     title: ocorrencia,
     id: id
-
-  })
-  markers.addListener("click", () => {
-    PegarUmaOcorrencia(id,);
-
-
   });
 
+  // Evento de clique no marcador para exibir detalhes da ocorrência
+  markers.addListener("click", () => {
+    PegarUmaOcorrencia(id);
+  });
 }
 
-
+// Função para realizar a geocodificação de um endereço ou coordenadas
 function geocode(request) {
   clear();
   geocoder
@@ -261,18 +281,101 @@ function geocode(request) {
         },
       };
 
-
-
+      // Preenchimento dos campos de formulário com os dados da geocodificação
       document.getElementById("addres").value = data.address;
       document.getElementById("problem").value = "Insira seu problema aqui";
       document.getElementById("lat").value = data.location.lat;
       document.getElementById("lng").value = data.location.lng;
+    });
+}
 
-    }
-    )
+// Evento de carregamento do DOM para adicionar a funcionalidade de abrir/fechar o menu da navbar
+document.addEventListener('DOMContentLoaded', function () {
+  const navbarToggle = document.querySelector('.navbar-toggle');
+  const links = document.querySelector('.links');
+
+  navbarToggle.addEventListener('click', function () {
+    links.classList.toggle('active');
+  });
+});
+
+
+
+// função para abrir o dialog do login
+
+function login() {
+  const dialogLogin = document.getElementById("LogIn");
+  dialogLogin.showModal();
+}
+function register() {
+  const dialogLogin = document.getElementById("register");
+  dialogLogin.showModal();
 }
 
 
 
+function cancelar() {
+  const dialogLogin = document.getElementById("LogIn");
+  const dialogregister = document.getElementById("register");
+  dialogregister.close();
+  dialogLogin.close();
+}
 
 
+ function ConfirmarCadastroFunc() {
+  
+   
+
+    requisicao.open("POST", "http://localhost:5000/addConta", true);
+    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  
+    // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
+    requisicao.send(JSON.stringify({
+      "email": document.getElementById("email").value,
+      "senha": document.getElementById("senha").value,
+      "user": document.getElementById("name").value,
+      "cpf": document.getElementById("cdu").value,
+      "adm": false
+    }))
+    
+    requisicao.onload = function () {
+      if (requisicao.status === 200) {
+        const responseObj = requisicao.response;
+        
+        Contaexistente = responseObj;
+        return Contaexistente;
+      } else {
+        console.log("Erro na requisição. Código de status:", requisicao.status);
+      }
+    }
+
+    if(Contaexistente){
+      alert("Conta criada!");
+    }
+    else{
+      alert("Conta já existente!");
+    }
+
+
+}
+
+
+//  function existeconta(){
+  
+  
+//   requisicao.open("GET", "http://localhost:5000/verficarExistencia/conta/" + document.getElementById("cdu").value + "/" + document.getElementById("email").value, true);
+//   requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+
+//   requisicao.onload = function () {
+//     if (requisicao.status === 200) {
+//       const responseObj = requisicao.response;
+//       Contaexistente = responseObj;
+//       return Contaexistente;
+//     } else {
+//       console.log("Erro na requisição. Código de status:", requisicao.status);
+//     }
+//   } 
+//    requisicao.send();
+
+ 
+//  }

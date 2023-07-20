@@ -11,7 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKD8NSryyh37adptif2T2Ou1XKXCK2cws&callback=initMap&v=weekly"
     defer
@@ -34,10 +34,39 @@
     </dialog>
 
     
-     <div id="map"></div>
+     <div id="map" class="mapa"></div>
 
+     <div class="navbar">
+      <div class="navbar-toggle">
+        <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon">
+      </div>
+      <ul class="links">
+        <li><button class="button-login" onclick="login()">Entrar</button></li>
+        <li><button class="button-login" onclick="register()">Cadastrar</button></li>
+        <li><a href="about">About</a></li>
+        <li><a href="historic">Historic</a></li>
+        <li><a href="contact">Contact</a></li>
+      </ul>
+    </div>
 
-     
+    <dialog id="LogIn">
+      <h2>Entrar</h2>
+      <p>cpf: <input id="cpf"></p>
+      <p>Senha: <input id="password"></p>
+      <button id= "cancelar" onclick="cancelar()">Cancelar</button>
+      <button id ="confirmar" onclick="ConfirmarLogin()">Confirmar</button>
+    </dialog>
+
+    <dialog id="register">
+      <h2>Cadastrar</h2>
+      <p>Nome: <input id="name"></p>
+      <p>cpf: <input id="cdu"></p>
+      <p>email: <input id="email"></p>
+      <p>Senha: <input id="senha"></p>
+      <button id="cancelarCadastro" onclick="cancelar()">Cancelar</button>
+      <button id="confirmarCadastro" onclick="ConfirmarCadastroFunc()">Confirmar</button>
+    </dialog>
+
 
     
      
