@@ -9,7 +9,6 @@ let geocoder;
 let responseDiv;
 let response;
 var novarequisicao = false;
-let Contaexistente = false; 
 let cpf = "";
 let Entrou = false;
 
@@ -122,10 +121,19 @@ function initMap() {
 
   // Limpa o marcador do mapa inicialmente
   clear();
+  pegar();
+  
 }
 
 // Função para enviar a ocorrência para o servidor
 function Confirm() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const userCPF = localStorage.getItem("userCPF");
+  if (!isLoggedIn || !userCPF) {
+    alert("Favor entrar antes de buscar ocorrências!");
+    return;
+  }
+  cpf = userCPF;
   console.log(cpf);
   if(cpf != ""){
 // Criação da requisição POST para adicionar a ocorrência
@@ -147,7 +155,7 @@ const modal = document.querySelector("dialog");
 modal.close();
   }else{
     alert("Favor entrar antes de cadastar um novo problema!");
-    
+
   }
   
 }
@@ -220,11 +228,16 @@ function clear() {
 
 // Função para criar uma nova requisição de geocodificação
 function newrequest() {
+  
+
   novarequisicao = true;
 }
 
 // Função para buscar as ocorrências do servidor
 function pegar() {
+  
+
+
   // Criação da requisição GET para buscar as ocorrências
   const requisicao = new XMLHttpRequest();
   requisicao.open("GET", "http://localhost:5000/ocorrencias");
@@ -383,6 +396,13 @@ function logIn(){
           cpf = document.getElementById("cpfLogin").value;
           const dialogLogin = document.getElementById("LogIn");
           dialogLogin.close();
+
+
+          localStorage.setItem("isLoggedIn", true);
+          localStorage.setItem("userCPF", cpf);
+          const userCPF = localStorage.getItem("userCPF");
+          console.log(userCPF);
+     
       }else{
           alert("CPF ou senha incorretos");
       }
@@ -395,5 +415,12 @@ function logIn(){
     requisicao.send();
   }
 
+  
+
   // Envio da requisição
   
+  function logout() {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userCPF");
+    // Resto do código para redirecionar para a página de login ou atualizar a página
+  }
