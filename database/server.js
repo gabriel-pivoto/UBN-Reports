@@ -138,9 +138,19 @@ app.get('/pegar/ocorrencia/:id', async (req, res) => {
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const { id, ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
-        const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
-        const res2 = await cidadeRef.set({
+        const {ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
+        let id;
+        let idExistente = true;
+        const ocorrenciaRef = db.collection('ocorrencias')
+        while(idExistente){
+            id = Math.floor(Math.random() * 1000000000) + 1;
+            const doc = await ocorrenciaRef.doc(`${id}`).get()
+            if (!doc.exists) {
+                idExistente = false;
+            }
+        }
+        const ocorrenciaRef2 = ocorrenciaRef.doc(`${id}`)
+        const res2 = await ocorrenciaRef2.set({
             "ocorrencia": ocorrencia,
             "latitude": latitude,
             "longitude": longitude,

@@ -3,7 +3,6 @@ const requisicao = new XMLHttpRequest();
 
 // Declaração de variáveis globais
 let map;
-let marker;
 let markers;
 let geocoder;
 let responseDiv;
@@ -36,11 +35,6 @@ function initMap() {
   submitButton.value = "Geocode";
   submitButton.classList.add("button", "button-primary");
 
-  const clearButton = document.createElement("input");
-  clearButton.type = "button";
-  clearButton.value = "Clear";
-  clearButton.classList.add("button", "button-secondary");
-
   const createRequest = document.createElement("input");
   createRequest.type = "button";
   createRequest.value = "New Request";
@@ -52,7 +46,6 @@ function initMap() {
   botaopegar.classList.add("button", "button-third");
 
   const cancelar = document.getElementById("cancelar");
-  const confirmar = document.getElementById("confirmar");
 
   response = document.createElement("pre");
   response.id = "response";
@@ -69,14 +62,8 @@ function initMap() {
   // Adiciona os elementos ao mapa
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(createRequest);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(botaopegar);
-
-  // Criação do marcador do Google Maps
-  marker = new google.maps.Marker({
-    map,
-  });
 
   // Evento de clique no mapa para realizar uma requisição de geocodificação reversa
   map.addListener("click", (e) => {
@@ -93,10 +80,6 @@ function initMap() {
     geocode({ address: inputText.value })
   );
 
-  // Evento de clique no botão "Clear" para limpar o marcador do mapa
-  clearButton.addEventListener("click", () => {
-    clear();
-  });
 
   // Evento de clique no botão "New Request" para criar uma nova requisição de geocodificação
   createRequest.addEventListener("click", () => {
@@ -110,7 +93,6 @@ function initMap() {
 
   
   confirmarCadastro.addEventListener("click", () => {
-    console.log("birirbir");
     ConfirmarCadastroFunc();
   })
 
@@ -120,7 +102,6 @@ function initMap() {
   });
 
   // Limpa o marcador do mapa inicialmente
-  clear();
   pegar();
   
 }
@@ -134,7 +115,6 @@ function Confirm() {
     return;
   }
   cpf = userCPF;
-  console.log(cpf);
   if(cpf != ""){
 // Criação da requisição POST para adicionar a ocorrência
 requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
@@ -142,7 +122,6 @@ requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-
 
 // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
 requisicao.send(JSON.stringify({
-  "id": Math.floor(Math.random() * 1000000) + 1,
   "ocorrencia": document.getElementById("problem").value,
   "latitude": document.getElementById("lat").value,
   "longitude": document.getElementById("lng").value,
@@ -157,7 +136,11 @@ modal.close();
     alert("Favor entrar antes de cadastar um novo problema!");
 
   }
-  
+
+  requisicao.onload=(()=>{
+    pegar()
+  })
+
 }
 
 // Função para pegar uma ocorrência do servidor
@@ -221,10 +204,7 @@ function cancel() {
 }
 
 
-// Função para limpar o marcador do mapa
-function clear() {
-  marker.setMap(null);
-}
+
 
 // Função para criar uma nova requisição de geocodificação
 function newrequest() {
@@ -286,15 +266,12 @@ function marcador(endereco, posicao, ocorrencia, id) {
 
 // Função para realizar a geocodificação de um endereço ou coordenadas
 function geocode(request) {
-  clear();
   geocoder
     .geocode(request)
     .then((result) => {
       const { results } = result;
 
       map.setCenter(results[0].geometry.location);
-      marker.setPosition(results[0].geometry.location);
-      marker.setMap(map);
       response.innerText = JSON.stringify(result, null, 2);
 
       const data = {
@@ -341,8 +318,6 @@ function register() {
 
 
  function ConfirmarCadastroFunc() {
-  
-   console.log("sdds dela");
 
     requisicao.open("POST", "http://localhost:5000/addConta", true);
     requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
@@ -401,7 +376,6 @@ function logIn(){
           localStorage.setItem("isLoggedIn", true);
           localStorage.setItem("userCPF", cpf);
           const userCPF = localStorage.getItem("userCPF");
-          console.log(userCPF);
      
       }else{
           alert("CPF ou senha incorretos");
