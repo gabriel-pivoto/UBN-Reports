@@ -90,9 +90,12 @@ app.get('/verficarExistencia/ocorrencia/:id', async (req, res) => {
 //     }
 // })
 
+
 //verificar o histórico de requisições do usuário
 app.get('/hitoricoReq/:cpf', async (req, res) => {
     try {
+        let ocorrencias="{";
+        let contador =0
         const { cpf } = req.params
         const contaRef = db.collection('ocorrencias')
         const snapshot = await contaRef.where('cpf', '==', cpf).get();
@@ -101,14 +104,19 @@ app.get('/hitoricoReq/:cpf', async (req, res) => {
         }
 
         snapshot.forEach(doc => {
-            console.log(doc.id, '=>', doc.data());
+            if(contador>0)
+                ocorrencias+=","
+            ocorrencias += JSON.stringify(doc.id) + ":" + JSON.stringify(doc.data())
+            contador++;
         });
-        return res.send(false);
+        ocorrencias+="}"
+        return res.send(ocorrencias);
 
     } catch (err) {
         res.status(500)
     }
 })
+
 
 
 
