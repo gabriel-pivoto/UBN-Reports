@@ -115,23 +115,6 @@ function Confirm() {
     return;
   }
   cpf = userCPF;
-<<<<<<< HEAD
-  console.log(cpf);
-  if (cpf != "") {
-    // Criação da requisição POST para adicionar a ocorrência
-    requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
-    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
-
-    // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-    requisicao.send(JSON.stringify({
-      "id": Math.floor(Math.random() * 1000000) + 1,
-      "ocorrencia": document.getElementById("problem").value,
-      "latitude": document.getElementById("lat").value,
-      "longitude": document.getElementById("lng").value,
-      "Endereco": document.getElementById("addres").value,
-      "cpf": cpf
-    }));
-=======
   if(cpf != ""){
 // Criação da requisição POST para adicionar a ocorrência
 requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
@@ -145,7 +128,6 @@ requisicao.send(JSON.stringify({
   "Endereco": document.getElementById("addres").value,
   "cpf": cpf
 }));
->>>>>>> 00fa36e57ca27cefa291d7f042db7b818c68d9f8
 
     // Fechar o modal de confirmação
     const modal = document.querySelector("dialog");
@@ -154,15 +136,10 @@ requisicao.send(JSON.stringify({
     alert("Favor entrar antes de cadastar um novo problema!");
 
   }
-<<<<<<< HEAD
-  pegar();
-
-=======
 
   requisicao.onload=(()=>{
     pegar()
   })
->>>>>>> 00fa36e57ca27cefa291d7f042db7b818c68d9f8
 
 }
 
@@ -340,11 +317,7 @@ function register() {
 
 
 
-<<<<<<< HEAD
-function ConfirmarCadastroFunc() {
-=======
  function ConfirmarCadastroFunc() {
->>>>>>> 00fa36e57ca27cefa291d7f042db7b818c68d9f8
 
   console.log("sdds dela");
 
@@ -402,22 +375,12 @@ function logIn() {
         dialogLogin.close();
 
 
-<<<<<<< HEAD
-        localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("userCPF", cpf);
-        const userCPF = localStorage.getItem("userCPF");
-        console.log(userCPF);
-
-      } else {
-        alert("CPF ou senha incorretos");
-=======
           localStorage.setItem("isLoggedIn", true);
           localStorage.setItem("userCPF", cpf);
-          const userCPF = localStorage.getItem("userCPF");
+          
      
       }else{
           alert("CPF ou senha incorretos");
->>>>>>> 00fa36e57ca27cefa291d7f042db7b818c68d9f8
       }
 
     } else {
