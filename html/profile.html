@@ -8,15 +8,25 @@
 
 <body>
     <div class="div-main">
+        <img src="../style/pinguin.jpg" alt="sua fotinha bebe" height="80em" width="80em">
         <button onclick="perfil()">Informações do Perfil</button>
-        <button>Histórico de requisições</button>
     </div>
-    <div class="div-perfil">
-        <h2 id="nome-perfil"></h2>
-        <p id="Cpf-perfil"></p>
-        <p class="email-perfil"></p>
-        <p class="qntreq-perfil"></p>
+    <div id="botaoContainer">
+        <!-- Aqui os botões serão criados dinamicamente -->
     </div>
+    
+    <dialog>
+    <h2>Ocorrencia</h2>
+    <p>Ocorrencia: <span id="ocorrencia-dialog"></span></p>
+    <p>Endereço: <span id="endereco-dialog"></span></p>
+    <p>Latitude: <span id="lat-dialog"></span></p>
+    <p>Longitude: <span id="lng-dialog"></span></p>
+    <p>Status: <span id="status-dialog"></span></p>
+    
+    
+    <button onclick="Fechar()">Fechar</button>
+    </dialog>
+    
 </body>
 
 </html>
