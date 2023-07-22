@@ -90,9 +90,12 @@ app.get('/verficarExistencia/ocorrencia/:id', async (req, res) => {
 //     }
 // })
 
+
 //verificar o histórico de requisições do usuário
 app.get('/hitoricoReq/:cpf', async (req, res) => {
     try {
+        let ocorrencias="{";
+        let contador =0
         const { cpf } = req.params
         const contaRef = db.collection('ocorrencias')
         const snapshot = await contaRef.where('cpf', '==', cpf).get();
@@ -101,14 +104,19 @@ app.get('/hitoricoReq/:cpf', async (req, res) => {
         }
 
         snapshot.forEach(doc => {
-            console.log(doc.id, '=>', doc.data());
+            if(contador>0)
+                ocorrencias+=","
+            ocorrencias += JSON.stringify(doc.id) + ":" + JSON.stringify(doc.data())
+            contador++;
         });
-        return res.send(false);
+        ocorrencias+="}"
+        return res.send(ocorrencias);
 
     } catch (err) {
         res.status(500)
     }
 })
+
 
 
 
@@ -130,9 +138,19 @@ app.get('/pegar/ocorrencia/:id', async (req, res) => {
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const { id, ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
-        const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
-        const res2 = await cidadeRef.set({
+        const {ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
+        let id;
+        let idExistente = true;
+        const ocorrenciaRef = db.collection('ocorrencias')
+        while(idExistente){
+            id = Math.floor(Math.random() * 1000000000) + 1;
+            const doc = await ocorrenciaRef.doc(`${id}`).get()
+            if (!doc.exists) {
+                idExistente = false;
+            }
+        }
+        const ocorrenciaRef2 = ocorrenciaRef.doc(`${id}`)
+        const res2 = await ocorrenciaRef2.set({
             "ocorrencia": ocorrencia,
             "latitude": latitude,
             "longitude": longitude,
