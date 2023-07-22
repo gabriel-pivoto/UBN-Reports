@@ -52,7 +52,6 @@ function initMap() {
   botaopegar.classList.add("button", "button-third");
 
   const cancelar = document.getElementById("cancelar");
-  const confirmar = document.getElementById("confirmar");
 
   response = document.createElement("pre");
   response.id = "response";
@@ -108,7 +107,7 @@ function initMap() {
     cancel();
   });
 
-  
+
   confirmarCadastro.addEventListener("click", () => {
     console.log("birirbir");
     ConfirmarCadastroFunc();
@@ -122,7 +121,7 @@ function initMap() {
   // Limpa o marcador do mapa inicialmente
   clear();
   pegar();
-  
+
 }
 
 // Função para enviar a ocorrência para o servidor
@@ -135,29 +134,31 @@ function Confirm() {
   }
   cpf = userCPF;
   console.log(cpf);
-  if(cpf != ""){
-// Criação da requisição POST para adicionar a ocorrência
-requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
-requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  if (cpf != "") {
+    // Criação da requisição POST para adicionar a ocorrência
+    requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
+    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
-// Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-requisicao.send(JSON.stringify({
-  "id": Math.floor(Math.random() * 1000000) + 1,
-  "ocorrencia": document.getElementById("problem").value,
-  "latitude": document.getElementById("lat").value,
-  "longitude": document.getElementById("lng").value,
-  "Endereco": document.getElementById("addres").value,
-  "cpf": cpf
-}));
+    // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
+    requisicao.send(JSON.stringify({
+      "id": Math.floor(Math.random() * 1000000) + 1,
+      "ocorrencia": document.getElementById("problem").value,
+      "latitude": document.getElementById("lat").value,
+      "longitude": document.getElementById("lng").value,
+      "Endereco": document.getElementById("addres").value,
+      "cpf": cpf
+    }));
 
-// Fechar o modal de confirmação
-const modal = document.querySelector("dialog");
-modal.close();
-  }else{
+    // Fechar o modal de confirmação
+    const modal = document.querySelector("dialog");
+    modal.close();
+  } else {
     alert("Favor entrar antes de cadastar um novo problema!");
 
   }
-  
+  pegar();
+
+
 }
 
 // Função para pegar uma ocorrência do servidor
@@ -228,14 +229,14 @@ function clear() {
 
 // Função para criar uma nova requisição de geocodificação
 function newrequest() {
-  
+
 
   novarequisicao = true;
 }
 
 // Função para buscar as ocorrências do servidor
 function pegar() {
-  
+
 
 
   // Criação da requisição GET para buscar as ocorrências
@@ -340,51 +341,51 @@ function register() {
 
 
 
- function ConfirmarCadastroFunc() {
-  
-   console.log("sdds dela");
+function ConfirmarCadastroFunc() {
 
-    requisicao.open("POST", "http://localhost:5000/addConta", true);
-    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
-  
-    // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-    requisicao.send(JSON.stringify({
-      "email": document.getElementById("email").value,
-      "senha": document.getElementById("senha").value,
-      "user": document.getElementById("name").value,
-      "cpf": document.getElementById("cdu").value,
-      "adm": false
-    }))
-    
-    requisicao.onload = function () {
-      if (requisicao.status === 200) {
-        const responseObj = requisicao.response;
-        
-        Contaexistente = responseObj;
-        return Contaexistente;
-      } else {
-        console.log("Erro na requisição. Código de status:", requisicao.status);
-      }
-    }
+  console.log("sdds dela");
 
-    if(Contaexistente){
-      const dialogLogin = document.getElementById("register");
-      dialogLogin.close();
-      alert("Conta criada!");
-    }
-    else{
-      alert("Conta já existente!");
-    }
+  requisicao.open("POST", "http://localhost:5000/addConta", true);
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
-    
+  // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
+  requisicao.send(JSON.stringify({
+    "email": document.getElementById("email").value,
+    "senha": document.getElementById("senha").value,
+    "user": document.getElementById("name").value,
+    "cpf": document.getElementById("cdu").value,
+    "adm": false
+  }))
+
+  requisicao.onload = function () {
+    if (requisicao.status === 200) {
+      const responseObj = requisicao.response;
+
+      Contaexistente = responseObj;
+      return Contaexistente;
+    } else {
+      console.log("Erro na requisição. Código de status:", requisicao.status);
+    }
+  }
+
+  if (Contaexistente) {
+    const dialogLogin = document.getElementById("register");
+    dialogLogin.close();
+    alert("Conta criada!");
+  }
+  else {
+    alert("Conta já existente!");
+  }
+
+
 }
 
 
-function logIn(){
+function logIn() {
   Entrou = false;
   cpf = "";
   const requisicao = new XMLHttpRequest();
-  requisicao.open("GET", "http://localhost:5000/login/"+ document.getElementById("cpfLogin").value+ "/" + document.getElementById("senhalogin").value);
+  requisicao.open("GET", "http://localhost:5000/login/" + document.getElementById("cpfLogin").value + "/" + document.getElementById("senhalogin").value);
   requisicao.setRequestHeader("Content-type", "application/json");
 
   // Manipulação do retorno da requisição
@@ -392,35 +393,35 @@ function logIn(){
     if (requisicao.status === 200) {
       const responseObj = JSON.parse(requisicao.response);
       Entrou = responseObj;
-      if(Entrou){
-          cpf = document.getElementById("cpfLogin").value;
-          const dialogLogin = document.getElementById("LogIn");
-          dialogLogin.close();
+      if (Entrou) {
+        cpf = document.getElementById("cpfLogin").value;
+        const dialogLogin = document.getElementById("LogIn");
+        dialogLogin.close();
 
 
-          localStorage.setItem("isLoggedIn", true);
-          localStorage.setItem("userCPF", cpf);
-          const userCPF = localStorage.getItem("userCPF");
-          console.log(userCPF);
-     
-      }else{
-          alert("CPF ou senha incorretos");
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("userCPF", cpf);
+        const userCPF = localStorage.getItem("userCPF");
+        console.log(userCPF);
+
+      } else {
+        alert("CPF ou senha incorretos");
       }
-      
-      }else {
-        console.log("Erro na requisição. Código de status:", requisicao.status);
-        alert("Preencha todos os campos corretamente!");
-      }
-    } 
-    requisicao.send();
-  }
 
-  
-
-  // Envio da requisição
-  
-  function logout() {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userCPF");
-    // Resto do código para redirecionar para a página de login ou atualizar a página
+    } else {
+      console.log("Erro na requisição. Código de status:", requisicao.status);
+      alert("Preencha todos os campos corretamente!");
+    }
   }
+  requisicao.send();
+}
+
+
+
+// Envio da requisição
+
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("userCPF");
+  // Resto do código para redirecionar para a página de login ou atualizar a página
+}
