@@ -1,72 +1,69 @@
 <!DOCTYPE html>
-<!--
- @license
- Copyright 2019 Google LLC. All Rights Reserved.
- SPDX-License-Identifier: Apache-2.0
--->
 <html>
-  <head>
-    <title>Geocoding Service</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <script
+
+<head>
+  <title>Geocoding Service</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKD8NSryyh37adptif2T2Ou1XKXCK2cws&callback=initMap&v=weekly"
-    defer
-  ></script>
-    
-    <script src="../javascript/maps.js"></script>
+    defer></script>
+
+  <script src="../javascript/maps.js"></script>
   <!-- <script src="../javascript/authentication.js"></script>  -->
-    <link rel="stylesheet" href="../style/maps.css">
-  </head>
-  <body>
+  <link rel="stylesheet" href="../style/maps.css">
+</head>
 
-    <dialog>
-      <h2>Nova Requisição</h2>
-      <p>Problema: <input id="problem"></p>
-      <p>Endereço: <input id="addres"></p>
-      <p>Latitude: <input id="lat"></p>
-      <p>Longitude: <input id="lng"></p>
-      <button id= "cancelar" onclick="cancel()">Cancelar</button>
-      <button onclick="Confirm()">Confirmar</button>
-    </dialog>
+<body>
 
-    
-     <div id="map" class="mapa"></div>
+  <dialog>
+    <h2>Nova Requisição</h2>
+    <p>Problema: <input id="problem"></p>
+    <p>Endereço: <input id="addres"></p>
+    <p>Latitude: <input id="lat"></p>
+    <p>Longitude: <input id="lng"></p>
+    <button id="cancelar" onclick="cancel()">Cancelar</button>
+    <button onclick="Confirm()">Confirmar</button>
+  </dialog>
 
-     <div class="navbar">
-      <div class="navbar-toggle">
-        <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon">
-      </div>
-      <ul class="links">
-        <li><button class="button-login" onclick="login()">Entrar</button></li>
-        <li><button class="button-login" onclick="register()">Cadastrar</button></li>
-        <li><a href="file:///C:/Users/gabri/OneDrive/Documentos/codiguins/Inatel/UBN-Reports/html/authentication.html">About</a></li>
-        <li><a href="historic">Historic</a></li>
-        <li><button onclick="logout()">Sair</button></li>
-      </ul>
+
+  <div id="map" class="mapa"></div>
+
+  <div class="navbar">
+    <div class="navbar-toggle">
+      <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon">
     </div>
+    <ul class="links">
+      <li><button class="button-login" onclick="login()">Entrar</button></li>
+      <li><button class="button-login" onclick="register()">Cadastrar</button></li>
+      <li><a href="http://127.0.0.1:5500/html/profile.html">Perfil</a></li>
+      <li><a href="historic">Historic</a></li>
+      <li><button onclick="logout()">Sair</button></li>
+    </ul>
+  </div>
 
-    <dialog id="LogIn">
-      <h2>Entrar</h2>
-      <p>cpf: <input id="cpfLogin"></p>
-      <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
-      
-      <button onclick="cancel()">Cancelar</button>
-      <button onclick="logIn()" >Confirmar</button>
-    </dialog>
+  <dialog id="LogIn">
+    <h2>Entrar</h2>
+    <p>cpf: <input id="cpfLogin"></p>
+    <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
 
-    <dialog id="register">
-      <h2>Cadastrar</h2>
-      <p>Nome: <input id="name"></p>
-      <p>cpf: <input id="cdu"></p>
-      <p>email: <input id="email"></p>
-      <p>Senha: <input id="senha" type="password" autocomplete="current-password" required></p>
-      <button onclick="cancel()">Cancelar</button>
-      <button id="confirmarCadastro" >Confirmar</button>
-    </dialog>
+    <button onclick="cancel()">Cancelar</button>
+    <button onclick="logIn()">Confirmar</button>
+  </dialog>
 
-  </body>
+  <dialog id="register">
+    <h2>Cadastrar</h2>
+    <p>Nome: <input id="name"></p>
+    <p>cpf: <input id="cdu"></p>
+    <p>email: <input id="email"></p>
+    <p>Senha: <input id="senha" type="password" autocomplete="current-password" required></p>
+    <button onclick="cancel()">Cancelar</button>
+    <button id="confirmarCadastro">Confirmar</button>
+  </dialog>
+
+</body>
+
 </html>
