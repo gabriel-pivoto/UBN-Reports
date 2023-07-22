@@ -319,8 +319,6 @@ function register() {
 
  function ConfirmarCadastroFunc() {
 
-  console.log("sdds dela");
-
   requisicao.open("POST", "http://localhost:5000/addConta", true);
   requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
