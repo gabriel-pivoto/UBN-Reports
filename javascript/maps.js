@@ -375,8 +375,9 @@ function logIn() {
 
           localStorage.setItem("isLoggedIn", true);
           localStorage.setItem("userCPF", cpf);
+          localStorage.setItem("senhaPerfil", document.getElementById("senhalogin").value);
           
-     
+        location.reload();
       }else{
           alert("CPF ou senha incorretos");
       }
@@ -396,5 +397,7 @@ function logIn() {
 function logout() {
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("userCPF");
+  localStorage.removeItem("senhaPerfil");
+  location.reload();
   // Resto do código para redirecionar para a página de login ou atualizar a página
 }

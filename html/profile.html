@@ -4,18 +4,47 @@
 <head>
     <title>Perfil</title>
     <script src="../javascript/profile.js"></script>
+    <script src="../javascript/maps.js"></script>
+    <link rel="stylesheet" href="../style/maps.css">
+
 </head>
 
 <body>
     <div class="div-main">
         <img src="../style/pinguin.jpg" alt="sua fotinha bebe" height="80em" width="80em">
-        <button onclick="perfil()">Informações do Perfil</button>
+        <p>Nome: <span id="nome"></span></p>
+        <p>Email: <span id="email"></span></p>
+        <p>CPF: <span id="cpf"></span></p>
+        <p>Adm: <span id="adm"></span></p>
+        <p>Número de ocorrências registradas: <span id="contador"></span></p>
     </div>
+   
+
+    <div class="navbar">
+        <div class="navbar-toggle">
+          <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon">
+        </div>
+        <ul class="links">
+            <li><button class="button-login" onclick="login()">Entrar</button></li>
+            <li><button onclick="logout()">Sair</button></li>
+            <li><a href="http://127.0.0.1:5500/html/index.html">Voltar</a></li>
+        </ul>
+      </div>
+
+      <dialog id="LogIn">
+        <h2>Entrar</h2>
+        <p>cpf: <input id="cpfLogin"></p>
+        <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
+    
+        <button onclick="cancel()">Cancelar</button>
+        <button onclick="logIn()">Confirmar</button>
+      </dialog>
+
     <div id="botaoContainer">
         <!-- Aqui os botões serão criados dinamicamente -->
     </div>
     
-    <dialog>
+    <dialog id="problema">
     <h2>Ocorrencia</h2>
     <p>Ocorrencia: <span id="ocorrencia-dialog"></span></p>
     <p>Endereço: <span id="endereco-dialog"></span></p>

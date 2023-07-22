@@ -1,8 +1,11 @@
 const req = new XMLHttpRequest();
 const isLoggedIn = localStorage.getItem("isLoggedIn");
 const userCPF = localStorage.getItem("userCPF");
+const senha = localStorage.getItem("userCPF");
 
-function perfil() {
+let contador = 0;
+
+function historicodereq() {
     console.log("CPF: " + userCPF);
     console.log("Está logado: " + isLoggedIn);
     if (!isLoggedIn || !userCPF) {
@@ -36,8 +39,14 @@ function criarBotoes(responseObj) {
 
     // Itera sobre o array de elementos
     responseObj.forEach((elemento, index) => {
+
+        contador +=1;
+        console.log(contador);
+        const contadorreq = document.getElementById("contador");
+        contadorreq.textContent = contador;
         // Cria um elemento de botão
         const botao = document.createElement("button");
+
 
         // Define um ID único para o botão (opcional, mas pode ser útil para manipulação futura)
         botao.id = `botao-${index}`;
@@ -63,21 +72,56 @@ function criarBotoes(responseObj) {
             statusreq.textContent = "Em breve!";
             statusreq.style.color = "rgb(0,0,255)";
 
-
-
-            const dialog = document.querySelector("dialog");
+            const dialog = document.getElementById("problema");
             dialog.showModal();
         });
 
         // Adiciona o botão à div de botões
         botaoContainer.appendChild(botao);
     });
+
+    perfil();
 }
 
 // Chama a função perfil() quando o DOM estiver completamente carregado
-document.addEventListener("DOMContentLoaded", perfil);
+document.addEventListener("DOMContentLoaded", historicodereq);
 
 function Fechar(){
-    const dialog = document.querySelector("dialog");
+    const dialog = document.getElementById("problema");
             dialog.close();
+}
+
+
+function perfil(){
+
+    const requisicao = new XMLHttpRequest();
+    requisicao.open("GET", "http://localhost:5000/pegar/conta/" + userCPF);
+    requisicao.setRequestHeader("Content-type", "application/json");
+  
+    // Manipulação do retorno da requisição
+    requisicao.onload = function () {
+      if (requisicao.status === 200) {
+        const responseObj = JSON.parse(requisicao.response);
+        
+        const nome = document.getElementById("nome");
+        nome.textContent = responseObj.user;
+
+        console.log(responseObj.user);
+        console.log(responseObj);
+
+        const email = document.getElementById("email");
+        email.textContent = responseObj.email;
+
+        const cpf = document.getElementById("cpf");
+        cpf.textContent = responseObj.cpf;
+
+        const Adm = document.getElementById("adm");
+        Adm.textContent = responseObj.adm;
+
+
+      } else {
+        console.log("Erro na requisição. Código de status:", requisicao.status);
+      }
+    }
+    requisicao.send();
 }

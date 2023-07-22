@@ -137,6 +137,22 @@ app.get('/pegar/ocorrencia/:id', async (req, res) => {
         res.status(500)
     }
 })
+//procurar uma conta pelo cpf
+app.get('/pegar/conta/:cpf', async (req, res) => {
+    try {
+        const { cpf } = req.params
+        const contaRef = db.collection('contas').doc(`${cpf}`)
+        const doc = await contaRef.get()
+        if (!doc.exists) {
+            return res.send(false)
+        }
+        return res.status(200).send(doc.data())
+    } catch (err) {
+        res.status(500)
+    }
+})
+
+
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
