@@ -48,12 +48,12 @@ section .navbar:last-child{
 .links {
   display: none;
   position: absolute;
-  top: 60px;
+  top: 30px;
   right: 0;
   z-index: 9999;
-  background-color: #ffffff;
+  background-color: #fbfbfb;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 12px;
 }
 
 .links.active {
@@ -63,6 +63,42 @@ section .navbar:last-child{
 .navbar-toggle.active~.links {
   display: block;
 }
+.navbar li {
+  list-style-type: none;
+  text-align: left;
+}
+
+.navbar li a {
+  color: black;
+  padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor:pointer;
+  font-size: 14px;
+}
+
+.navbar li  a:active {
+  color: blue;
+}
+.navbar li  a:hover {
+  color: blue;
+  background-color:rgb(232, 245, 245);
+}
+
+.navbar li button{
+  border: none;
+  background-color:  #fbfbfb;
+  cursor:pointer;
+  font-size: 14px;
+}
+.navbar li button:hover{
+  border: none;
+  color: blue;
+  background-color:rgb(232, 245, 245);
+  cursor:pointer;
+}
+
 
 .mapa {
   position: relative;

@@ -37,15 +37,8 @@ function initMap() {
 
   const createRequest = document.createElement("input");
   createRequest.type = "button";
-  createRequest.value = "New Request";
+  createRequest.value = "Nova Requisição";
   createRequest.classList.add("button", "button-third");
-
-  const botaopegar = document.createElement("input");
-  botaopegar.type = "button";
-  botaopegar.value = "Pegar";
-  botaopegar.classList.add("button", "button-third");
-
-  const cancelar = document.getElementById("cancelar");
 
   response = document.createElement("pre");
   response.id = "response";
@@ -63,7 +56,6 @@ function initMap() {
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(createRequest);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(botaopegar);
 
   // Evento de clique no mapa para realizar uma requisição de geocodificação reversa
   map.addListener("click", (e) => {
@@ -86,23 +78,15 @@ function initMap() {
     newrequest();
   });
 
-  // Evento de clique no botão "Cancelar" para fechar o modal de confirmação
-  cancelar.addEventListener("click", () => {
-    cancel();
-  });
-
+  
 
   confirmarCadastro.addEventListener("click", () => {
     ConfirmarCadastroFunc();
   })
 
-  // Evento de clique no botão "Pegar" para buscar as ocorrências do servidor
-  botaopegar.addEventListener("click", () => {
-    pegar();
-  });
-
   // Limpa o marcador do mapa inicialmente
   pegar();
+  perfil()
 
 }
 
@@ -115,19 +99,20 @@ function Confirm() {
     return;
   }
   cpf = userCPF;
-  if(cpf != ""){
-// Criação da requisição POST para adicionar a ocorrência
-requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
-requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  
+  if (cpf != "") {
+    // Criação da requisição POST para adicionar a ocorrência
+    requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
+    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
-// Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-requisicao.send(JSON.stringify({
-  "ocorrencia": document.getElementById("problem").value,
-  "latitude": document.getElementById("lat").value,
-  "longitude": document.getElementById("lng").value,
-  "Endereco": document.getElementById("addres").value,
-  "cpf": cpf
-}));
+    // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
+    requisicao.send(JSON.stringify({
+      "ocorrencia": document.getElementById("problem").value,
+      "latitude": document.getElementById("lat").value,
+      "longitude": document.getElementById("lng").value,
+      "Endereco": document.getElementById("addres").value,
+      "cpf": cpf
+    }));
 
     // Fechar o modal de confirmação
     const modal = document.querySelector("dialog");
@@ -137,8 +122,8 @@ requisicao.send(JSON.stringify({
 
   }
 
-  requisicao.onload=(()=>{
-    pegar()
+  requisicao.onload = (() => {
+    pegar();
   })
 
 }
@@ -196,11 +181,22 @@ function PegarUmaOcorrencia(id) {
 // Função para cancelar a adição da ocorrência
 function cancel() {
   const modal = document.querySelector("dialog");
+
   const dialogLogin = document.getElementById("LogIn");
+
   const dialogregister = document.getElementById("register");
-  dialogregister.close();
-  dialogLogin.close();
-  modal.close();
+  if (modal != null) {
+
+    modal.close();
+  }
+  if (dialogLogin != null) {
+    dialogLogin.close();
+
+  }
+  if (dialogregister != null) {
+    dialogregister.close();
+
+  }
 }
 
 
@@ -317,7 +313,7 @@ function register() {
 
 
 
- function ConfirmarCadastroFunc() {
+function ConfirmarCadastroFunc() {
 
   requisicao.open("POST", "http://localhost:5000/addConta", true);
   requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
@@ -364,22 +360,25 @@ function logIn() {
 
   // Manipulação do retorno da requisição
   requisicao.onload = function () {
+
     if (requisicao.status === 200) {
+      
+    
       const responseObj = JSON.parse(requisicao.response);
       Entrou = responseObj;
       if (Entrou) {
         cpf = document.getElementById("cpfLogin").value;
+        perfil();
         const dialogLogin = document.getElementById("LogIn");
         dialogLogin.close();
 
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("userCPF", cpf);
+        localStorage.setItem("senhaPerfil", document.getElementById("senhalogin").value);
 
-          localStorage.setItem("isLoggedIn", true);
-          localStorage.setItem("userCPF", cpf);
-          localStorage.setItem("senhaPerfil", document.getElementById("senhalogin").value);
-          
         location.reload();
-      }else{
-          alert("CPF ou senha incorretos");
+      } else {
+        alert("CPF ou senha incorretos");
       }
 
     } else {
@@ -388,6 +387,7 @@ function logIn() {
     }
   }
   requisicao.send();
+  
 }
 
 
@@ -400,4 +400,28 @@ function logout() {
   localStorage.removeItem("senhaPerfil");
   location.reload();
   // Resto do código para redirecionar para a página de login ou atualizar a página
+}
+
+
+function perfil(){
+
+  const requisicao = new XMLHttpRequest();
+  const userCPF = localStorage.getItem("userCPF");
+  requisicao.open("GET", "http://localhost:5000/pegar/conta/" + userCPF);
+  console.log(userCPF);
+  requisicao.setRequestHeader("Content-type", "application/json");
+
+  // Manipulação do retorno da requisição
+  requisicao.onload = function () {
+    if (requisicao.status === 200) {
+      const responseObj = JSON.parse(requisicao.response);
+      
+      var img = document.getElementById("imagemPerfil");
+      img.setAttribute('src', responseObj.imagem);
+
+    } else {
+      console.log("Erro na requisição. Código de status:", requisicao.status);
+    }
+  }
+  requisicao.send();
 }

@@ -6,8 +6,6 @@ const senha = localStorage.getItem("userCPF");
 let contador = 0;
 
 function historicodereq() {
-    console.log("CPF: " + userCPF);
-    console.log("Está logado: " + isLoggedIn);
     if (!isLoggedIn || !userCPF) {
         alert("Favor entrar antes de buscar ocorrências!");
         return;
@@ -18,10 +16,16 @@ function historicodereq() {
 
     // Manipulação do retorno da requisição
     req.onload = function () {
-        if (req.status === 200) {
+        if (req.status === 200 ) {
             const responseObj = JSON.parse(req.response);
-            console.log(responseObj[1].Endereco);
-            criarBotoes(responseObj);
+
+
+            console.log(responseObj);
+            if( JSON.parse(req.response)){
+                criarBotoes(responseObj);
+
+            }
+            perfil();
         } else {
             console.log("Erro na requisição. Código de status:", req.status);
             alert("Preencha todos os campos corretamente!");
@@ -41,7 +45,6 @@ function criarBotoes(responseObj) {
     responseObj.forEach((elemento, index) => {
 
         contador +=1;
-        console.log(contador);
         const contadorreq = document.getElementById("contador");
         contadorreq.textContent = contador;
         // Cria um elemento de botão
@@ -80,7 +83,6 @@ function criarBotoes(responseObj) {
         botaoContainer.appendChild(botao);
     });
 
-    perfil();
 }
 
 // Chama a função perfil() quando o DOM estiver completamente carregado
@@ -102,12 +104,10 @@ function perfil(){
     requisicao.onload = function () {
       if (requisicao.status === 200) {
         const responseObj = JSON.parse(requisicao.response);
+        console.log(responseObj.imagem);
         
         const nome = document.getElementById("nome");
         nome.textContent = responseObj.user;
-
-        console.log(responseObj.user);
-        console.log(responseObj);
 
         const email = document.getElementById("email");
         email.textContent = responseObj.email;
@@ -118,6 +118,13 @@ function perfil(){
         const Adm = document.getElementById("adm");
         Adm.textContent = responseObj.adm;
 
+        
+        var img = document.getElementById("imagemPerfil");
+        img.setAttribute('src', responseObj.imagem);
+        var img2 = document.getElementById("imagemPerfil2");
+        img2.setAttribute('src', responseObj.imagem);
+  
+
 
       } else {
         console.log("Erro na requisição. Código de status:", requisicao.status);
@@ -125,3 +132,4 @@ function perfil(){
     }
     requisicao.send();
 }
+

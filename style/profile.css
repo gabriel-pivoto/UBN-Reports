@@ -1,0 +1,86 @@
+/* Estilos para o body e ajuste padrão */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #a0a0a0;
+  }
+  
+  .div-main {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .div-main img {
+    border-radius: 20%;
+    margin-right: 30px;
+    height: 180px;
+    width: 180px;
+    flex-shrink: 0; /* Prevent image from shrinking */
+  }
+
+  .paragraph {
+    display: flex;
+    flex-direction: column;
+    background-color: aquamarines;
+    align-self: flex-start;
+  }
+
+  .paragraph p {
+    margin: 10px 0;
+    align-self: flex-start;
+  }
+
+  /* Set the last two paragraphs to display inline */
+  .paragraph p:nth-last-child(-n+2) {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  /* Align paragraphs in the column vertically */
+  .paragraph p:not(:last-child) {
+    align-self: flex-start;
+  }
+  
+  
+  /* Estilos para a caixa de diálogo (dialog) */
+  #problema {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  /* Estilos para o botão do diálogo */
+  #problema button {
+    margin: 10px;
+    border-color: transparent;
+    align-items: center;
+    align-self: center;
+    
+  }
+  
+  #botaoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid black; /* Adiciona uma borda preta de 2 pixels */
+    max-height: 200px; /* Set a fixed height for the container */
+    overflow-y: scroll; /* Add a vertical scroll */
+    
+  }
+
+  #botaoContainer button {
+    margin: 1px 0; /* Espaçamento entre os botões empilhados */
+    font-style: arial;
+    width: 80%;
+    border-style: outset;
+    cursor:pointer;
+  }
+
+  #botaoContainer button:hover {
+    background-color: #1d9ce6;
+    cursor:pointer;
+  }
