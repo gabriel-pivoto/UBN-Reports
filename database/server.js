@@ -3,8 +3,18 @@ const express = require("express")
 const cors = require('cors');
 const app = express()
 const port = 5000
-const { db } = require('./firebase.js')
+const { db,uploadImage } = require('./firebase.js')
 const { FieldValue } = require("firebase-admin/firestore")
+const Multer = require('multer');
+
+
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: 1024 * 1024 *100
+})
+
+
 
 const corsOption = {
     credentials: true,
@@ -13,10 +23,17 @@ const corsOption = {
 app.use(cors(corsOption));
 app.use(express.json())
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    
     next();
 });
+
+
+
 
 //pegar todas as correspondências no banco de dados das ocorrencias
 app.get('/ocorrencias', async (req, res) => {
@@ -94,8 +111,8 @@ app.get('/verficarExistencia/ocorrencia/:id', async (req, res) => {
 //verificar o histórico de requisições do usuário
 app.get('/hitoricoReq/:cpf', async (req, res) => {
     try {
-        let ocorrencias="[";
-        let contador =0
+        let ocorrencias = "[";
+        let contador = 0
         const { cpf } = req.params
         const contaRef = db.collection('ocorrencias')
         const snapshot = await contaRef.where('cpf', '==', cpf).get();
@@ -104,15 +121,15 @@ app.get('/hitoricoReq/:cpf', async (req, res) => {
         }
 
         snapshot.forEach(doc => {
-            if(contador>0)
-                ocorrencias+=","
+            if (contador > 0)
+                ocorrencias += ","
             ocorrencias += JSON.stringify(doc.data())
             contador++;
         });
-        ocorrencias+="]"
-        
+        ocorrencias += "]"
+
         return res.send(JSON.parse(ocorrencias));
-        
+
 
     } catch (err) {
         res.status(500)
@@ -137,6 +154,8 @@ app.get('/pegar/ocorrencia/:id', async (req, res) => {
         res.status(500)
     }
 })
+
+
 //procurar uma conta pelo cpf
 app.get('/pegar/conta/:cpf', async (req, res) => {
     try {
@@ -151,16 +170,14 @@ app.get('/pegar/conta/:cpf', async (req, res) => {
         res.status(500)
     }
 })
-
-
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const {ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
+        const { ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
         let id;
         let idExistente = true;
         const ocorrenciaRef = db.collection('ocorrencias')
-        while(idExistente){
+        while (idExistente) {
             id = Math.floor(Math.random() * 1000000000) + 1;
             const doc = await ocorrenciaRef.doc(`${id}`).get()
             if (!doc.exists) {
@@ -174,22 +191,23 @@ app.post('/addOcorrencia', async (req, res) => {
             "latitude": latitude,
             "longitude": longitude,
             "Endereco": Endereco,
-            "cpf":cpf
+            "cpf": cpf
         },
             { merge: true }
         )
-        res.status(200).send("ocorrencia criada")    
+        res.status(200).send("ocorrencia criada")
     } catch (err) {
         res.status(500)
     }
 })
 
 //adicionar uma conta no banco de dados
-app.post('/addConta', async (req, res) => {
+app.post('/addConta', multer.single('imagem'), uploadImage, async (req, res) => {
     try {
         let c1 = false;
         let c2 = false;
-        const { email, senha, user, cpf, adm } = req.body;
+        const { email, senha, user, cpf, adm} = req.body;
+        const imagem = req.file.firebaseUrl
         const contaRef2 = db.collection('contas')
         const doc = await contaRef2.doc(`${cpf}`).get()
         if (doc.exists) {
@@ -199,22 +217,23 @@ app.post('/addConta', async (req, res) => {
         if (!snapshot.empty) {
             c2 = true;
         }
-        if(!c1 && !c2){
+        if (!c1 && !c2) {
             const contaRef = db.collection('contas').doc(`${cpf}`)
-        const res2 = await contaRef.set({
-            "email": email,
-            "senha": senha,
-            "user": user,
-            "cpf": cpf,
-            "adm": adm
-        },
-            { merge: true }
-        )
-        res.status(200).send(true)
-    
-        } res.status(200).send(false)
+            const res2 = await contaRef.set({
+                "email": email,
+                "senha": senha,
+                "user": user,
+                "cpf": cpf,
+                "adm": adm,
+                "imagem":imagem
+            },
+                { merge: true }
+            )
+            res.status(200).send(true)
 
-        } catch (err) {
+        } res.status(201).send(false)
+
+    } catch (err) {
         res.status(500)
     }
 })

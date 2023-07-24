@@ -1,5 +1,6 @@
 const {initializeApp,cert}= require("firebase-admin/app")
 const {getFirestore} = require("firebase-admin/firestore")
+var admin = require("firebase-admin");
 
 const serviceAccount = {
     "type": "service_account",
@@ -15,8 +16,43 @@ const serviceAccount = {
     "universe_domain": "googleapis.com"
   }
   
+const BUCKET = "fetin-teste.appspot.com"
 initializeApp({
-    credential:cert(serviceAccount)
+    credential:cert(serviceAccount),
+    storageBucket: BUCKET
 })
 const db= getFirestore()
-module.exports = {db}
+
+
+
+const bucket = admin.storage().bucket()
+
+const uploadImage = (req,res,next)=>{
+    if(!req.file) return next();
+    const imagem =  req.file;
+    const nomeArquivo = Date.now()+"." + imagem.originalname.split(".").pop();
+
+
+    const file =  bucket.file(nomeArquivo);
+    const stream = file.createWriteStream({
+        metadata:{
+            contentType:imagem.mimeType,
+        }
+    })
+
+
+    stream.on("error",(e)=>{
+        console.error(e)
+    })
+
+    stream.on("finish",async()=>{
+        await file.makePublic();
+        
+        req.file.firebaseUrl = "https://storage.googleapis.com/"+BUCKET+'/'+nomeArquivo
+        next()
+    })
+
+    stream.end(imagem.buffer)
+}
+
+module.exports = {db,uploadImage}

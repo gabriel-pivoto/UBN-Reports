@@ -54,12 +54,17 @@
 
   <dialog id="register">
     <h2>Cadastrar</h2>
-    <p>Nome: <input id="name"></p>
-    <p>cpf: <input id="cdu"></p>
-    <p>email: <input id="email"></p>
-    <p>Senha: <input id="senha" type="password" autocomplete="current-password" required></p>
+    <form id="formulario" name="formulario" lass = "edit-note"enctype="multipart/form-data">
+    <p>Nome: <input id="name" name="user"></p>
+    <p>cpf: <input id="cdu" name="cpf"></p>
+    <p>email: <input id="email" name="email"></p>
+    <p>adm: <input id="adm" name="adm"></p>
+    <p>Senha: <input id="senha" type="password" autocomplete="current-password"  name='senha' required></p>
+    <p>Imagem: <input  type='file'id="img" name="imagem" accept="image/jpeg" required></p>
+  </form>
     <button onclick="cancel()">Cancelar</button>
     <button id="confirmarCadastro">Confirmar</button>
+
   </dialog>
 
 </body>

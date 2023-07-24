@@ -10,7 +10,7 @@ let response;
 var novarequisicao = false;
 let cpf = "";
 let Entrou = false;
-
+let Contaexistente
 // Função de inicialização do mapa
 function initMap() {
   // Criação do objeto de mapa do Google Maps
@@ -86,7 +86,7 @@ function initMap() {
 
   // Limpa o marcador do mapa inicialmente
   pegar();
-  perfil()
+  pegarFotodePerfil()
 
 }
 
@@ -314,41 +314,34 @@ function register() {
 
 
 function ConfirmarCadastroFunc() {
+  Contaexistente=false
+  var formulario = new FormData(document.getElementById('formulario'))
+  requisicao.open("POST", "http://localhost:5000/addConta");
 
-  requisicao.open("POST", "http://localhost:5000/addConta", true);
-  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  let teste = document.getElementById('img').files[0]
 
-  // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-  requisicao.send(JSON.stringify({
-    "email": document.getElementById("email").value,
-    "senha": document.getElementById("senha").value,
-    "user": document.getElementById("name").value,
-    "cpf": document.getElementById("cdu").value,
-    "adm": false
-  }))
+  formulario.set("imagem", new File([teste],"nome",{type:"image/jpeg"}))
+
 
   requisicao.onload = function () {
     if (requisicao.status === 200) {
-      const responseObj = requisicao.response;
-
-      Contaexistente = responseObj;
-      return Contaexistente;
-    } else {
+      a()
+    }else {
+      b()
       console.log("Erro na requisição. Código de status:", requisicao.status);
     }
   }
+  requisicao.send(formulario)
 
-  if (Contaexistente) {
-    const dialogLogin = document.getElementById("register");
-    dialogLogin.close();
-    alert("Conta criada!");
-  }
-  else {
-    alert("Conta já existente!");
-  }
-
-
+function a(){
+  const dialogLogin = document.getElementById("register");
+  dialogLogin.close();
+  alert("Conta criada!");
 }
+function b(){
+  alert("Conta já existente!");}
+}
+
 
 
 function logIn() {
@@ -368,7 +361,7 @@ function logIn() {
       Entrou = responseObj;
       if (Entrou) {
         cpf = document.getElementById("cpfLogin").value;
-        perfil();
+        pegarFotodePerfil();
         const dialogLogin = document.getElementById("LogIn");
         dialogLogin.close();
 
@@ -403,7 +396,7 @@ function logout() {
 }
 
 
-function perfil(){
+function pegarFotodePerfil(){
 
   const requisicao = new XMLHttpRequest();
   const userCPF = localStorage.getItem("userCPF");
