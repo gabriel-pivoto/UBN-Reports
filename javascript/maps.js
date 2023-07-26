@@ -78,7 +78,7 @@ function initMap() {
     newrequest();
   });
 
-  
+
 
   confirmarCadastro.addEventListener("click", () => {
     ConfirmarCadastroFunc();
@@ -99,7 +99,7 @@ function Confirm() {
     return;
   }
   cpf = userCPF;
-  
+
   if (cpf != "") {
     // Criação da requisição POST para adicionar a ocorrência
     requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
@@ -111,7 +111,8 @@ function Confirm() {
       "latitude": document.getElementById("lat").value,
       "longitude": document.getElementById("lng").value,
       "Endereco": document.getElementById("addres").value,
-      "cpf": cpf
+      "cpf": cpf,
+      "descricao": document.getElementById("descricao").value
     }));
 
     // Fechar o modal de confirmação
@@ -137,29 +138,28 @@ function PegarUmaOcorrencia(id) {
   // Manipulação do retorno da requisição
   requisicao.onload = function teste() {
     let ocorrencia = JSON.parse(requisicao.response);
+    
 
     let position = new google.maps.LatLng(ocorrencia.latitude, ocorrencia.longitude);
     contentString =
-      '<div id="content">' +
-      '<div id="siteNotice">' +
-      "</div>" +
-      '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + '</h1>' +
-      '<div id="bodyContent">' +
-      "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-      "sandstone rock formation in the southern part of the " +
-      "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
-      "south west of the nearest large town, Alice Springs; 450&#160;km " +
-      "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
-      "features of the Uluru - Kata Tjuta National Park. Uluru is " +
-      "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
-      "Aboriginal people of the area. It has many springs, waterholes, " +
-      "rock caves and ancient paintings. Uluru is listed as a World " +
-      "Heritage Site.</p>" +
-      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-      "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
-      "(last visited June 22, 2009).</p>" +
-      "</div>" +
-      "</div>";
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<meta property="og:title" content="' + ocorrencia.ocorrencia + '">' +
+    '<meta property="og:description" content="' + ocorrencia.descricao + '">' +
+    // '<meta property="og:image" content="' + ocorrencia.imagem + '">' +
+    '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + '</h1>' +
+    '<div id="bodyContent">' +
+    "<p> " + ocorrencia.descricao + "</p>" +
+    "<p> " + ocorrencia.Endereco + "</p>" +
+    '<a href="mailto: gabrielspivoto@gmail.com">'+
+    '<img width="25" height="25" src="../images/mail-outline.svg" alt="">'+
+    '</a>' +
+    '<a href="https://www.facebook.com/sharer/sharer.php?u=https://storage.googleapis.com/fetin-teste.appspot.com/1690326854741.nome">' +
+    '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
+    '</a>' +
+    "</div>" +
+    "</div>";
 
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
     const infowindow = new google.maps.InfoWindow({
@@ -199,14 +199,16 @@ function cancel() {
   }
 }
 
-
-
-
 // Função para criar uma nova requisição de geocodificação
 function newrequest() {
-
-
-  novarequisicao = true;
+  const userCPF = localStorage.getItem("userCPF")
+  if (userCPF != null) {
+    novarequisicao = true;
+  } else {
+    alert("Favor entrar com sua conta!");
+    const dialogLogin = document.getElementById("LogIn");
+    dialogLogin.showModal();
+  }
 }
 
 // Função para buscar as ocorrências do servidor
@@ -314,32 +316,37 @@ function register() {
 
 
 function ConfirmarCadastroFunc() {
-  Contaexistente=false
+  Contaexistente = false
   var formulario = new FormData(document.getElementById('formulario'))
   requisicao.open("POST", "http://localhost:5000/addConta");
 
   let teste = document.getElementById('img').files[0]
 
-  formulario.set("imagem", new File([teste],"nome",{type:"image/jpeg"}))
+  formulario.set("imagem", new File([teste], "nome", { type: "image/jpeg" }))
 
 
   requisicao.onload = function () {
     if (requisicao.status === 200) {
-      a()
-    }else {
-      b()
+      ContaCriada()
+    } else {
+      ContaExistente()
       console.log("Erro na requisição. Código de status:", requisicao.status);
     }
   }
   requisicao.send(formulario)
 
-function a(){
-  const dialogLogin = document.getElementById("register");
-  dialogLogin.close();
-  alert("Conta criada!");
-}
-function b(){
-  alert("Conta já existente!");}
+  function ContaCriada() {
+    const dialogLogin = document.getElementById("register");
+    dialogLogin.close();
+    alert("Conta criada!");
+  }
+  function ContaExistente() {
+    alert("Conta já existente!");
+    const dialogregister = document.getElementById("register");
+    dialogregister.close();
+    const dialogLogin = document.getElementById("LogIn");
+    dialogLogin.showModal();
+  }
 }
 
 
@@ -355,8 +362,8 @@ function logIn() {
   requisicao.onload = function () {
 
     if (requisicao.status === 200) {
-      
-    
+
+
       const responseObj = JSON.parse(requisicao.response);
       Entrou = responseObj;
       if (Entrou) {
@@ -380,7 +387,7 @@ function logIn() {
     }
   }
   requisicao.send();
-  
+
 }
 
 
@@ -396,21 +403,25 @@ function logout() {
 }
 
 
-function pegarFotodePerfil(){
+function pegarFotodePerfil() {
 
   const requisicao = new XMLHttpRequest();
   const userCPF = localStorage.getItem("userCPF");
   requisicao.open("GET", "http://localhost:5000/pegar/conta/" + userCPF);
-  console.log(userCPF);
+
   requisicao.setRequestHeader("Content-type", "application/json");
 
   // Manipulação do retorno da requisição
   requisicao.onload = function () {
     if (requisicao.status === 200) {
       const responseObj = JSON.parse(requisicao.response);
-      
+
       var img = document.getElementById("imagemPerfil");
-      img.setAttribute('src', responseObj.imagem);
+      if (responseObj.imagem != undefined) {
+        img.setAttribute('src', responseObj.imagem);
+        console.log(responseObj.imagem);
+      }
+
 
     } else {
       console.log("Erro na requisição. Código de status:", requisicao.status);
@@ -418,3 +429,48 @@ function pegarFotodePerfil(){
   }
   requisicao.send();
 }
+
+
+
+function PegarLocal(){
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, handleError);
+  } else {
+    alert("Geolocalização não é suportada pelo seu navegador.");
+  }
+
+}function showPosition(position) {
+  var latitude = position.coords.latitude;
+  var longitude = position.coords.longitude;
+
+  // Fazer uma chamada à API de Geocodificação Reversa
+  var geocoder = new google.maps.Geocoder();
+  var latlng = new google.maps.LatLng(latitude, longitude);
+
+  geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results[0]) {
+        var address = results[0].formatted_address;
+        document.getElementById("addres").value = address;
+        document.getElementById("lat").value = latitude;
+        document.getElementById("lng").value = longitude;
+
+        markers = new google.maps.Marker({
+          position: latlng,
+          map: map,
+        });
+        map.setCenter(latlng);
+        // document.getElementById("nrequisicao").draggable();
+      } else {
+        alert("Endereço não encontrado para estas coordenadas.");
+      }
+    } else {
+      alert("Erro na geocodificação reversa: " + status);
+    }
+  });
+}
+
+function handleError(error) {
+  alert("Erro ao obter a localização: " + error.message);
+}
+
