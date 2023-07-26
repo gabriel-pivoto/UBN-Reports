@@ -3,7 +3,7 @@ const express = require("express")
 const cors = require('cors');
 const app = express()
 const port = 5000
-const { db,uploadImage } = require('./firebase.js')
+const { db, uploadImage } = require('./firebase.js')
 const { FieldValue } = require("firebase-admin/firestore")
 const Multer = require('multer');
 
@@ -11,7 +11,7 @@ const Multer = require('multer');
 
 const multer = Multer({
     storage: Multer.memoryStorage(),
-    limits: 1024 * 1024 *100
+    limits: 1024 * 1024 * 100
 })
 
 
@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    
+
     next();
 });
 
@@ -173,7 +173,7 @@ app.get('/pegar/conta/:cpf', async (req, res) => {
 //adicionar uma ocorrencia no banco de dados
 app.post('/addOcorrencia', async (req, res) => {
     try {
-        const { ocorrencia, longitude, latitude, Endereco, cpf } = req.body;
+        const { ocorrencia, longitude, latitude, Endereco, descricao, cpf } = req.body;
         let id;
         let idExistente = true;
         const ocorrenciaRef = db.collection('ocorrencias')
@@ -191,7 +191,9 @@ app.post('/addOcorrencia', async (req, res) => {
             "latitude": latitude,
             "longitude": longitude,
             "Endereco": Endereco,
-            "cpf": cpf
+            "cpf": cpf,
+            "descricao": descricao,
+            "status": 0
         },
             { merge: true }
         )
@@ -201,12 +203,16 @@ app.post('/addOcorrencia', async (req, res) => {
     }
 })
 
+
+
+
+
 //adicionar uma conta no banco de dados
 app.post('/addConta', multer.single('imagem'), uploadImage, async (req, res) => {
     try {
         let c1 = false;
         let c2 = false;
-        const { email, senha, user, cpf, adm} = req.body;
+        const { email, senha, user, cpf } = req.body;
         const imagem = req.file.firebaseUrl
         const contaRef2 = db.collection('contas')
         const doc = await contaRef2.doc(`${cpf}`).get()
@@ -224,8 +230,8 @@ app.post('/addConta', multer.single('imagem'), uploadImage, async (req, res) => 
                 "senha": senha,
                 "user": user,
                 "cpf": cpf,
-                "adm": adm,
-                "imagem":imagem
+                "adm": false,
+                "imagem": imagem
             },
                 { merge: true }
             )
@@ -238,15 +244,27 @@ app.post('/addConta', multer.single('imagem'), uploadImage, async (req, res) => 
     }
 })
 
-//alterar uma ocorrencia de dados
-app.patch("/alterarOcorrencia", async (req, res) => {
+
+//alterar o status de uma ocorrência
+app.put("/alterar/status", async (req, res) => {
     try {
-        const { id, novaOcorrencia } = req.body
-        const cidadeRef = db.collection('ocorrencias').doc(`${id}`)
-        const res2 = await cidadeRef.set({
-            "ocorrencia": novaOcorrencia
-        }, { merge: true })
-        res.status(200).send("ocorrencia alterada")
+        const { cpf, id, status } = req.body
+        let adm = false;
+        const doc = await db.collection('contas').doc(`${cpf}`).get()
+        if (doc.exists) {
+            adm = doc.data().adm
+        } else {
+            adm = false
+        }
+        if (adm != false) {
+            const ocorrenciaRef = db.collection('ocorrencias').doc(`${id}`)
+            const res2 = await ocorrenciaRef.set({
+                "status": status
+            }, { merge: true })
+            res.status(200).send("ocorrencia alterada")
+        }else{
+            res.status(200).send('status não alterado')
+        }
     } catch (err) {
         res.status(500)
     }
