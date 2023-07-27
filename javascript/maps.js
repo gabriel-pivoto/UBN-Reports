@@ -92,6 +92,12 @@ function initMap() {
 
 // Função para enviar a ocorrência para o servidor
 function Confirm() {
+  let formulario = new FormData(document.getElementById('formularioOcorrencia'))
+  let imagem= document.getElementById('imagemOcorrencia').files[0]
+
+  formulario.set("imagem", new File([imagem], "nome.jpeg", { type: "image/jpeg" }))
+
+  
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const userCPF = localStorage.getItem("userCPF");
   if (!isLoggedIn || !userCPF) {
@@ -99,21 +105,13 @@ function Confirm() {
     return;
   }
   cpf = userCPF;
-
+  formulario.set('cpf',cpf)
   if (cpf != "") {
     // Criação da requisição POST para adicionar a ocorrência
     requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
-    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
 
     // Envio dos dados da ocorrência como um objeto JSON no corpo da requisição
-    requisicao.send(JSON.stringify({
-      "ocorrencia": document.getElementById("problem").value,
-      "latitude": document.getElementById("lat").value,
-      "longitude": document.getElementById("lng").value,
-      "Endereco": document.getElementById("addres").value,
-      "cpf": cpf,
-      "descricao": document.getElementById("descricao").value
-    }));
+    requisicao.send(formulario);
 
     // Fechar o modal de confirmação
     const modal = document.querySelector("dialog");
@@ -284,10 +282,10 @@ function geocode(request) {
       };
 
       // Preenchimento dos campos de formulário com os dados da geocodificação
-      document.getElementById("addres").value = data.address;
-      document.getElementById("problem").value = "Insira seu problema aqui";
-      document.getElementById("lat").value = data.location.lat;
-      document.getElementById("lng").value = data.location.lng;
+      document.getElementById("Endereco").value = data.address;
+      document.getElementById("ocorrencia").value = "Insira seu problema aqui";
+      document.getElementById("latitude").value = data.location.lat;
+      document.getElementById("longitude").value = data.location.lng;
     });
 }
 
@@ -323,9 +321,9 @@ function ConfirmarCadastroFunc() {
   var formulario = new FormData(document.getElementById('formulario'))
   requisicao.open("POST", "http://localhost:5000/addConta");
 
-  let teste = document.getElementById('img').files[0]
+  let imagem = document.getElementById('img').files[0]
 
-  formulario.set("imagem", new File([teste], "nome", { type: "image/jpeg" }))
+  formulario.set("imagem", new File([imagem], "nome", { type: "image/jpeg" }))
 
 
   requisicao.onload = function () {
@@ -454,9 +452,9 @@ function PegarLocal() {
     if (status == google.maps.GeocoderStatus.OK) {
       if (results[0]) {
         var address = results[0].formatted_address;
-        document.getElementById("addres").value = address;
-        document.getElementById("lat").value = latitude;
-        document.getElementById("lng").value = longitude;
+        document.getElementById("Endereco").value = address;
+        document.getElementById("latitude").value = latitude;
+        document.getElementById("longitude").value = longitude;
 
         markers = new google.maps.Marker({
           position: latlng,
