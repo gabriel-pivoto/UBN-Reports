@@ -148,11 +148,10 @@ function PegarUmaOcorrencia(id) {
   "<p> " + ocorrencia.descricao + "</p>" +
   "<p> " + ocorrencia.Endereco + "</p>" +
   '<p> Status: ' + ocorrencia.status + ' </p>' +
-  '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + '&body=' + ocorrencia.descricao + '">' +
+  '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + '&body=Descrição: ' + ocorrencia.descricao + '%0AStatus: '+ocorrencia.status+' %0ALink para a imagem: '+ocorrencia.imagem+'">' +
   '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
   '</a>' +
-  '<meta property="og:description" content="Descrição do Conteúdo"></meta>' +
-  '<a href="https://www.facebook.com/sharer/sharer.php?u=https://storage.googleapis.com/fetin-teste.appspot.com/1690326854741.nome&quote=Texto%20da%20citação%20aqui" target="_blank">' +
+  '<a href="https://www.facebook.com/sharer/sharer.php?u='+ ocorrencia.imagem +' "target="_blank">'+
   '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
   '</a>' +
   '<a href="https://api.whatsapp.com/send?text= Ocorrência: '+ ocorrencia.ocorrencia +'%0ADescrição: '+ocorrencia.descricao+'%0AEndereço: '+ocorrencia.Endereco+'%0AStatus: '+ocorrencia.status+'%0AImagem: '+ocorrencia.imagem+'" >' +
@@ -160,7 +159,6 @@ function PegarUmaOcorrencia(id) {
   '</a>' +
   '</div>' +
   '</div>';
-  console.log(encodeURIComponent("https://storage.googleapis.com/fetin-teste.appspot.com/1690326854741.nome"));
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
@@ -337,8 +335,8 @@ function ConfirmarCadastroFunc() {
   requisicao.send(formulario)
 
   function ContaCriada() {
-    const dialogLogin = document.getElementById("register");
-    dialogLogin.close();
+    const dialogregister = document.getElementById("register");
+    dialogregister.close();
     alert("Conta criada!");
   }
   function ContaExistente() {
@@ -420,7 +418,7 @@ function pegarFotodePerfil() {
       var img = document.getElementById("imagemPerfil");
       if (responseObj.imagem != undefined) {
         img.setAttribute('src', responseObj.imagem);
-        console.log(responseObj.imagem);
+        
       }
 
 

@@ -87,27 +87,6 @@ app.get('/verficarExistencia/ocorrencia/:id', async (req, res) => {
     }
 })
 
-//verificar se a conta existe retorna false se os dois parametros ainda não existirem e retorna true caso existirem em algum lugar
-// app.get('/verficarExistencia/conta/:cpf/:email', async (req, res) => {
-//     try {
-//         const { cpf, email } = req.params
-//         const contaRef = db.collection('contas')
-//         const doc = await contaRef.doc(`${cpf}`).get()
-//         if (doc.exists) {
-//             return res.send(true)
-//         }
-//         const snapshot = await contaRef.where('email', '==', email).get();
-//         if (!snapshot.empty) {
-//             return res.send(true);
-//         }
-//         return res.send(false);
-
-//     } catch (err) {
-//         res.status(500)
-//     }
-// })
-
-
 //verificar o histórico de requisições do usuário
 app.get('/hitoricoReq/:cpf', async (req, res) => {
     try {
@@ -194,7 +173,7 @@ app.post('/addOcorrencia',multer.single('imagem'), uploadImage, async (req, res)
             "Endereco": Endereco,
             "cpf": cpf,
             "descricao": descricao,
-            "status": 0,
+            "status": "Solicitada",
             'imagem': imagem
 
         },
