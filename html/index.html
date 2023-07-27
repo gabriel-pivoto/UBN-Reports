@@ -1,77 +1,124 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>UBN Reports</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKD8NSryyh37adptif2T2Ou1XKXCK2cws&callback=initMap&v=weekly"
+      defer
+    ></script>
 
-<head>
-  <title>UBN Reports</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKD8NSryyh37adptif2T2Ou1XKXCK2cws&callback=initMap&v=weekly"
-    defer></script>
+    <script src="../javascript/maps.js"></script>
+    <link rel="stylesheet" href="../style/maps.css" />
+  </head>
 
-  <script src="../javascript/maps.js"></script>
-  <link rel="stylesheet" href="../style/maps.css">
-</head>
+  <body>
+    <dialog id="nrequisicao">
+      <h2>Nova Requisição</h2>
+      <form
+        id="formularioOcorrencia"
+        name="formularioOcorrencia"
+        lass="edit-note"
+        enctype="multipart/form-data"
+      >
+        <p>Problema: <input id="ocorrencia" name="ocorrencia" /></p>
+        <p>Endereço: <input id="Endereco" name="Endereco" readonly /></p>
+        <p hidden>Latitude: <input id="latitude" name="latitude" /></p>
+        <p hidden>Longitude: <input id="longitude" name="longitude" /></p>
+        <p>Descrição: <input id="descricao" name="descricao" /></p>
+        <p>
+          Imagem:
+          <input
+            type="file"
+            id="imagemOcorrencia"
+            name="imagem"
+            accept="image/jpeg"
+            required
+          />
+        </p>
+      </form>
+      <button onclick="cancel()">Cancelar</button>
+      <button onclick="Confirm()">Confirmar</button>
+      <button onclick="PegarLocal()">Sua localização</button>
+    </dialog>
 
-<body>
+    <div id="map" class="mapa"></div>
 
-  <dialog id="nrequisicao" >
-    <h2>Nova Requisição</h2>
-    <form id="formularioOcorrencia" name="formularioOcorrencia" lass = "edit-note"enctype="multipart/form-data">
-    <p>Problema: <input id="ocorrencia" name="ocorrencia"></p>
-    <p>Endereço: <input id="Endereco" name="Endereco" readonly></p>
-    <p hidden>Latitude: <input id="latitude" name="latitude"></p>
-    <p hidden>Longitude: <input id="longitude" name="longitude"></p>
-    <p>Descrição: <input id="descricao" name="descricao"></p>   
-    <p>Imagem: <input  type='file'id="imagemOcorrencia" name="imagem" accept="image/jpeg" required></p>
-    </form>
-    <button onclick="cancel()">Cancelar</button>
-    <button onclick="Confirm()">Confirmar</button>
-    <button onclick="PegarLocal()">Sua localização </button>
-  </dialog>
-
-
-  <div id="map" class="mapa"></div>
-
-  <div class="navbar">
-    <div class="navbar-toggle">
-      <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon" id="imagemPerfil">
+    <div class="navbar">
+      <div class="navbar-toggle">
+        <img
+          src="../style/pinguin.jpg"
+          alt="Menu"
+          class="navbar-icon"
+          id="imagemPerfil"
+        />
+      </div>
+      <ul class="links">
+        <li><button class="button-login" onclick="login()">Entrar</button></li>
+        <li>
+          <button class="button-login" onclick="register()">Cadastrar</button>
+        </li>
+        <li><a href="http://127.0.0.1:5500/html/profile.html">Perfil</a></li>
+        <li><a href="http://127.0.0.1:5500/html/AboutUs.html">Sobre nós</a></li>
+        <li><button onclick="logout()">Sair</button></li>
+      </ul>
     </div>
-    <ul class="links">
-      <li><button class="button-login" onclick="login()"> Entrar</button></li>
-      <li><button class="button-login" onclick="register()">Cadastrar</button></li>
-      <li><a href="http://127.0.0.1:5500/html/profile.html">Perfil</a></li>
-      <li><a href="http://127.0.0.1:5500/html/AboutUs.html">Sobre nós</a></li>
-      <li><button onclick="logout()">Sair</button></li>
-    </ul>
-  </div>
 
-  <dialog id="LogIn">
-    <h2>Entrar</h2>
-    <p>cpf: <input id="cpfLogin"></p>
-    <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
+    <dialog id="LogIn">
+      <h2>Entrar</h2>
+      <p>cpf: <input id="cpfLogin" /></p>
+      <p>
+        Senha:
+        <input
+          id="senhalogin"
+          type="password"
+          autocomplete="current-password"
+          required
+        />
+      </p>
 
-    <button onclick="cancel()">Cancelar</button>
-    <button onclick="logIn()">Confirmar</button>
-  </dialog>
+      <button onclick="cancel()">Cancelar</button>
+      <button onclick="logIn()">Confirmar</button>
+    </dialog>
 
-  <dialog id="register">
-    <h2>Cadastrar</h2>
-    <form id="formulario" name="formulario" lass = "edit-note"enctype="multipart/form-data">
-    <p>Nome: <input id="name" name="user"></p>
-    <p>cpf: <input id="cdu" name="cpf"></p>
-    <p>email: <input id="email" name="email"></p>
-    <p>Senha: <input id="senha" type="password" autocomplete="current-password"  name='senha' required></p>
-    <p>Imagem: <input  type='file'id="img" name="imagem" accept="image/jpeg" required></p>
-  </form>
-    <button onclick="cancel()">Cancelar</button>
-    <button id="confirmarCadastro">Confirmar</button>
-
-  </dialog>
-
-</body>
-
+    <dialog id="register">
+      <h2>Cadastrar</h2>
+      <form
+        id="formulario"
+        name="formulario"
+        lass="edit-note"
+        enctype="multipart/form-data"
+      >
+        <p>Nome: <input id="name" name="user" /></p>
+        <p>cpf: <input id="cdu" name="cpf" /></p>
+        <p>email: <input id="email" name="email" /></p>
+        <p>
+          Senha:
+          <input
+            id="senha"
+            type="password"
+            autocomplete="current-password"
+            name="senha"
+            required
+          />
+        </p>
+        <p>
+          Imagem:
+          <input
+            type="file"
+            id="img"
+            name="imagem"
+            accept="image/jpeg"
+            required
+          />
+        </p>
+      </form>
+      <button onclick="cancel()">Cancelar</button>
+      <button id="confirmarCadastro">Confirmar</button>
+    </dialog>
+  </body>
 </html>

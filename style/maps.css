@@ -60,7 +60,7 @@ section .navbar:last-child{
   display: block;
 }
 
-.navbar-toggle.active~.links {
+.navbar-toggle.active ~ .links {
   display: block;
 }
 .navbar li {
@@ -74,31 +74,30 @@ section .navbar:last-child{
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  cursor:pointer;
+  cursor: pointer;
   font-size: 14px;
 }
 
-.navbar li  a:active {
+.navbar li a:active {
   color: blue;
 }
-.navbar li  a:hover {
+.navbar li a:hover {
   color: blue;
-  background-color:rgb(232, 245, 245);
+  background-color: rgb(232, 245, 245);
 }
 
-.navbar li button{
+.navbar li button {
   border: none;
-  background-color:  #fbfbfb;
-  cursor:pointer;
+  background-color: #fbfbfb;
+  cursor: pointer;
   font-size: 14px;
 }
-.navbar li button:hover{
+.navbar li button:hover {
   border: none;
   color: blue;
-  background-color:rgb(232, 245, 245);
-  cursor:pointer;
+  background-color: rgb(232, 245, 245);
+  cursor: pointer;
 }
-
 
 .mapa {
   position: relative;
@@ -107,7 +106,6 @@ section .navbar:last-child{
 
 #map {
   height: 100%;
-
 }
 
 /* Optional: Makes the sample page fill the window. */
@@ -118,8 +116,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
-
 
 input[type="text"] {
   background-color: #fff;

@@ -1,64 +1,86 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Sobre Nós e Projeto</title>
-        <link rel="stylesheet" href="../style/maps.css">
-        <link rel="stylesheet" href="../style/profile.css">
-        <script src="../javascript/maps.js"></script>
-    
-    </head>
-    <body>
-        <div class="navbar">
-            <div class="navbar-toggle">
-              <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon" id="imagemPerfil">
-            </div>
-            <ul class="links">
-              <li><button class="button-login" onclick="login()"> Entrar</button></li>
-              <li><a href="http://127.0.0.1:5500/html/profile.html">Perfil</a></li>
-              <li><a href="http://127.0.0.1:5500/html/AboutUs.html">Sobre nós</a></li>
-              <li><button onclick="logout()">Sair</button></li>
-            </ul>
-          </div>
 
-          <dialog id="LogIn">
-            <h2>Entrar</h2>
-            <p>cpf: <input id="cpfLogin"></p>
-            <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
-        
-            <button onclick="cancel()">Cancelar</button>
-            <button onclick="logIn()">Confirmar</button>
-          </dialog>
+<head>
+  <title>Sobre Nós e Projeto</title>
+  <link rel="stylesheet" href="../style/maps.css">
+  <link rel="stylesheet" href="../style/profile.css">
+  <link rel="stylesheet" href="../style/AboutUs.css">
+  <script src="../javascript/maps.js"></script>
 
+</head>
 
-          <h1>Sistema de Requisições Cidadãs - Contribuindo para uma Cidade Melhor</h1>
-          <h2>Introdução:</h2>
-          <p>Somos um grupo de dois estudantes do inatel, do curso de Engenharia de Software, e estamos criando um projeto para a nossa Fetin.</p>
-          <p><pre>Nomes: Gabriel de Souza Pivoto    Periodo: 4°      <br>       João Victor Godoy da Silva Periodo: 2°</pre></p>
+<body>
+  <div class="navbar">
+    <div class="navbar-toggle">
+      <img src="../style/pinguin.jpg" alt="Menu" class="navbar-icon" id="imagemPerfil">
+    </div>
+    <ul class="links">
+      <li><button class="button-login" onclick="login()"> Entrar</button></li>
+      <li><a href="http://127.0.0.1:5500/html/profile.html">Perfil</a></li>
+      <li><a href="http://127.0.0.1:5500/html/AboutUs.html">Sobre nós</a></li>
+      <li><button onclick="logout()">Sair</button></li>
+    </ul>
+  </div>
 
-          <p>Nosso projeto visa estabelecer um canal de comunicação direto entre a população e a prefeitura, permitindo que os cidadãos possam reportar questões e problemas em suas comunidades que necessitam de intervenção e reparos imediatos. Através do <em>Sistema de Requisições</em>, pretendemos fortalecer a colaboração entre os munícipes e o poder público, agilizando o processo de identificação e resolução de questões como vazamentos de água, falta de iluminação pública, buracos nas ruas e outras demandas emergenciais.</p>
-        
-          <h2>Como Funciona:</h2>
-          <ol>
-            <li><strong>Criação de Conta:</strong> O cidadão cria uma conta ou faz login no sistema para registrar sua requisição. Serão solicitadas informações básicas, como nome, email e CPF.</li>
-            <li><strong>Registro de Requisição:</strong> O usuário seleciona o local do problema.</li>
-            <li><strong>Descrição Detalhada:</strong> O solicitante descreve detalhadamente o problema encontrado e fornecendo informações como a localização exata do ocorrido</li>
-            <li><strong>Envio de Imagens:</strong> Para melhor compreensão do problema, o cidadão poderá anexar uma fotografia relacionadas à requisição.</li>
-            <li><strong>Acompanhamento e Status:</strong> Após o envio da requisição, o solicitante poderá acompanhar pelo o site os Status da requisição e ações tomadas pela prefeitura.</li>
-          </ol>
-        
-          <h2>Benefícios do Sistema de Requisições:</h2>
-          <ul>
-            <li>Agilidade no Atendimento: Ao possibilitar que os problemas sejam reportados diretamente pela população, a prefeitura terá conhecimento imediato das demandas emergenciais, permitindo uma resposta mais rápida e eficiente.</li>
-            <li>Transparência e Participação Cidadã: O sistema promove a transparência, permitindo que os cidadãos acompanhem o andamento das requisições e saibam como está o processo de resolução dos problemas.</li>
-            <li>Priorização de Ações: Com um registro sistemático das requisições, a prefeitura poderá identificar padrões e priorizar intervenções em áreas mais afetadas, melhorando a gestão dos recursos públicos.</li>
-            <li>Melhoria Contínua: Ao estabelecer um canal de comunicação contínuo entre a população e a prefeitura, o sistema incentiva a melhoria constante dos serviços públicos, à medida que os problemas são identificados e solucionados em tempo hábil.</li>
-          </ul>
-        
-          <h2>Conclusão:</h2>
-          <p>O <em>Sistema de Requisições</em> é uma iniciativa inovadora que visa fortalecer a relação entre a comunidade e a prefeitura, permitindo que todos possam contribuir ativamente para a construção de uma cidade mais segura, limpa e funcional. Ao empoderar os cidadãos para que eles próprios sejam agentes de mudança, acreditamos que poderemos alcançar uma cidade mais colaborativa e harmoniosa, onde todos possam desfrutar de uma melhor qualidade de vida. Junte-se a nós nessa jornada rumo a uma cidade melhor para todos!</p>
-        
+  <dialog id="LogIn">
+    <h2>Entrar</h2>
+    <p>cpf: <input id="cpfLogin"></p>
+    <p>Senha: <input id="senhalogin" type="password" autocomplete="current-password" required></p>
+
+    <button onclick="cancel()">Cancelar</button>
+    <button onclick="logIn()">Confirmar</button>
+  </dialog>
 
 
+  <h1>Sistema de Requisições - Contribuindo para uma Cidade Melhor</h1>
+  <h2>Introdução:</h2>
+  <p>Somos um grupo de dois estudantes do inatel, do curso de Engenharia de Software, e estamos criando um projeto para
+    a nossa Fetin.</p>
+  <p>
+  <pre style="font-size: 15px;">Nomes: Gabriel de Souza Pivoto    Periodo: 4°      <br>       João Victor Godoy da Silva Periodo: 2°</pre>
+  </p>
 
-    </body>
+  <p>Nosso projeto visa estabelecer um canal de comunicação direto entre a população e a prefeitura, permitindo que os
+    cidadãos possam reportar questões e problemas em suas comunidades que necessitam de intervenção e reparos imediatos.
+    Através do <em>Sistema de Requisições</em>, pretendemos fortalecer a colaboração entre os munícipes e o poder
+    público, agilizando o processo de identificação e resolução de questões como vazamentos de água, falta de iluminação
+    pública, buracos nas ruas e outras demandas emergenciais.</p>
+
+  <h2>Como Funciona:</h2>
+  <ol>
+    <li><strong>Criação de Conta:</strong> O cidadão cria uma conta ou faz login no sistema para registrar sua
+      requisição. Serão solicitadas informações básicas, como nome, email e CPF.</li>
+    <li><strong>Registro de Requisição:</strong> O usuário seleciona o local do problema.</li>
+    <li><strong>Descrição Detalhada:</strong> O solicitante descreve detalhadamente o problema encontrado e fornecendo
+      informações como a localização exata do ocorrido</li>
+    <li><strong>Envio de Imagens:</strong> Para melhor compreensão do problema, o cidadão poderá anexar uma fotografia
+      relacionadas à requisição.</li>
+    <li><strong>Acompanhamento e Status:</strong> Após o envio da requisição, o solicitante poderá acompanhar pelo o
+      site os Status da requisição e ações tomadas pela prefeitura.</li>
+  </ol>
+
+  <h2>Benefícios do Sistema de Requisições:</h2>
+  <ul>
+    <li>Agilidade no Atendimento: Ao possibilitar que os problemas sejam reportados diretamente pela população, a
+      prefeitura terá conhecimento imediato das demandas emergenciais, permitindo uma resposta mais rápida e eficiente.
+    </li>
+    <li>Transparência e Participação Cidadã: O sistema promove a transparência, permitindo que os cidadãos acompanhem o
+      andamento das requisições e saibam como está o processo de resolução dos problemas.</li>
+    <li>Priorização de Ações: Com um registro sistemático das requisições, a prefeitura poderá identificar padrões e
+      priorizar intervenções em áreas mais afetadas, melhorando a gestão dos recursos públicos.</li>
+    <li>Melhoria Contínua: Ao estabelecer um canal de comunicação contínuo entre a população e a prefeitura, o sistema
+      incentiva a melhoria constante dos serviços públicos, à medida que os problemas são identificados e solucionados
+      em tempo hábil.</li>
+  </ul>
+
+  <h2>Conclusão:</h2>
+  <p>O <em>Sistema de Requisições</em> é uma iniciativa inovadora que visa fortalecer a relação entre a comunidade e a
+    prefeitura, permitindo que todos possam contribuir ativamente para a construção de uma cidade mais segura, limpa e
+    funcional. Ao empoderar os cidadãos para que eles próprios sejam agentes de mudança, acreditamos que poderemos
+    alcançar uma cidade mais colaborativa e harmoniosa, onde todos possam desfrutar de uma melhor qualidade de vida.
+    Junte-se a nós nessa jornada rumo a uma cidade melhor para todos!</p>
+
+</body>
+
 </html>

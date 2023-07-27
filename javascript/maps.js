@@ -10,7 +10,7 @@ let response;
 var novarequisicao = false;
 let cpf = "";
 let Entrou = false;
-let Contaexistente
+let Contaexistente;
 // Função de inicialização do mapa
 function initMap() {
   // Criação do objeto de mapa do Google Maps
@@ -72,32 +72,32 @@ function initMap() {
     geocode({ address: inputText.value })
   );
 
-
   // Evento de clique no botão "New Request" para criar uma nova requisição de geocodificação
   createRequest.addEventListener("click", () => {
     newrequest();
   });
 
-
-
   confirmarCadastro.addEventListener("click", () => {
     ConfirmarCadastroFunc();
-  })
+  });
 
   // Limpa o marcador do mapa inicialmente
   pegar();
-  pegarFotodePerfil()
-
+  pegarFotodePerfil();
 }
 
 // Função para enviar a ocorrência para o servidor
 function Confirm() {
-  let formulario = new FormData(document.getElementById('formularioOcorrencia'))
-  let imagem= document.getElementById('imagemOcorrencia').files[0]
+  let formulario = new FormData(
+    document.getElementById("formularioOcorrencia")
+  );
+  let imagem = document.getElementById("imagemOcorrencia").files[0];
 
-  formulario.set("imagem", new File([imagem], "nome.jpeg", { type: "image/jpeg" }))
+  formulario.set(
+    "imagem",
+    new File([imagem], "nome.jpeg", { type: "image/jpeg" })
+  );
 
-  
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const userCPF = localStorage.getItem("userCPF");
   if (!isLoggedIn || !userCPF) {
@@ -105,7 +105,7 @@ function Confirm() {
     return;
   }
   cpf = userCPF;
-  formulario.set('cpf',cpf)
+  formulario.set("cpf", cpf);
   if (cpf != "") {
     // Criação da requisição POST para adicionar a ocorrência
     requisicao.open("POST", "http://localhost:5000/addOcorrencia", true);
@@ -118,47 +118,80 @@ function Confirm() {
     modal.close();
   } else {
     alert("Favor entrar antes de cadastar um novo problema!");
-
   }
 
-  requisicao.onload = (() => {
+  requisicao.onload = () => {
     pegar();
-  })
-
+  };
 }
 
 // Função para pegar uma ocorrência do servidor
 function PegarUmaOcorrencia(id) {
   // Criação da requisição GET para buscar uma ocorrência específica
   requisicao.open("GET", "http://localhost:5000/pegar/ocorrencia/" + id);
-  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  requisicao.setRequestHeader(
+    "Content-type",
+    "application/json",
+    "Access-Control-Allow-Origin"
+  );
 
   // Manipulação do retorno da requisição
   requisicao.onload = function teste() {
     let ocorrencia = JSON.parse(requisicao.response);
     let x = ocorrencia.imagem;
 
-    let position = new google.maps.LatLng(ocorrencia.latitude, ocorrencia.longitude);
+    let position = new google.maps.LatLng(
+      ocorrencia.latitude,
+      ocorrencia.longitude
+    );
     contentString =
-  '<div id="content">' +
-  '<div id="siteNotice">' +
-  '</div>' +
-  '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + '</h1>' +
-  '<div id="bodyContent">' +
-  "<p> " + ocorrencia.descricao + "</p>" +
-  "<p> " + ocorrencia.Endereco + "</p>" +
-  '<p> Status: ' + ocorrencia.status + ' </p>' +
-  '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + '&body=Descrição: ' + ocorrencia.descricao + '%0AStatus: '+ocorrencia.status+' %0ALink para a imagem: '+ocorrencia.imagem+'">' +
-  '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
-  '</a>' +
-  '<a href="https://www.facebook.com/sharer/sharer.php?u='+ ocorrencia.imagem +' "target="_blank">'+
-  '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
-  '</a>' +
-  '<a href="https://api.whatsapp.com/send?text= Ocorrência: '+ ocorrencia.ocorrencia +'%0ADescrição: '+ocorrencia.descricao+'%0AEndereço: '+ocorrencia.Endereco+'%0AStatus: '+ocorrencia.status+'%0AImagem: '+ocorrencia.imagem+'" >' +
-  '<img width="25" height="25" src="../images/logo-whatsapp.svg" alt="">' +
-  '</a>' +
-  '</div>' +
-  '</div>';
+      '<div id="content">' +
+      '<div id="siteNotice">' +
+      "</div>" +
+      '<h1 id="firstHeading" class="firstHeading">' +
+      ocorrencia.ocorrencia +
+      "</h1>" +
+      '<div id="bodyContent">' +
+      "<p> " +
+      ocorrencia.descricao +
+      "</p>" +
+      "<p> " +
+      ocorrencia.Endereco +
+      "</p>" +
+      "<p> Status: " +
+      ocorrencia.status +
+      " </p>" +
+      '<a href="mailto:? &subject=' +
+      ocorrencia.ocorrencia +
+      "&body=Descrição: " +
+      ocorrencia.descricao +
+      "%0AStatus: " +
+      ocorrencia.status +
+      " %0ALink para a imagem: " +
+      ocorrencia.imagem +
+      '">' +
+      '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
+      "</a>" +
+      '<a href="https://www.facebook.com/sharer/sharer.php?u=' +
+      ocorrencia.imagem +
+      ' "target="_blank">' +
+      '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
+      "</a>" +
+      '<a href="https://api.whatsapp.com/send?text= Ocorrência: ' +
+      ocorrencia.ocorrencia +
+      "%0ADescrição: " +
+      ocorrencia.descricao +
+      "%0AEndereço: " +
+      ocorrencia.Endereco +
+      "%0AStatus: " +
+      ocorrencia.status +
+      "%0AImagem: " +
+      ocorrencia.imagem +
+      '" >' +
+      '<img width="25" height="25" src="../images/logo-whatsapp.svg" alt="">' +
+      "</a>" +
+      "</div>" +
+      "</div>";
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
@@ -168,14 +201,13 @@ function PegarUmaOcorrencia(id) {
 
     // Abre a infowindow no mapa
     infowindow.open({
-      map
+      map,
     });
-  }
+  };
 
   // Envio da requisição
   requisicao.send();
 }
-
 
 // Função para cancelar a adição da ocorrência
 function cancel() {
@@ -185,22 +217,19 @@ function cancel() {
 
   const dialogregister = document.getElementById("register");
   if (modal != null) {
-
     modal.close();
   }
   if (dialogLogin != null) {
     dialogLogin.close();
-
   }
   if (dialogregister != null) {
     dialogregister.close();
-
   }
 }
 
 // Função para criar uma nova requisição de geocodificação
 function newrequest() {
-  const userCPF = localStorage.getItem("userCPF")
+  const userCPF = localStorage.getItem("userCPF");
   if (userCPF != null) {
     novarequisicao = true;
   } else {
@@ -212,9 +241,6 @@ function newrequest() {
 
 // Função para buscar as ocorrências do servidor
 function pegar() {
-
-
-
   // Criação da requisição GET para buscar as ocorrências
   const requisicao = new XMLHttpRequest();
   requisicao.open("GET", "http://localhost:5000/ocorrencias");
@@ -252,7 +278,7 @@ function marcador(endereco, posicao, ocorrencia, id) {
     position: posicao,
     map: map,
     title: ocorrencia,
-    id: id
+    id: id,
   });
 
   // Evento de clique no marcador para exibir detalhes da ocorrência
@@ -263,41 +289,37 @@ function marcador(endereco, posicao, ocorrencia, id) {
 
 // Função para realizar a geocodificação de um endereço ou coordenadas
 function geocode(request) {
-  geocoder
-    .geocode(request)
-    .then((result) => {
-      const { results } = result;
+  geocoder.geocode(request).then((result) => {
+    const { results } = result;
 
-      map.setCenter(results[0].geometry.location);
-      response.innerText = JSON.stringify(result, null, 2);
+    map.setCenter(results[0].geometry.location);
+    response.innerText = JSON.stringify(result, null, 2);
 
-      const data = {
-        address: results[0].formatted_address,
-        location: {
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-        },
-      };
+    const data = {
+      address: results[0].formatted_address,
+      location: {
+        lat: results[0].geometry.location.lat(),
+        lng: results[0].geometry.location.lng(),
+      },
+    };
 
-      // Preenchimento dos campos de formulário com os dados da geocodificação
-      document.getElementById("Endereco").value = data.address;
-      document.getElementById("ocorrencia").value = "Insira seu problema aqui";
-      document.getElementById("latitude").value = data.location.lat;
-      document.getElementById("longitude").value = data.location.lng;
-    });
+    // Preenchimento dos campos de formulário com os dados da geocodificação
+    document.getElementById("Endereco").value = data.address;
+    document.getElementById("ocorrencia").value = "Insira seu problema aqui";
+    document.getElementById("latitude").value = data.location.lat;
+    document.getElementById("longitude").value = data.location.lng;
+  });
 }
 
 // Evento de carregamento do DOM para adicionar a funcionalidade de abrir/fechar o menu da navbar
-document.addEventListener('DOMContentLoaded', function () {
-  const navbarToggle = document.querySelector('.navbar-toggle');
-  const links = document.querySelector('.links');
+document.addEventListener("DOMContentLoaded", function () {
+  const navbarToggle = document.querySelector(".navbar-toggle");
+  const links = document.querySelector(".links");
 
-  navbarToggle.addEventListener('click', function () {
-    links.classList.toggle('active');
+  navbarToggle.addEventListener("click", function () {
+    links.classList.toggle("active");
   });
 });
-
-
 
 // função para abrir o dialog do login
 
@@ -310,29 +332,24 @@ function register() {
   dialogLogin.showModal();
 }
 
-
-
-
-
 function ConfirmarCadastroFunc() {
-  Contaexistente = false
-  var formulario = new FormData(document.getElementById('formulario'))
+  Contaexistente = false;
+  var formulario = new FormData(document.getElementById("formulario"));
   requisicao.open("POST", "http://localhost:5000/addConta");
 
-  let imagem = document.getElementById('img').files[0]
+  let imagem = document.getElementById("img").files[0];
 
-  formulario.set("imagem", new File([imagem], "nome", { type: "image/jpeg" }))
-
+  formulario.set("imagem", new File([imagem], "nome", { type: "image/jpeg" }));
 
   requisicao.onload = function () {
     if (requisicao.status === 200) {
-      ContaCriada()
+      ContaCriada();
     } else {
-      ContaExistente()
+      ContaExistente();
       console.log("Erro na requisição. Código de status:", requisicao.status);
     }
-  }
-  requisicao.send(formulario)
+  };
+  requisicao.send(formulario);
 
   function ContaCriada() {
     const dialogregister = document.getElementById("register");
@@ -348,21 +365,22 @@ function ConfirmarCadastroFunc() {
   }
 }
 
-
-
 function logIn() {
   Entrou = false;
   cpf = "";
   const requisicao = new XMLHttpRequest();
-  requisicao.open("GET", "http://localhost:5000/login/" + document.getElementById("cpfLogin").value + "/" + document.getElementById("senhalogin").value);
+  requisicao.open(
+    "GET",
+    "http://localhost:5000/login/" +
+      document.getElementById("cpfLogin").value +
+      "/" +
+      document.getElementById("senhalogin").value
+  );
   requisicao.setRequestHeader("Content-type", "application/json");
 
   // Manipulação do retorno da requisição
   requisicao.onload = function () {
-
     if (requisicao.status === 200) {
-
-
       const responseObj = JSON.parse(requisicao.response);
       Entrou = responseObj;
       if (Entrou) {
@@ -373,23 +391,22 @@ function logIn() {
 
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("userCPF", cpf);
-        localStorage.setItem("senhaPerfil", document.getElementById("senhalogin").value);
+        localStorage.setItem(
+          "senhaPerfil",
+          document.getElementById("senhalogin").value
+        );
 
         location.reload();
       } else {
         alert("CPF ou senha incorretos");
       }
-
     } else {
       console.log("Erro na requisição. Código de status:", requisicao.status);
       alert("Preencha todos os campos corretamente!");
     }
-  }
+  };
   requisicao.send();
-
 }
-
-
 
 // Envio da requisição
 
@@ -401,9 +418,7 @@ function logout() {
   // Resto do código para redirecionar para a página de login ou atualizar a página
 }
 
-
 function pegarFotodePerfil() {
-
   const requisicao = new XMLHttpRequest();
   const userCPF = localStorage.getItem("userCPF");
   requisicao.open("GET", "http://localhost:5000/pegar/conta/" + userCPF);
@@ -417,19 +432,14 @@ function pegarFotodePerfil() {
 
       var img = document.getElementById("imagemPerfil");
       if (responseObj.imagem != undefined) {
-        img.setAttribute('src', responseObj.imagem);
-        
+        img.setAttribute("src", responseObj.imagem);
       }
-
-
     } else {
       console.log("Erro na requisição. Código de status:", requisicao.status);
     }
-  }
+  };
   requisicao.send();
 }
-
-
 
 function PegarLocal() {
   if (navigator.geolocation) {
@@ -437,8 +447,8 @@ function PegarLocal() {
   } else {
     alert("Geolocalização não é suportada pelo seu navegador.");
   }
-
-} function showPosition(position) {
+}
+function showPosition(position) {
   var latitude = position.coords.latitude;
   var longitude = position.coords.longitude;
 
@@ -446,7 +456,7 @@ function PegarLocal() {
   var geocoder = new google.maps.Geocoder();
   var latlng = new google.maps.LatLng(latitude, longitude);
 
-  geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+  geocoder.geocode({ latLng: latlng }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       if (results[0]) {
         var address = results[0].formatted_address;
@@ -472,4 +482,3 @@ function PegarLocal() {
 function handleError(error) {
   alert("Erro ao obter a localização: " + error.message);
 }
-
