@@ -20,11 +20,14 @@
 
   <dialog id="nrequisicao" >
     <h2>Nova Requisição</h2>
-    <p>Problema: <input id="problem"></p>
-    <p>Endereço: <input id="addres" readonly></input>
-    <p hidden>Latitude: <input id="lat"></p>
-    <p hidden>Longitude: <input id="lng"></p>
-    <p>Descrição: <input id="descricao"></p>    
+    <form id="formularioOcorrencia" name="formularioOcorrencia" lass = "edit-note"enctype="multipart/form-data">
+    <p>Problema: <input id="ocorrencia" name="ocorrencia"></p>
+    <p>Endereço: <input id="Endereco" name="Endereco" readonly></p>
+    <p hidden>Latitude: <input id="latitude" name="latitude"></p>
+    <p hidden>Longitude: <input id="longitude" name="longitude"></p>
+    <p>Descrição: <input id="descricao" name="descricao"></p>   
+    <p>Imagem: <input  type='file'id="imagemOcorrencia" name="imagem" accept="image/jpeg" required></p>
+    </form>
     <button onclick="cancel()">Cancelar</button>
     <button onclick="Confirm()">Confirmar</button>
     <button onclick="PegarLocal()">Sua localização </button>

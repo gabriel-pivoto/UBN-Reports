@@ -171,11 +171,12 @@ app.get('/pegar/conta/:cpf', async (req, res) => {
     }
 })
 //adicionar uma ocorrencia no banco de dados
-app.post('/addOcorrencia', async (req, res) => {
+app.post('/addOcorrencia',multer.single('imagem'), uploadImage, async (req, res) => {
     try {
         const { ocorrencia, longitude, latitude, Endereco, descricao, cpf } = req.body;
         let id;
         let idExistente = true;
+        const imagem = req.file.firebaseUrl
         const ocorrenciaRef = db.collection('ocorrencias')
         while (idExistente) {
             id = Math.floor(Math.random() * 1000000000) + 1;
@@ -193,7 +194,9 @@ app.post('/addOcorrencia', async (req, res) => {
             "Endereco": Endereco,
             "cpf": cpf,
             "descricao": descricao,
-            "status": 0
+            "status": 0,
+            'imagem': imagem
+
         },
             { merge: true }
         )
