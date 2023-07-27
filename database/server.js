@@ -193,7 +193,7 @@ app.post('/addOcorrencia', async (req, res) => {
             "Endereco": Endereco,
             "cpf": cpf,
             "descricao": descricao,
-            "status": 0
+            "status": "Solicitada"
         },
             { merge: true }
         )

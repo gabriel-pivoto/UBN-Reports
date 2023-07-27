@@ -138,29 +138,31 @@ function PegarUmaOcorrencia(id) {
   // Manipulação do retorno da requisição
   requisicao.onload = function teste() {
     let ocorrencia = JSON.parse(requisicao.response);
-    
+    let x = ocorrencia.imagem;
 
     let position = new google.maps.LatLng(ocorrencia.latitude, ocorrencia.longitude);
     contentString =
-    '<div id="content">' +
-    '<div id="siteNotice">' +
-    "</div>" +
-    '<meta property="og:title" content="' + ocorrencia.ocorrencia + '">' +
-    '<meta property="og:description" content="' + ocorrencia.descricao + '">' +
-    // '<meta property="og:image" content="' + ocorrencia.imagem + '">' +
-    '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + '</h1>' +
-    '<div id="bodyContent">' +
-    "<p> " + ocorrencia.descricao + "</p>" +
-    "<p> " + ocorrencia.Endereco + "</p>" +
-    '<a href="mailto: gabrielspivoto@gmail.com">'+
-    '<img width="25" height="25" src="../images/mail-outline.svg" alt="">'+
-    '</a>' +
-    '<a href="https://www.facebook.com/sharer/sharer.php?u=https://storage.googleapis.com/fetin-teste.appspot.com/1690326854741.nome">' +
-    '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
-    '</a>' +
-    "</div>" +
-    "</div>";
-
+  '<div id="content">' +
+  '<div id="siteNotice">' +
+  '</div>' +
+  '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + '</h1>' +
+  '<div id="bodyContent">' +
+  "<p> " + ocorrencia.descricao + "</p>" +
+  "<p> " + ocorrencia.Endereco + "</p>" +
+  '<p> Status: ' + ocorrencia.status + ' </p>' +
+  '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + '&body=' + ocorrencia.descricao + '">' +
+  '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
+  '</a>' +
+  '<meta property="og:description" content="Descrição do Conteúdo"></meta>' +
+  '<a href="https://www.facebook.com/sharer/sharer.php?u=https://storage.googleapis.com/fetin-teste.appspot.com/1690326854741.nome&quote=Texto%20da%20citação%20aqui" target="_blank">' +
+  '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
+  '</a>' +
+  '<a href="https://api.whatsapp.com/send?text= Ocorrência: '+ ocorrencia.ocorrencia +'%0ADescrição: '+ocorrencia.descricao+'%0AEndereço: '+ocorrencia.Endereco+'%0AStatus: '+ocorrencia.status+'%0AImagem: '+ocorrencia.imagem+'" >' +
+  '<img width="25" height="25" src="../images/logo-whatsapp.svg" alt="">' +
+  '</a>' +
+  '</div>' +
+  '</div>';
+  console.log(encodeURIComponent("https://storage.googleapis.com/fetin-teste.appspot.com/1690326854741.nome"));
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
@@ -177,6 +179,7 @@ function PegarUmaOcorrencia(id) {
   // Envio da requisição
   requisicao.send();
 }
+
 
 // Função para cancelar a adição da ocorrência
 function cancel() {
@@ -432,14 +435,14 @@ function pegarFotodePerfil() {
 
 
 
-function PegarLocal(){
+function PegarLocal() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, handleError);
   } else {
     alert("Geolocalização não é suportada pelo seu navegador.");
   }
 
-}function showPosition(position) {
+} function showPosition(position) {
   var latitude = position.coords.latitude;
   var longitude = position.coords.longitude;
 
