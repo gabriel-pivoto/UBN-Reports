@@ -11,12 +11,22 @@ var novarequisicao = false;
 let cpf = "";
 let Entrou = false;
 let Contaexistente;
+let latInitial = -42.26;
+let lngInitial = -35.71;
 // Função de inicialização do mapa
+
 function initMap() {
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, handleError);
+  } else {
+    alert("Geolocalização não é suportada pelo seu navegador.");
+  }
+  
   // Criação do objeto de mapa do Google Maps
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 14,
-    center: { lat: -22.26, lng: -45.71 },
+    center: { lat: latInitial, lng: lngInitial },
     mapTypeControl: false,
     fullscreenControl: false,
   });
@@ -150,8 +160,9 @@ function PegarUmaOcorrencia(id) {
       "</div>" +
       '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia +  "</h1>" +
       '<div id="bodyContent">' +
-      "<p> " + ocorrencia.descricao + "</p>" +
-      "<p> " + ocorrencia.Endereco +  "</p>" +
+      "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.descricao + "</p>" +
+      "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.Endereco +  "</p>" +
+      '<img width="200" height="200" src='+ocorrencia.imagem+' alt="">'+
       "<p> Status: " + ocorrencia.status +  " </p>" +
       '<a href="mailto:? &subject=' +  ocorrencia.ocorrencia + "&body=Descrição: " +   ocorrencia.descricao + "%0AStatus: " +  ocorrencia.status +  " %0ALink para a imagem: " + ocorrencia.imagem +'">' +
       '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
@@ -436,10 +447,10 @@ function showPosition(position) {
         document.getElementById("latitude").value = latitude;
         document.getElementById("longitude").value = longitude;
 
-        markers = new google.maps.Marker({
-          position: latlng,
-          map: map,
-        });
+        // markers = new google.maps.Marker({
+        //   position: latlng,
+        //   map: map,
+        // });
         map.setCenter(latlng);
         // document.getElementById("nrequisicao").draggable();
       } else {
