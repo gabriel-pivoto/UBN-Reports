@@ -171,6 +171,8 @@ app.post(
           descricao: descricao,
           status: "Solicitada",
           imagem: imagem,
+          upvote: [],
+          downvote: []
         },
         { merge: true }
       );
@@ -250,6 +252,54 @@ app.put("/alterar/status", async (req, res) => {
     res.status(500);
   }
 });
+
+
+//alterar o upvote ou downvote de acordo com a operação
+app.put('/vote/requisicao', async (req, res) => {
+  try {
+    const { operacao, cpf, id } = req.body
+    const ocorrenciaRef = db.collection("ocorrencias").doc(`${id}`);
+    if (operacao == "upvote") {
+      const res2 = await ocorrenciaRef.update(
+        {
+          upvote: FieldValue.arrayUnion(cpf),
+        },
+        { merge: true }
+      );
+      res.status(200).send("upvote adicionado");
+    } else if (operacao == "downvote") {
+      const res2 = await ocorrenciaRef.update(
+        {
+          downvote: FieldValue.arrayUnion(cpf),
+        },
+        { merge: true }
+      );
+      res.status(200).send("downvote adicionado");
+    }else if(operacao=="removeUpvote"){
+      const res2 = await ocorrenciaRef.update(
+        {
+          upvote: FieldValue.arrayRemove(cpf),
+        },
+        { merge: true }
+      );
+      res.status(200).send("upvote deletado");
+    }else if(operacao=="removeDownvote"){
+      const res2 = await ocorrenciaRef.update(
+        {
+          downvote: FieldValue.arrayRemove(cpf),
+        },
+        { merge: true }
+      );
+      res.status(200).send("downvote deletado");
+    }
+
+  } catch (e) {
+    res.status(500)
+  }
+})
+
+
+
 
 //deletar uma ocorrência no banco de dados
 app.delete("/ocorrencia", async (req, res) => {
