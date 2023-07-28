@@ -21,6 +21,7 @@ section .navbar:last-child{
   position: absolute;
   top: 10px;
   right: 10px;
+  width: 8vh;
   z-index: 9999;
   background-color: transparent;
   border-radius: 45%;
@@ -48,8 +49,9 @@ section .navbar:last-child{
 .links {
   display: none;
   position: absolute;
-  top: 30px;
-  right: 0;
+  width: 100px;
+  top: 3vh;
+  right: 6vh;
   z-index: 9999;
   background-color: #fbfbfb;
   padding: 10px;

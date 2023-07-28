@@ -148,46 +148,18 @@ function PegarUmaOcorrencia(id) {
       '<div id="content">' +
       '<div id="siteNotice">' +
       "</div>" +
-      '<h1 id="firstHeading" class="firstHeading">' +
-      ocorrencia.ocorrencia +
-      "</h1>" +
+      '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia +  "</h1>" +
       '<div id="bodyContent">' +
-      "<p> " +
-      ocorrencia.descricao +
-      "</p>" +
-      "<p> " +
-      ocorrencia.Endereco +
-      "</p>" +
-      "<p> Status: " +
-      ocorrencia.status +
-      " </p>" +
-      '<a href="mailto:? &subject=' +
-      ocorrencia.ocorrencia +
-      "&body=Descrição: " +
-      ocorrencia.descricao +
-      "%0AStatus: " +
-      ocorrencia.status +
-      " %0ALink para a imagem: " +
-      ocorrencia.imagem +
-      '">' +
+      "<p> " + ocorrencia.descricao + "</p>" +
+      "<p> " + ocorrencia.Endereco +  "</p>" +
+      "<p> Status: " + ocorrencia.status +  " </p>" +
+      '<a href="mailto:? &subject=' +  ocorrencia.ocorrencia + "&body=Descrição: " +   ocorrencia.descricao + "%0AStatus: " +  ocorrencia.status +  " %0ALink para a imagem: " + ocorrencia.imagem +'">' +
       '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
       "</a>" +
-      '<a href="https://www.facebook.com/sharer/sharer.php?u=' +
-      ocorrencia.imagem +
-      ' "target="_blank">' +
+      '<a href="https://www.facebook.com/sharer/sharer.php?u=' +  ocorrencia.imagem + ' "target="_blank">' +
       '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
       "</a>" +
-      '<a href="https://api.whatsapp.com/send?text= Ocorrência: ' +
-      ocorrencia.ocorrencia +
-      "%0ADescrição: " +
-      ocorrencia.descricao +
-      "%0AEndereço: " +
-      ocorrencia.Endereco +
-      "%0AStatus: " +
-      ocorrencia.status +
-      "%0AImagem: " +
-      ocorrencia.imagem +
-      '" >' +
+      '<a href="https://api.whatsapp.com/send?text= Ocorrência: ' +  ocorrencia.ocorrencia +  "%0ADescrição: " +   ocorrencia.descricao +   "%0AEndereço: " +   ocorrencia.Endereco +   "%0AStatus: " +   ocorrencia.status +  "%0AImagem: " +   ocorrencia.imagem + '" >' +
       '<img width="25" height="25" src="../images/logo-whatsapp.svg" alt="">' +
       "</a>" +
       "</div>" +
