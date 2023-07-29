@@ -13,6 +13,10 @@ let Entrou = false;
 let Contaexistente;
 let latInitial = -42.26;
 let lngInitial = -35.71;
+let upvoteSwap = false;
+let downvoteSwap = false;
+let contador = 0;
+
 // Função de inicialização do mapa
 
 function initMap() {
@@ -22,7 +26,7 @@ function initMap() {
   } else {
     alert("Geolocalização não é suportada pelo seu navegador.");
   }
-  
+
   // Criação do objeto de mapa do Google Maps
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 14,
@@ -50,7 +54,7 @@ function initMap() {
   createRequest.value = "Nova Requisição";
   createRequest.classList.add("button", "button-third");
 
-  
+
   response = document.createElement("pre");
   response.id = "response";
   response.innerText = "";
@@ -170,47 +174,51 @@ async function PegarUmaOcorrencia(id) {
         break;
       }
     }
+    downvoteSwap = TemDownvote;
+    upvoteSwap = TemUpvote;
+    contadorUpvote = 0;
+    contadorDownvote = 0;
     contentString =
       '<div id="content">' +
-      '<div id="vote">'+
-      '<img width="25" height="25" src="'+ Upvote(TemUpvote)+'" id="upvote"  onclick="TrocarUpvote('+userCPF +","+ ocorrencia.id+","+ `'${Upvote(TemUpvote)}'`+') "alt="upvote">'+
-      '<img width="25" height="25" src="'+ Downvote(TemDownvote) +'"  id="downvote"  onclick="TrocarDownvote('+userCPF +","+ ocorrencia.id+","+ `'${Downvote(TemDownvote)}'`+')" alt="downvote">'+
-      '</div>'+
+      '<div id="vote">' +
+      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="upvote"  onclick="TrocarUpvote(' + userCPF + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
+      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="downvote"  onclick="TrocarDownvote(' + userCPF + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
+      '</div>' +
       '<div id="siteNotice">' +
       "</div>" +
-      '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia +  "</h1>" +
+      '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + "</h1>" +
       '<div id="bodyContent">' +
       "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.descricao + "</p>" +
-      "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.Endereco +  "</p>" +
-      '<img width="200" height="200" src='+ocorrencia.imagem+' alt="">'+
-      "<p> Status: " + ocorrencia.status +  " </p>" +
-      '<a href="mailto:? &subject=' +  ocorrencia.ocorrencia + "&body=Descrição: " +   ocorrencia.descricao + "%0AStatus: " +  ocorrencia.status +  " %0ALink para a imagem: " + ocorrencia.imagem +'">' +
+      "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.Endereco + "</p>" +
+      '<img width="200" height="200" src=' + ocorrencia.imagem + ' alt="">' +
+      "<p> Status: " + ocorrencia.status + " </p>" +
+      '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + "&body=Descrição: " + ocorrencia.descricao + "%0AStatus: " + ocorrencia.status + " %0ALink para a imagem: " + ocorrencia.imagem + '">' +
       '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
       "</a>" +
-      '<a href="https://www.facebook.com/sharer/sharer.php?u=' +  ocorrencia.imagem + ' "target="_blank">' +
+      '<a href="https://www.facebook.com/sharer/sharer.php?u=' + ocorrencia.imagem + ' "target="_blank">' +
       '<img width="25" height="25" src="../images/logo-facebook.svg" alt="">' +
       "</a>" +
-      '<a href="https://api.whatsapp.com/send?text= Ocorrência: ' +  ocorrencia.ocorrencia +  "%0ADescrição: " +   ocorrencia.descricao +   "%0AEndereço: " +   ocorrencia.Endereco +   "%0AStatus: " +   ocorrencia.status +  "%0AImagem: " +   ocorrencia.imagem + '" >' +
+      '<a href="https://api.whatsapp.com/send?text= Ocorrência: ' + ocorrencia.ocorrencia + "%0ADescrição: " + ocorrencia.descricao + "%0AEndereço: " + ocorrencia.Endereco + "%0AStatus: " + ocorrencia.status + "%0AImagem: " + ocorrencia.imagem + '" >' +
       '<img width="25" height="25" src="../images/logo-whatsapp.svg" alt="">' +
       "</a>" +
       "</div>" +
       "</div>";
-      
+
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
-    const infowindow =  new google.maps.InfoWindow({
+    const infowindow = new google.maps.InfoWindow({
       content: contentString,
       position: position,
       ariaLabel: ocorrencia.ocorrencia,
     });
-    
-    
+
+
     // Abre a infowindow no mapa
-     infowindow.open({
+    infowindow.open({
       map,
     });
-    
+
   };
-  
+
   // Envio da requisição
   requisicao.send();
 }
@@ -378,9 +386,9 @@ function logIn() {
   requisicao.open(
     "GET",
     "http://localhost:5000/login/" +
-      document.getElementById("cpfLogin").value +
-      "/" +
-      document.getElementById("senhalogin").value
+    document.getElementById("cpfLogin").value +
+    "/" +
+    document.getElementById("senhalogin").value
   );
   requisicao.setRequestHeader("Content-type", "application/json");
 
@@ -489,71 +497,84 @@ function handleError(error) {
   alert("Erro ao obter a localização: " + error.message);
 }
 
-function Upvote(TemUpvote){
-  if(TemUpvote){
+function Upvote(TemUpvote) {
+  if (TemUpvote) {
     return "../images/upvote_green.svg";
-  }else{    
+  } else {
     return "../images/upvote.svg";
   }
 }
 
-function Downvote(TemDownvote){
-  if(TemDownvote){    
-  return "../images/downvote_red.svg";
-  }else{    
+function Downvote(TemDownvote) {
+  if (TemDownvote) {
+    return "../images/downvote_red.svg";
+  } else {
     return "../images/downvote.svg";
   }
 }
 
-function TrocarUpvote(userCPF, id, votou){
-  console.log("Função trocar upvote sexo");
-    if(votou == "../images/upvote_green.svg"){
+function TrocarUpvote(userCPF, id, votou) {
+  if (contador == 0) {
+    if (votou == "../images/upvote_green.svg") {
       votou = true;
-    }else{
+    } else {
       votou = false;
     }
-    requisicao.open("PUT", "http://localhost:5000/vote/requisicao");
-    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
-    
-    requisicao.onload = function () {
-    if (requisicao.status === 200) {
-        console.log(requisicao.response);
-        var x = document.getElementById("upvote");
-        x.setAttribute('src',`${Upvote(!votou)}`);
-        TemUpvote = !TemUpvote;
-    } else {
-      
-    console.log("Erro na requisição. Código de status:", requisicao.status);
-    }
-  };
-    requisicao.send(JSON.stringify({
-      "operacao":"upvote",
-      "cpf":`${userCPF}`,
-      "id":id,
-      "votou":votou
-    }));
-}
-
-function TrocarDownvote(userCPF, id, votou){
-  if(votou == "../images/downvote_red.svg"){
-    votou = true;
-  }else{
-    votou = false;
+  } else {
+    votou = upvoteSwap;
+    upvoteSwap = !upvoteSwap
   }
   requisicao.open("PUT", "http://localhost:5000/vote/requisicao");
-  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");  
-    requisicao.onload = function () {
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+
+  requisicao.onload = function () {
     if (requisicao.status === 200) {
-      console.log(requisicao.response);
+      var x = document.getElementById("upvote");
+      x.setAttribute('src', `${Upvote(!votou)}`);
+      document.getElementById("downvote").setAttribute('src', '../images/downvote.svg');
+      downvoteSwap = false;
     } else {
-      
-    console.log("Erro na requisição. Código de status:", requisicao.status);
+
+      console.log("Erro na requisição. Código de status:", requisicao.status);
     }
   };
-    requisicao.send(JSON.stringify({
-      "operacao":"downvote",
-      "cpf":`${userCPF}`,
-      "id":id,
-      "votou":votou
-    }));
+  requisicao.send(JSON.stringify({
+    "operacao": "upvote",
+    "cpf": `${userCPF}`,
+    "id": id,
+    "votou": votou
+  }));
+  contador++;
+}
+function TrocarDownvote(userCPF, id, votou) {
+  if (contador == 0) {
+    if (votou == "../images/downvote_red.svg") {
+      votou = true;
+    } else {
+      votou = false;
+    }
+  } else {
+    votou = downvoteSwap;
+    downvoteSwap = !downvoteSwap
+  }
+  requisicao.open("PUT", "http://localhost:5000/vote/requisicao");
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+  requisicao.onload = function () {
+    if (requisicao.status === 200) {
+      var x = document.getElementById("downvote");
+      x.setAttribute('src', `${Downvote(!votou)}`);
+      document.getElementById("upvote").setAttribute('src', '../images/upvote.svg');
+      upvoteSwap = false;
+    } else {
+
+      console.log("Erro na requisição. Código de status:", requisicao.status);
+    }
+  };
+  requisicao.send(JSON.stringify({
+    "operacao": "downvote",
+    "cpf": `${userCPF}`,
+    "id": id,
+    "votou": votou
+  }));
+  contador++;
 }
