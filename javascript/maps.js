@@ -50,6 +50,7 @@ function initMap() {
   createRequest.value = "Nova Requisição";
   createRequest.classList.add("button", "button-third");
 
+  
   response = document.createElement("pre");
   response.id = "response";
   response.innerText = "";
@@ -136,7 +137,7 @@ function Confirm() {
 }
 
 // Função para pegar uma ocorrência do servidor
-function PegarUmaOcorrencia(id) {
+async function PegarUmaOcorrencia(id) {
   // Criação da requisição GET para buscar uma ocorrência específica
   requisicao.open("GET", "http://localhost:5000/pegar/ocorrencia/" + id);
   requisicao.setRequestHeader(
@@ -144,7 +145,7 @@ function PegarUmaOcorrencia(id) {
     "application/json",
     "Access-Control-Allow-Origin"
   );
-
+  const userCPF = localStorage.getItem("userCPF");
   // Manipulação do retorno da requisição
   requisicao.onload = function teste() {
     let ocorrencia = JSON.parse(requisicao.response);
@@ -154,8 +155,27 @@ function PegarUmaOcorrencia(id) {
       ocorrencia.latitude,
       ocorrencia.longitude
     );
+    let TemUpvote = false;
+    let TemDownvote = false;
+    let upvote = ocorrencia.upvote;
+    let downvote = ocorrencia.downvote;
+    for (i = 0; i < upvote.length; i++) {
+      if (upvote[i] == userCPF) {
+        TemUpvote = true;
+        break;
+      }
+    } for (i = 0; i < downvote.length; i++) {
+      if (downvote[i] == userCPF) {
+        TemDownvote = true;
+        break;
+      }
+    }
     contentString =
       '<div id="content">' +
+      '<div id="vote">'+
+      '<img width="25" height="25" src="'+ Upvote(TemUpvote)+'" id="upvote"  onclick="TrocarUpvote('+userCPF +","+ ocorrencia.id+","+ `'${Upvote(TemUpvote)}'`+') "alt="upvote">'+
+      '<img width="25" height="25" src="'+ Downvote(TemDownvote) +'"  id="downvote"  onclick="TrocarDownvote('+userCPF +","+ ocorrencia.id+","+ `'${Downvote(TemDownvote)}'`+')" alt="downvote">'+
+      '</div>'+
       '<div id="siteNotice">' +
       "</div>" +
       '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia +  "</h1>" +
@@ -175,19 +195,22 @@ function PegarUmaOcorrencia(id) {
       "</a>" +
       "</div>" +
       "</div>";
+      
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
-    const infowindow = new google.maps.InfoWindow({
+    const infowindow =  new google.maps.InfoWindow({
       content: contentString,
       position: position,
       ariaLabel: ocorrencia.ocorrencia,
     });
-
+    
+    
     // Abre a infowindow no mapa
-    infowindow.open({
+     infowindow.open({
       map,
     });
+    
   };
-
+  
   // Envio da requisição
   requisicao.send();
 }
@@ -464,4 +487,73 @@ function showPosition(position) {
 
 function handleError(error) {
   alert("Erro ao obter a localização: " + error.message);
+}
+
+function Upvote(TemUpvote){
+  if(TemUpvote){
+    return "../images/upvote_green.svg";
+  }else{    
+    return "../images/upvote.svg";
+  }
+}
+
+function Downvote(TemDownvote){
+  if(TemDownvote){    
+  return "../images/downvote_red.svg";
+  }else{    
+    return "../images/downvote.svg";
+  }
+}
+
+function TrocarUpvote(userCPF, id, votou){
+  console.log("Função trocar upvote sexo");
+    if(votou == "../images/upvote_green.svg"){
+      votou = true;
+    }else{
+      votou = false;
+    }
+    requisicao.open("PUT", "http://localhost:5000/vote/requisicao");
+    requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
+    
+    requisicao.onload = function () {
+    if (requisicao.status === 200) {
+        console.log(requisicao.response);
+        var x = document.getElementById("upvote");
+        x.setAttribute('src',`${Upvote(!votou)}`);
+        TemUpvote = !TemUpvote;
+    } else {
+      
+    console.log("Erro na requisição. Código de status:", requisicao.status);
+    }
+  };
+    requisicao.send(JSON.stringify({
+      "operacao":"upvote",
+      "cpf":`${userCPF}`,
+      "id":id,
+      "votou":votou
+    }));
+}
+
+function TrocarDownvote(userCPF, id, votou){
+  if(votou == "../images/downvote_red.svg"){
+    votou = true;
+  }else{
+    votou = false;
+  }
+  requisicao.open("PUT", "http://localhost:5000/vote/requisicao");
+  requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");  
+    requisicao.onload = function () {
+    if (requisicao.status === 200) {
+      console.log(requisicao.response);
+    } else {
+      
+    console.log("Erro na requisição. Código de status:", requisicao.status);
+    }
+  };
+    requisicao.send(JSON.stringify({
+      "operacao":"downvote",
+      "cpf":`${userCPF}`,
+      "id":id,
+      "votou":votou
+    }));
 }

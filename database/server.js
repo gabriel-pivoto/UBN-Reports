@@ -295,7 +295,7 @@ app.put('/vote/requisicao', async (req, res) => {
   try {
     const { operacao, cpf, id, votou } = req.body
     const ocorrenciaRef = db.collection("ocorrencias").doc(`${id}`);
-    if (operacao == "upvote" & votou == false) {
+    if (operacao == "upvote" && votou == false) {
       const res1 = await ocorrenciaRef.update(
         {
           upvote: FieldValue.arrayUnion(cpf),
