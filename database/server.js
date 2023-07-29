@@ -139,6 +139,42 @@ app.get("/pegar/conta/:cpf", async (req, res) => {
     res.status(500);
   }
 });
+
+//procura numa ocorrencia de id, um cpf no upvote e no downvote, se n tiver nada, retorna nada, se tiver no upvote retorna upvote, se tiver no downvote retorna downvote
+app.get('/pegar/vote/:id/:cpf', async (req, res) => {
+  try {
+    const { id, cpf } = req.params;
+    const ocorrenciaRef = db.collection("ocorrencias").doc(`${id}`);
+    const doc = await ocorrenciaRef.get();
+    let TemUpvote = false;
+    let TemDownvote = false;
+    const ocorrencia = doc.data();
+    let upvote = ocorrencia.upvote;
+    let downvote = ocorrencia.downvote;
+    for (i = 0; i < upvote.length; i++) {
+      if (upvote[i] == cpf) {
+        TemUpvote = true;
+        break;
+      }
+    } for (i = 0; i < downvote.length; i++) {
+      if (downvote[i] == cpf) {
+        TemDownvote = true;
+        break;
+      }
+    }
+    if (!TemDownvote && !TemUpvote) {
+      res.status(200).send("nada")
+    } else if (TemDownvote) {
+      res.status(200).send('downvote')
+    } else if (TemUpvote) {
+      res.status(200).send('upvote')
+    }
+  } catch (error) {
+    res.status(500);
+  }
+})
+
+
 //adicionar uma ocorrencia no banco de dados
 app.post(
   "/addOcorrencia",
@@ -257,25 +293,37 @@ app.put("/alterar/status", async (req, res) => {
 //alterar o upvote ou downvote de acordo com a operação
 app.put('/vote/requisicao', async (req, res) => {
   try {
-    const { operacao, cpf, id } = req.body
+    const { operacao, cpf, id, votou } = req.body
     const ocorrenciaRef = db.collection("ocorrencias").doc(`${id}`);
-    if (operacao == "upvote") {
-      const res2 = await ocorrenciaRef.update(
+    if (operacao == "upvote" & votou == false) {
+      const res1 = await ocorrenciaRef.update(
         {
           upvote: FieldValue.arrayUnion(cpf),
         },
         { merge: true }
       );
-      res.status(200).send("upvote adicionado");
-    } else if (operacao == "downvote") {
       const res2 = await ocorrenciaRef.update(
+        {
+          downvote: FieldValue.arrayRemove(cpf),
+        },
+        { merge: true }
+      );
+      res.status(200).send("upvote adicionado");
+    } else if (operacao == "downvote" && votou == false) {
+      const res1 = await ocorrenciaRef.update(
         {
           downvote: FieldValue.arrayUnion(cpf),
         },
         { merge: true }
       );
+      const res2 = await ocorrenciaRef.update(
+        {
+          upvote: FieldValue.arrayRemove(cpf),
+        },
+        { merge: true }
+      );
       res.status(200).send("downvote adicionado");
-    }else if(operacao=="removeUpvote"){
+    } else if (operacao == "upvote" && votou == true) {
       const res2 = await ocorrenciaRef.update(
         {
           upvote: FieldValue.arrayRemove(cpf),
@@ -283,7 +331,7 @@ app.put('/vote/requisicao', async (req, res) => {
         { merge: true }
       );
       res.status(200).send("upvote deletado");
-    }else if(operacao=="removeDownvote"){
+    } else if (operacao == "downvote" && votou == true) {
       const res2 = await ocorrenciaRef.update(
         {
           downvote: FieldValue.arrayRemove(cpf),
