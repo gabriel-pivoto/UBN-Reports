@@ -3,7 +3,7 @@ const isLoggedIn = localStorage.getItem("isLoggedIn");
 const userCPF = localStorage.getItem("userCPF");
 const senha = localStorage.getItem("userCPF");
 
-let contador = 0;
+let contador1 = 0;
 
 function historicodereq() {
   if (!isLoggedIn || !userCPF) {
@@ -41,9 +41,9 @@ function criarBotoes(responseObj) {
 
   // Itera sobre o array de elementos
   responseObj.forEach((elemento, index) => {
-    contador += 1;
+    contador1 += 1;
     const contadorreq = document.getElementById("contador");
-    contadorreq.textContent = contador;
+    contadorreq.textContent = contador1;
     // Cria um elemento de botão
     const botao = document.createElement("button");
 
@@ -61,16 +61,16 @@ function criarBotoes(responseObj) {
       let enderecoreq = document.getElementById("endereco-dialog");
       enderecoreq.textContent = elemento.Endereco;
 
-      let latreq = document.getElementById("lat-dialog");
-      latreq.textContent = elemento.latitude;
+      console.log(elemento);
 
-      let lngreq = document.getElementById("lng-dialog");
-      lngreq.textContent = elemento.longitude;
+      let lngreq = document.getElementById("descricao-dialog");
+      lngreq.textContent = elemento.descricao;
 
-      let statusreq = document.getElementById("status-dialog");
-      statusreq.textContent = "Em breve!";
-      statusreq.style.color = "rgb(0,0,255)";
+      let status = document.getElementById("status-dialog");
+      status.textContent = elemento.status;
 
+      let imagem = document.getElementById("imagem");
+      imagem.setAttribute('src', elemento.imagem);
       const dialog = document.getElementById("problema");
       dialog.showModal();
     });
