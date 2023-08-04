@@ -181,8 +181,8 @@ async function PegarUmaOcorrencia(id) {
     contentString =
       '<div id="content">' +
       '<div id="vote">' +
-      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="upvote"  onclick="TrocarUpvote(' + userCPF + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
-      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="downvote"  onclick="TrocarDownvote(' + userCPF + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
+      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="'+ocorrencia.id+'upvote"  onclick="TrocarUpvote(' + userCPF + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
+      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="'+ocorrencia.id+'downvote"  onclick="TrocarDownvote(' + userCPF + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
       '</div>' +
       '<div id="siteNotice">' +
       "</div>" +
@@ -496,7 +496,7 @@ function showPosition(position) {
 function handleError(error) {
   alert("Erro ao obter a localização: " + error.message);
 }
-
+// coloca a imagem do upvote de acordo com o parametro enviado
 function Upvote(TemUpvote) {
   if (TemUpvote) {
     return "../images/upvote_green.svg";
@@ -504,7 +504,7 @@ function Upvote(TemUpvote) {
     return "../images/upvote.svg";
   }
 }
-
+// coloca a imagem do downvote de acordo com o parametro enviado
 function Downvote(TemDownvote) {
   if (TemDownvote) {
     return "../images/downvote_red.svg";
@@ -512,7 +512,7 @@ function Downvote(TemDownvote) {
     return "../images/downvote.svg";
   }
 }
-
+//muda o downvote especifico de acordo com a opção anterior marcada
 function TrocarUpvote(userCPF, id, votou) {
   if (contador == 0) {
     if (votou == "../images/upvote_green.svg") {
@@ -529,9 +529,9 @@ function TrocarUpvote(userCPF, id, votou) {
 
   requisicao.onload = function () {
     if (requisicao.status === 200) {
-      var x = document.getElementById("upvote");
+      var x = document.getElementById(id+"upvote");
       x.setAttribute('src', `${Upvote(!votou)}`);
-      document.getElementById("downvote").setAttribute('src', '../images/downvote.svg');
+      document.getElementById(id+"downvote").setAttribute('src', '../images/downvote.svg');
       downvoteSwap = false;
     } else {
 
@@ -546,6 +546,7 @@ function TrocarUpvote(userCPF, id, votou) {
   }));
   contador++;
 }
+//muda o downvote especifico de acordo com a opção anterior marcada
 function TrocarDownvote(userCPF, id, votou) {
   if (contador == 0) {
     if (votou == "../images/downvote_red.svg") {
@@ -561,9 +562,9 @@ function TrocarDownvote(userCPF, id, votou) {
   requisicao.setRequestHeader("Content-type", "application/json", "Access-Control-Allow-Origin");
   requisicao.onload = function () {
     if (requisicao.status === 200) {
-      var x = document.getElementById("downvote");
+      var x = document.getElementById(id+"downvote");
       x.setAttribute('src', `${Downvote(!votou)}`);
-      document.getElementById("upvote").setAttribute('src', '../images/upvote.svg');
+      document.getElementById(id+"upvote").setAttribute('src', '../images/upvote.svg');
       upvoteSwap = false;
     } else {
 
