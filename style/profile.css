@@ -1,8 +1,10 @@
-/* Estilos para o body e ajuste padrão */
+@import url('https://fonts.googleapis.com/css2?family=REM:wght@200&family=Ubuntu:wght@300&display=swap');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: Ubuntu, REM;
+  font-weight: 800;
 }
 #imagemcidade {
   height: 100%;
@@ -27,7 +29,7 @@ body {
 }
 
 .div-main {
-  background-color: #ffffff82;
+  background-color: #ffffff9c;
   display: flex;
   flex-direction:column;
   justify-content: flex-start; 
@@ -56,7 +58,7 @@ body {
 }
 
 .paragraph p {
-  margin: 10px 0;
+  margin: 10px 10px;
   color: black;
   align-self: flex-start;
 }
@@ -82,6 +84,8 @@ body {
 
 /* Estilos para o botão do diálogo */
 #problema button {
+  font-family: inherit;
+  font-weight: 600;
   margin: 10px;
   border-color: transparent;
   align-items: center;
@@ -110,14 +114,20 @@ body {
 
 #botaoContainer button {
   margin: 1px 0; /* Espaçamento entre os botões empilhados */
-  font-style: arial;
-  width: 800px;
+  width: 50em;
   border-radius: 10px;
   border:none;
   cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
 }
 
 #botaoContainer button:hover {
   background-color: #1d9ce6;
   cursor: pointer;
+}
+
+#botao{
+  font-family: inherit;
+  font-weight: inherit;
 }

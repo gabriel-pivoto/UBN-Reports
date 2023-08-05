@@ -16,8 +16,10 @@ section .navbar:last-child{
 
 
 } */
-
+@import url('https://fonts.googleapis.com/css2?family=REM:wght@200&family=Ubuntu:wght@300&display=swap');
 .navbar {
+  font-family: Ubuntu, REM;
+  font-weight: 600;
   position: absolute;
   top: 10px;
   right: 10px;
@@ -45,6 +47,7 @@ section .navbar:last-child{
   border-radius: 50%;
   object-fit: cover;
 }
+
 
 .links {
   display: none;
@@ -91,6 +94,8 @@ section .navbar:last-child{
 }
 
 .navbar li button {
+  font-family: inherit;
+  font-weight: inherit;
   border: none;
   background-color: #fbfbfb;
   cursor: pointer;
@@ -128,7 +133,7 @@ input[type="text"] {
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
   margin: 10px;
   padding: 0 0.5em;
-  font: 400 18px Roboto, Arial, sans-serif;
+  font: 400 18px Roboto, inherit;
   overflow: hidden;
   line-height: 40px;
   margin-right: 0;
@@ -142,7 +147,7 @@ input[type="button"] {
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
   margin: 10px;
   padding: 0 0.5em;
-  font: 400 18px Roboto, Arial, sans-serif;
+  font: 400 18px Roboto, inherit;
   overflow: hidden;
   height: 40px;
   cursor: pointer;
@@ -187,7 +192,7 @@ input[type="button"].button-third:hover {
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
   margin: 10px;
   padding: 0 0.5em;
-  font: 400 18px Roboto, Arial, sans-serif;
+  font: 400 18px Roboto,inherit;
   overflow: hidden;
   overflow: auto;
   max-height: 50%;
@@ -203,7 +208,7 @@ input[type="button"].button-third:hover {
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
   margin: 10px;
   padding: 0 0.5em;
-  font: 400 18px Roboto, Arial, sans-serif;
+  font: 400 18px Roboto, inherit;
   overflow: hidden;
   padding: 1rem;
   font-size: medium;
@@ -215,3 +220,209 @@ input[type="button"].button-third:hover {
   right: 10px;
   z-index: 1;
 }
+ #nrequisicao{
+  border: none;
+  border-radius: 5%;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+/* Opcional: Estilize a imagem de preview como desejado */
+#imagemPreview {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+}
+
+#nrequisicao p  input[type=text] {
+  height: 18px;
+  width: 150px;
+  border: none;
+  border-bottom: 2px solid black;
+  box-shadow: none;
+  
+}
+
+#nrequisicao p  input[type=text]:focus {
+  outline: none;
+}
+
+#nrequisicao input[type=submit] {
+  font-family: inherit;
+  font-weight: inherit;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  
+}
+#nrequisicao input[type=submit]:hover{
+  cursor: pointer;
+  
+  color: lightgreen;
+}
+
+#nrequisicao #pegarlocal:hover {
+  color: blue;
+}
+#nrequisicao button {
+  font-family: inherit;
+  font-weight: inherit;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+#nrequisicao button:hover {
+  color:red;
+  
+}
+#register{
+  border-radius: 5%;
+  border:none;
+  background-color: #f9fdff;
+}
+#register form pre p {
+  
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+}
+#register form  p {
+  
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+#register form pre p input[type=text]{
+    height: 18px;
+    width: 150px;
+    border: none;
+    border-bottom: 2px solid black;
+    box-shadow: none;
+    
+  }
+  #register form pre p  input[type=text]:focus {
+    outline: none;
+  }
+  
+  
+  #register p  input[type=text]:focus {
+    outline: none;
+  }
+  
+  #register button {
+    font-family: Ubuntu, REM;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+  }
+
+    
+  #register button:hover {
+    color: red;
+    
+  }
+  #register input[type=submit] {
+    font-family: Ubuntu, REM;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+  }
+  #register input[type=submit]:hover{
+    cursor: pointer;
+    color: lightgreen;
+  }
+  #LogIn{
+    border-radius: 5%;
+    border:none;
+    background-color: #f9fdff;
+  }
+
+
+  #LogIn  p {
+  
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  #LogIn  p {
+    
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  #LogIn  pre p input[type=text]{
+      height: 18px;
+      width: 190px;
+      border: none;
+      font-family: Ubutun, REM;
+      font-weight: 600;
+      border-bottom: 2px solid black;
+      box-shadow: none;
+      background-color: transparent;
+      
+    }
+    #LogIn pre p  input[type=text]:focus {
+      outline: none;
+    }
+    
+    #LogIn button {
+      font-family: Ubuntu, REM;
+      font-weight: 600;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      
+    }
+    #LogIn button:hover {
+      color: red;
+    }
+    #LogIn input[type=submit] {
+      font-family: Ubuntu, REM;
+      font-weight: 600;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      
+    }
+    #LogIn input[type=submit]:hover{
+      cursor: pointer;
+      color: lightgreen;
+    }
+
+    #LogIn pre p  input[type=password]{
+      font-family: Ubuntu, REM;
+      font-weight: 600;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      
+     border-bottom: 2px solid black;
+     width: 200px;
+    }
+    
+    
+    #LogIn pre p  input[type=password]:focus {
+      outline: none;
+    }
+    

@@ -69,6 +69,15 @@ function criarBotoes(responseObj) {
 
     // Define o texto do botão como o elemento atual do array
     botao.innerText = elemento.ocorrencia;
+    botao.style.display = 'flex';
+    botao.style.justifyContent = 'center';
+    botao.style.alignItems = 'center';
+
+const statusElement = document.createElement('span');
+statusElement.innerText = elemento.status;
+statusElement.style.marginLeft = 'auto';
+
+botao.appendChild(statusElement);
 
     // Adiciona um evento de clique ao botão (opcional, você pode adicionar outras ações aqui)
     botao.addEventListener("click", () => {

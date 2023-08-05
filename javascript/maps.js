@@ -37,7 +37,7 @@ function initMap() {
 
   // Inicialização do geocoder do Google Maps para conversão entre coordenadas e endereços
   geocoder = new google.maps.Geocoder();
-
+  
   // Criação dos elementos HTML para interação com o mapa
   const modal = document.querySelector("dialog");
   const inputText = document.createElement("input");
@@ -46,7 +46,7 @@ function initMap() {
 
   const submitButton = document.createElement("input");
   submitButton.type = "button";
-  submitButton.value = "Geocode";
+  submitButton.value = "Pesquisar";
   submitButton.classList.add("button", "button-primary");
 
   const createRequest = document.createElement("input");
@@ -92,9 +92,6 @@ function initMap() {
     newrequest();
   });
 
-  confirmarCadastro.addEventListener("click", () => {
-    ConfirmarCadastroFunc();
-  });
 
   // Limpa o marcador do mapa inicialmente
   pegar();
@@ -180,18 +177,18 @@ async function PegarUmaOcorrencia(id) {
     contadorDownvote = 0;
     contentString =
       '<div id="content">' +
-      '<div id="vote">' +
-      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="'+ocorrencia.id+'upvote"  onclick="TrocarUpvote(' + userCPF + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
-      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="'+ocorrencia.id+'downvote"  onclick="TrocarDownvote(' + userCPF + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
-      '</div>' +
-      '<div id="siteNotice">' +
-      "</div>" +
+      '<div id="siteNotice"></div>'+
       '<h1 id="firstHeading" class="firstHeading">' + ocorrencia.ocorrencia + "</h1>" +
       '<div id="bodyContent">' +
       "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.descricao + "</p>" +
       "<p style='max-width: 300px; word-wrap: break-word;'> " + ocorrencia.Endereco + "</p>" +
       '<img width="200" height="200" src=' + ocorrencia.imagem + ' alt="">' +
       "<p> Status: " + ocorrencia.status + " </p>" +
+      '<pre style="word-wrap: break-word;">'+  
+      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="'+ocorrencia.id+'upvote"  onclick="TrocarUpvote(' + userCPF + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
+       '  ' + 
+      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="'+ocorrencia.id+'downvote"  onclick="TrocarDownvote(' + userCPF + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
+      '                     '+
       '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + "&body=Descrição: " + ocorrencia.descricao + "%0AStatus: " + ocorrencia.status + " %0ALink para a imagem: " + ocorrencia.imagem + '">' +
       '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
       "</a>" +
@@ -201,7 +198,8 @@ async function PegarUmaOcorrencia(id) {
       '<a href="https://api.whatsapp.com/send?text= Ocorrência: ' + ocorrencia.ocorrencia + "%0ADescrição: " + ocorrencia.descricao + "%0AEndereço: " + ocorrencia.Endereco + "%0AStatus: " + ocorrencia.status + "%0AImagem: " + ocorrencia.imagem + '" >' +
       '<img width="25" height="25" src="../images/logo-whatsapp.svg" alt="">' +
       "</a>" +
-      "</div>" +
+      '</pre>'+
+       "</div>" +
       "</div>";
 
     // Criação de uma infowindow do Google Maps para exibir informações da ocorrência
@@ -225,19 +223,28 @@ async function PegarUmaOcorrencia(id) {
 
 // Função para cancelar a adição da ocorrência
 function cancel() {
-  const modal = document.querySelector("dialog");
-
+ 
   const dialogLogin = document.getElementById("LogIn");
-
   const dialogregister = document.getElementById("register");
-  if (modal != null) {
-    modal.close();
-  }
+  
   if (dialogLogin != null) {
     dialogLogin.close();
   }
   if (dialogregister != null) {
     dialogregister.close();
+    const fileInput = document.getElementById('imagemPreview2');
+  fileInput.src = "../images/cloud-upload.svg";
+  fileInput.width = 30;
+  fileInput.height = 30;
+  }
+  const modal = document.getElementById("nrequisicao");
+
+  if (modal != null) {
+    const fileInput = document.getElementById('imagemPreview');
+  fileInput.src = "../images/cloud-upload.svg";
+  fileInput.width = 30;
+  fileInput.height = 30;
+    modal.close();
   }
 }
 
@@ -319,7 +326,6 @@ function geocode(request) {
 
     // Preenchimento dos campos de formulário com os dados da geocodificação
     document.getElementById("Endereco").value = data.address;
-    document.getElementById("ocorrencia").value = "Insira seu problema aqui";
     document.getElementById("latitude").value = data.location.lat;
     document.getElementById("longitude").value = data.location.lng;
   });
@@ -344,6 +350,13 @@ function login() {
 function register() {
   const dialogLogin = document.getElementById("register");
   dialogLogin.showModal();
+  var form=document.getElementById("formulario");
+function submitForm(event){
+   //Preventing page refresh
+   event.preventDefault();
+   ConfirmarCadastroFunc()
+}
+form.addEventListener('submit', submitForm);
 }
 
 function ConfirmarCadastroFunc() {
@@ -351,7 +364,7 @@ function ConfirmarCadastroFunc() {
   var formulario = new FormData(document.getElementById("formulario"));
   requisicao.open("POST", "http://localhost:5000/addConta");
 
-  let imagem = document.getElementById("img").files[0];
+  let imagem = document.getElementById("imagem").files[0];
 
   formulario.set("imagem", new File([imagem], "nome", { type: "image/jpeg" }));
 
@@ -499,23 +512,23 @@ function handleError(error) {
 // coloca a imagem do upvote de acordo com o parametro enviado
 function Upvote(TemUpvote) {
   if (TemUpvote) {
-    return "../images/upvote_green.svg";
+    return "../images/like_green.svg";
   } else {
-    return "../images/upvote.svg";
+    return "../images/like.svg";
   }
 }
 // coloca a imagem do downvote de acordo com o parametro enviado
 function Downvote(TemDownvote) {
   if (TemDownvote) {
-    return "../images/downvote_red.svg";
+    return "../images/dislike_red.svg";
   } else {
-    return "../images/downvote.svg";
+    return "../images/dislike.svg";
   }
 }
 //muda o downvote especifico de acordo com a opção anterior marcada
 function TrocarUpvote(userCPF, id, votou) {
   if (contador == 0) {
-    if (votou == "../images/upvote_green.svg") {
+    if (votou == "../images/like_green.svg") {
       votou = true;
     } else {
       votou = false;
@@ -531,7 +544,7 @@ function TrocarUpvote(userCPF, id, votou) {
     if (requisicao.status === 200) {
       var x = document.getElementById(id+"upvote");
       x.setAttribute('src', `${Upvote(!votou)}`);
-      document.getElementById(id+"downvote").setAttribute('src', '../images/downvote.svg');
+      document.getElementById(id+"downvote").setAttribute('src', '../images/dislike.svg');
       downvoteSwap = false;
     } else {
 
@@ -549,7 +562,7 @@ function TrocarUpvote(userCPF, id, votou) {
 //muda o downvote especifico de acordo com a opção anterior marcada
 function TrocarDownvote(userCPF, id, votou) {
   if (contador == 0) {
-    if (votou == "../images/downvote_red.svg") {
+    if (votou == "../images/dislike_red.svg") {
       votou = true;
     } else {
       votou = false;
@@ -564,7 +577,7 @@ function TrocarDownvote(userCPF, id, votou) {
     if (requisicao.status === 200) {
       var x = document.getElementById(id+"downvote");
       x.setAttribute('src', `${Downvote(!votou)}`);
-      document.getElementById(id+"upvote").setAttribute('src', '../images/upvote.svg');
+      document.getElementById(id+"upvote").setAttribute('src', '../images/like.svg');
       upvoteSwap = false;
     } else {
 
@@ -578,4 +591,39 @@ function TrocarDownvote(userCPF, id, votou) {
     "votou": votou
   }));
   contador++;
+}
+function previewImage() {
+  const fileInput = document.getElementById('imagemOcorrencia');
+  const previewImage = document.getElementById('imagemPreview');
+  
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      previewImage.src = e.target.result;
+      previewImage.width = 100;
+      previewImage.height = 100;
+    }
+    
+    reader.readAsDataURL(file);
+  }
+}
+
+function previewImage2() {
+  const fileInput = document.getElementById('imagem');
+  const previewImage = document.getElementById('imagemPreview2');
+  
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      previewImage.src = e.target.result;
+      previewImage.width = 100;
+      previewImage.height = 100;
+    }
+    
+    reader.readAsDataURL(file);
+  }
 }
