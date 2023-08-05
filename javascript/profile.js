@@ -2,7 +2,13 @@ const req = new XMLHttpRequest();
 const isLoggedIn = localStorage.getItem("isLoggedIn");
 const userCPF = localStorage.getItem("userCPF");
 const senha = localStorage.getItem("userCPF");
-
+const statusRequisições = [
+  "Solicitada",
+  "Em Analise",
+  "Em Progresso",
+  "Finalizada",
+];
+let numeroStatusRequisições = [0, 0, 0, 0];
 let contador1 = 0;
 
 function historicodereq() {
@@ -44,6 +50,17 @@ function criarBotoes(responseObj) {
     contador1 += 1;
     const contadorreq = document.getElementById("contador");
     contadorreq.textContent = contador1;
+
+    if (elemento.status == "Solicitada") {
+      numeroStatusRequisições[0] += 1;
+    } else if (elemento.status == "Em Analise") {
+      numeroStatusRequisições[1] += 1;
+    } else if (elemento.status == "Em Progresso") {
+      numeroStatusRequisições[2] += 1;
+    } else if (elemento.status == "Finalizada") {
+      numeroStatusRequisições[3] += 1;
+    }
+
     // Cria um elemento de botão
     const botao = document.createElement("button");
 
@@ -70,7 +87,7 @@ function criarBotoes(responseObj) {
       status.textContent = elemento.status;
 
       let imagem = document.getElementById("imagem");
-      imagem.setAttribute('src', elemento.imagem);
+      imagem.setAttribute("src", elemento.imagem);
       const dialog = document.getElementById("problema");
       dialog.showModal();
     });
@@ -108,13 +125,51 @@ function perfil() {
       const cpf = document.getElementById("cpf");
       cpf.textContent = responseObj.cpf;
 
-      const Adm = document.getElementById("adm");
-      Adm.textContent = responseObj.adm;
+      // const Adm = document.getElementById("adm");
+      // Adm.textContent = responseObj.adm;
 
       var img = document.getElementById("imagemPerfil");
       img.setAttribute("src", responseObj.imagem);
       var img2 = document.getElementById("imagemPerfil2");
       img2.setAttribute("src", responseObj.imagem);
+      var barColors = ["#b91d47", "#00aba9", "#2b5797", "#2C4728"];
+
+      new Chart("myChart", {
+        type: "pie",
+        data: {
+          labels: statusRequisições,
+          datasets: [
+            {
+              backgroundColor: barColors,
+              data: numeroStatusRequisições,
+            },
+          ],
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Suas Requisições",
+            fontColor: "Black",
+          },
+          legend: {
+            display: true,
+            position: "left", // Places the legend to the left of the chart
+            labels: {
+              
+              fontColor: "Black", // Sets the color of the legend text to blue
+            },
+          },
+          scales: {
+            x: {
+              display: false, // Hides the x-axis
+            },
+            y: {
+              display: false, // Hides the y-axis
+            },
+          },
+          
+        },
+      });
     } else {
       console.log("Erro na requisição. Código de status:", requisicao.status);
     }

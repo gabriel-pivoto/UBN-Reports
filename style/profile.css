@@ -3,26 +3,53 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #a0a0a0;
+}
+#imagemcidade {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  margin: 0px;
+}
+#imagemcidade img{
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+}
+
+#containersuper {
+  position: relative;
+  z-index: 999;
+  display: flex;
+  flex-direction: row;
 }
 
 .div-main {
+  background-color: #ffffff82;
   display: flex;
-  align-items: flex-start;
+  flex-direction:column;
+  justify-content: flex-start; 
+  align-items: flex-start; 
   padding: 10px;
-  text-align: center;
+  text-align: left;
+  margin-right: 10px;
+  border-right: 2px solid rgb(13, 231, 243)
 }
 
 .div-main img {
-  border-radius: 20%;
-  margin-right: 30px;
+  
+  border-radius: 50%;
   height: 180px;
   width: 180px;
+  margin-left: 25%;
   flex-shrink: 0; /* Prevent image from shrinking */
 }
 
 .paragraph {
   display: flex;
+  margin-top: 15px;
   flex-direction: column;
   background-color: aquamarines;
   align-self: flex-start;
@@ -30,6 +57,7 @@ body {
 
 .paragraph p {
   margin: 10px 0;
+  color: black;
   align-self: flex-start;
 }
 
@@ -67,19 +95,25 @@ body {
 
 
 #botaoContainer {
+  float:inline-start;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  border: 2px solid black; /* Adiciona uma borda preta de 2 pixels */
-  max-height: 200px; /* Set a fixed height for the container */
-  overflow-y: scroll; /* Add a vertical scroll */
+  align-items:flex-start;
+  max-height: 1000px; /* Set a fixed height for the container */
+  overflow-y: scroll; 
+  margin-top: 15px;
+  /* Add a vertical scroll */
+}
+#botaoContainer::-webkit-scrollbar {
+  display: none;
 }
 
 #botaoContainer button {
   margin: 1px 0; /* Espaçamento entre os botões empilhados */
   font-style: arial;
-  width: 80%;
-  border-style: outset;
+  width: 800px;
+  border-radius: 10px;
+  border:none;
   cursor: pointer;
 }
 

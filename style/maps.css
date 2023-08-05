@@ -72,10 +72,12 @@ section .navbar:last-child{
 
 .navbar li a {
   color: black;
+
   padding: 3px 7px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
+  
   cursor: pointer;
   font-size: 14px;
 }
