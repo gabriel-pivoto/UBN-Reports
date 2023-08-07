@@ -353,6 +353,13 @@ document.addEventListener("DOMContentLoaded", function () {
 function login() {
   const dialogLogin = document.getElementById("LogIn");
   dialogLogin.showModal();
+  form=document.getElementById("loginConta");
+  function submitForm(event){
+     //Preventing page refresh
+     event.preventDefault();
+     logIn()
+  }
+  form.addEventListener('submit', submitForm);
 }
 function register() {
   const dialogLogin = document.getElementById("register");
