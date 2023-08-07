@@ -79,6 +79,13 @@ function initMap() {
       novarequisicao = false;
 
       modal.showModal();
+      form=document.getElementById("formularioOcorrencia")
+      function submitForm(event){
+        //Preventing page refresh
+        event.preventDefault();
+        Confirm()
+     }
+     form.addEventListener('submit', submitForm);
     }
   });
 
