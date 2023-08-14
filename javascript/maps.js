@@ -16,6 +16,8 @@ let lngInitial = -35.71;
 let upvoteSwap = false;
 let downvoteSwap = false;
 let contador = 0;
+let latTemporaria=0;
+let lngTemporaria=0;
 
 // Função de inicialização do mapa
 
@@ -317,17 +319,18 @@ function marcador(endereco, posicao, ocorrencia, id) {
 
 // Função para realizar a geocodificação de um endereço ou coordenadas
 function geocode(request) {
+  latTemporaria=request.location.lat();
+  lngTemporaria=request.location.lng();
   geocoder.geocode(request).then((result) => {
     const { results } = result;
 
     map.setCenter(results[0].geometry.location);
     response.innerText = JSON.stringify(result, null, 2);
-
     const data = {
       address: results[0].formatted_address,
       location: {
-        lat: results[0].geometry.location.lat(),
-        lng: results[0].geometry.location.lng(),
+        lat: latTemporaria,
+        lng: lngTemporaria,
       },
     };
 
@@ -497,7 +500,7 @@ function showPosition(position) {
   var geocoder = new google.maps.Geocoder();
   var latlng = new google.maps.LatLng(latitude, longitude);
 
-  geocoder.geocode({ latLng: latlng }, function (results, status) {
+  geocoder.geocode({location: latlng }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       if (results[0]) {
         var address = results[0].formatted_address;
@@ -510,7 +513,6 @@ function showPosition(position) {
         //   map: map,
         // });
         map.setCenter(latlng);
-        // document.getElementById("nrequisicao").draggable();
       } else {
         alert("Endereço não encontrado para estas coordenadas.");
       }
