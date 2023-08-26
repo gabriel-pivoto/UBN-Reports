@@ -25,7 +25,17 @@
         lass="edit-note"
         enctype="multipart/form-data"
       >
-        <p>Problema: <input class="" placeholder="Insira seu problema aqui"type="text" id="ocorrencia" name="ocorrencia"required /></p>
+        <!-- <p>Problema: <input class="" placeholder="Insira seu problema aqui"type="text" id="ocorrencia" name="ocorrencia"required /></p> -->
+        <p>Problema: 
+          
+          <select id="ocorrencia" name="ocorrencia" required>
+            <option value="definir">Definir problema </option>
+            <option value="buraco">Buraco</option>
+            <option value="esgoto">Esgoto</option>
+            <option value="caçamba_abandonada" selected>Caçamba abandonada</option>
+            <option value="outros" selected>Outros</option>
+          </select>
+        </p>
         <p>Endereço: <input id="Endereco" placeholder="Seu Endereço" type="text"name="Endereco" readonly /></p>
         <p hidden>Latitude: <input id="latitude"  type="text" name="latitude" /></p>
         <p hidden>Longitude: <input id="longitude" type="text" name="longitude" /></p>
@@ -52,8 +62,8 @@
           </p>
           <button onclick="cancel()">Cancelar</button>
           <input type="submit">
-          <button id="pegarlocal" onclick="PegarLocal()">Sua localização</button>
         </form>
+        <button id="pegarlocal" onclick="PegarLocal()">Sua localização</button>
 
     </dialog>
 

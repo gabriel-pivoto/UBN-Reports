@@ -426,3 +426,14 @@ label {
       outline: none;
     }
     
+
+#ocorrencia_buttons button {
+  background-color: #fff; /* Green background */
+  border: 1px solid black; /* Green border */
+  color: black; /* White text */
+  padding: 10px 24px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  width: 50%; /* Set a width if needed */
+  display: block;
+  
+}

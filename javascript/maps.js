@@ -22,7 +22,6 @@ let lngTemporaria=0;
 // Função de inicialização do mapa
 
 function initMap() {
-
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, handleError);
   } else {
@@ -643,3 +642,5 @@ function previewImage2() {
     reader.readAsDataURL(file);
   }
 }
+
+
