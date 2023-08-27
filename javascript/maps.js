@@ -302,20 +302,35 @@ function pegar() {
 }
 
 // Função para criar um marcador no mapa
-function marcador(endereco, posicao, ocorrencia, id) {
-  markers = new google.maps.Marker({
-    position: posicao,
-    map: map,
-    title: ocorrencia,
-    id: id,
-  });
-
-  // Evento de clique no marcador para exibir detalhes da ocorrência
-  markers.addListener("click", () => {
-    PegarUmaOcorrencia(id);
-  });
-}
-
+async function marcador(endereco, posicao, ocorrencia, id) {
+  imagem = await selecionaImagem(ocorrencia);
+    markers = new google.maps.Marker({
+      position: posicao,
+      map: map,
+      title: ocorrencia,
+      id: id,
+      icon:imagem
+    });
+  
+    // Evento de clique no marcador para exibir detalhes da ocorrência
+    markers.addListener("click", () => {
+      PegarUmaOcorrencia(id);
+    });
+  }
+  
+  async function selecionaImagem(ocorrencia){
+    let imagem;
+    switch (ocorrencia) {
+      case "aaaaa":
+        imagem='../images/like.svg'
+        break;
+    
+      default:
+        imagem=""
+        break;
+    }
+  return imagem
+  }
 // Função para realizar a geocodificação de um endereço ou coordenadas
 function geocode(request) {
   latTemporaria=request.location.lat();
