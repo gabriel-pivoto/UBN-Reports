@@ -29,17 +29,18 @@
         <p>Problema: 
           
           <select id="ocorrencia" name="ocorrencia" required>
-            <option value="definir">Definir problema </option>
-            <option value="buraco">Buraco</option>
-            <option value="esgoto">Esgoto</option>
-            <option value="caçamba_abandonada" selected>Caçamba abandonada</option>
-            <option value="outros" selected>Outros</option>
+            <option value=""selected>Definir problema </option>
+            <option value="buraco" >Buraco</option>
+            <option value="lixo" >Lixo</option>
+            <option value="energia" >Falta de energia</option>
+            <option value="poste" >Poste</option>
+            <option value="outros" >Outros</option>
           </select>
         </p>
         <p>Endereço: <input id="Endereco" placeholder="Seu Endereço" type="text"name="Endereco" readonly /></p>
         <p hidden>Latitude: <input id="latitude"  type="text" name="latitude" /></p>
         <p hidden>Longitude: <input id="longitude" type="text" name="longitude" /></p>
-        <p>Descrição: <input id="descricao" placeholder="Insira sua descrição aqui" type="text" name="descricao" required/></p>
+        <p id="pdescricao" hidden>Descrição: <input id="descricao" placeholder="Insira sua descrição aqui" type="text" name="descricao" /></p>
        
 
           <p> 

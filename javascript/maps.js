@@ -20,6 +20,20 @@ let latTemporaria=0;
 let lngTemporaria=0;
 
 // Função de inicialização do mapa
+const styles = {
+  default: [],
+  hide: [
+    {
+      featureType: "poi.business",
+      stylers: [{ visibility: "off" }],
+    },
+    {
+      featureType: "transit",
+      elementType: "labels.icon",
+      stylers: [{ visibility: "off" }],
+    },
+  ],
+};
 
 function initMap() {
   if (navigator.geolocation) {
@@ -34,8 +48,10 @@ function initMap() {
     center: { lat: latInitial, lng: lngInitial },
     mapTypeControl: false,
     fullscreenControl: false,
+    styles: styles["hide"]
   });
 
+  
   // Inicialização do geocoder do Google Maps para conversão entre coordenadas e endereços
   geocoder = new google.maps.Geocoder();
   
@@ -94,6 +110,23 @@ function initMap() {
   submitButton.addEventListener("click", () =>
     geocode({ address: inputText.value })
   );
+
+  ocorrencia.addEventListener("click", () =>{
+
+    
+    console.log(document.getElementById("ocorrencia").value == "outros");
+    document.getElementById("descricao").setAttribute("required","required");
+    document.getElementById("pdescricao").removeAttribute("hidden");
+    document.getElementById("descricao").removeAttribute("hidden");
+   
+    if(document.getElementById("ocorrencia").value != "outros"){
+     document.getElementById("pdescricao").setAttribute("hidden", "hidden");
+     document.getElementById("descricao").setAttribute("hidden", "hidden");
+     document.getElementById("pdescricao").removeAttribute("required");
+     document.getElementById("descricao").removeAttribute("required");
+    }
+
+  });
 
   // Evento de clique no botão "New Request" para criar uma nova requisição de geocodificação
   createRequest.addEventListener("click", () => {
@@ -193,9 +226,9 @@ async function PegarUmaOcorrencia(id) {
       '<img width="200" height="200" src=' + ocorrencia.imagem + ' alt="">' +
       "<p> Status: " + ocorrencia.status + " </p>" +
       '<pre style="word-wrap: break-word;">'+  
-      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="'+ocorrencia.id+'upvote"  onclick="TrocarUpvote(' + userCPF + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
+      '<img width="25" height="25" src="' + Upvote(TemUpvote) + '" id="'+ocorrencia.id+'upvote"  onclick="TrocarUpvote(' + `'${userCPF}'` + "," + ocorrencia.id + "," + `'${Upvote(TemUpvote)}'` + ') "alt="upvote">' +
        '  ' + 
-      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="'+ocorrencia.id+'downvote"  onclick="TrocarDownvote(' + userCPF + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
+      '<img width="25" height="25" src="' + Downvote(TemDownvote) + '"  id="'+ocorrencia.id+'downvote"  onclick="TrocarDownvote(' + `'${userCPF}'` + "," + ocorrencia.id + "," + `'${Downvote(TemDownvote)}'` + ')" alt="downvote">' +
       '                     '+
       '<a href="mailto:? &subject=' + ocorrencia.ocorrencia + "&body=Descrição: " + ocorrencia.descricao + "%0AStatus: " + ocorrencia.status + " %0ALink para a imagem: " + ocorrencia.imagem + '">' +
       '<img width="25" height="25" src="../images/mail-outline.svg" alt="">' +
@@ -303,34 +336,54 @@ function pegar() {
 
 // Função para criar um marcador no mapa
 async function marcador(endereco, posicao, ocorrencia, id) {
-  imagem = await selecionaImagem(ocorrencia);
-    markers = new google.maps.Marker({
-      position: posicao,
-      map: map,
-      title: ocorrencia,
-      id: id,
-      icon:imagem
-    });
-  
-    // Evento de clique no marcador para exibir detalhes da ocorrência
-    markers.addListener("click", () => {
-      PegarUmaOcorrencia(id);
-    });
-  }
-  
-  async function selecionaImagem(ocorrencia){
-    let imagem;
-    switch (ocorrencia) {
-      case "aaaaa":
-        imagem='../images/like.svg'
-        break;
+  const imagem = await selecionaImagem(ocorrencia);
+
+  const markerIcon = {
+    url: imagem,
+    scaledSize: new google.maps.Size(30, 30), // Defina o tamanho do ícone aqui
+  };
+
+  const marker = new google.maps.Marker({
+    position: posicao,
+    map: map,
+    title: ocorrencia,
+    id: id,
+    icon: markerIcon,
+  });
+
+  // Evento de clique no marcador para exibir detalhes da ocorrência
+  marker.addListener("click", () => {
+    PegarUmaOcorrencia(id);
+  });
+}
+
+async function selecionaImagem(ocorrencia) {
+  let imagem;
+  switch (ocorrencia) {
     
-      default:
-        imagem=""
-        break;
-    }
-  return imagem
+
+      case "buraco":
+      imagem = '../images/buraco.svg';
+      break;
+
+      case "lixo":
+      imagem = '../images/lixo.svg';
+      break;
+
+      case "energia":
+      imagem = '../images/energia.svg';
+      break;
+
+      case "poste":
+      imagem = '../images/poste.svg';
+      break;
+
+    default:
+      imagem = '../images/padrao.svg';
+      break;
   }
+  return imagem;
+}
 // Função para realizar a geocodificação de um endereço ou coordenadas
 function geocode(request) {
   latTemporaria=request.location.lat();
