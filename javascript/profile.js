@@ -91,6 +91,12 @@ botao.appendChild(statusElement);
 
       let lngreq = document.getElementById("descricao-dialog");
       lngreq.textContent = elemento.descricao;
+      if(lngreq.textContent == ""){
+        document.getElementById("descricao-dialog").style.display = "none";
+        document.getElementById("descricao").style.display = "none";
+        
+      }
+     
 
       let status = document.getElementById("status-dialog");
       status.textContent = elemento.status;

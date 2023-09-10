@@ -5,6 +5,7 @@ body {
   padding: 0;
   font-family: Ubuntu, REM;
   font-weight: 800;
+  background-color: #f3f3f3;
 }
 #imagemcidade {
   height: 100%;
@@ -29,7 +30,7 @@ body {
 }
 
 .div-main {
-  background-color: #ffffff9c;
+  background-color: #f3f3f3;;
   display: flex;
   flex-direction:column;
   justify-content: flex-start; 
@@ -78,18 +79,30 @@ body {
 #problema {
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 15px;
   background-color: #fff;
+
+    justify-content: space-between;
+    align-items: center;
+}
+#problema h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 /* Estilos para o botão do diálogo */
 #problema button {
   font-family: inherit;
+  font-style: bold;
   font-weight: 600;
   margin: 10px;
   border-color: transparent;
   align-items: center;
   align-self: center;
+  color: red;
+  background-color: #fff;
+  margin-left: auto;
 }
 #problema img {
   margin-left: 10px;

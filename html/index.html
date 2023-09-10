@@ -31,7 +31,7 @@
           <select id="ocorrencia" name="ocorrencia" required>
             <option value=""selected>Definir problema </option>
             <option value="buraco" >Buraco</option>
-            <option value="lixo" >Lixo</option>
+            <option value="lixo " >Lixo</option>
             <option value="energia" >Falta de energia</option>
             <option value="poste" >Poste</option>
             <option value="outros" >Outros</option>
@@ -58,14 +58,11 @@
             onchange="previewImage()"
             />
           </div>
-            
-            
           </p>
-          <button onclick="cancel()">Cancelar</button>
+          <button onclick="cancel()" type="reset">Cancelar</button>
+          <button id="pegarlocal" onclick="PegarLocal()">Sua localização</button>
           <input type="submit">
         </form>
-        <button id="pegarlocal" onclick="PegarLocal()">Sua localização</button>
-
     </dialog>
 
     <div id="map" class="mapa"></div>
@@ -98,7 +95,7 @@
       <h2>Entrar</h2>
       <pre><p>CPF:  <input type="text" pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})" placeholder="Insira seu CPF xxx.xxx.xxx-xx" id="cpfLogin" required/></pre></p>
       <pre><p>Senha: <input type="password" placeholder="Inserir sua senha" id="senhalogin" type="password" autocomplete="current-password"required/></pre></p>
-      <button onclick="cancel()">Cancelar</button>
+      <button onclick="cancel()" type="reset">Cancelar</button>
       <input type="submit">
       <!-- <button onclick="logIn()">Confirmar</button> -->
     </form>
@@ -130,7 +127,7 @@
             />
           </div>
         </p>
-        <button onclick="cancel()" >Cancelar</button>
+        <button onclick="cancel()" type="reset" >Cancelar</button>
         <input type="submit">
       </form>
     </dialog>

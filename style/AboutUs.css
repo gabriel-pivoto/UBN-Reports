@@ -1,6 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=REM:wght@200&family=Ubuntu:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Karla:wght@700&family=REM:wght@200&family=Ubuntu:wght@300&display=swap");
 body {
-    margin: 35px;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #a0a0a0;
-  }
+  margin: 60px;
+  margin-bottom: 60px;
+  border: 20px;
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  background-color: #f3f3f3;
+  line-height: 1.8em;
+}
+h3 {
+  font-family: normal !important;
+}
+h1,
+h2,
+h3 {
+  text-align: center;
+}
+h2{
+  margin: 30px;
+}
+
+p {
+  margin: 0 0 15px;
+  font-style: normal;
+  line-height: 1.8em;
+  max-width: 100%;
+  text-align: left;
+  margin-bottom: 30px;
+}

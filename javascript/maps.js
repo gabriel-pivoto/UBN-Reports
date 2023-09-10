@@ -59,7 +59,7 @@ function initMap() {
   const modal = document.querySelector("dialog");
   const inputText = document.createElement("input");
   inputText.type = "text";
-  inputText.placeholder = "Enter a location";
+  inputText.placeholder = "Entre com uma localização";
 
   const submitButton = document.createElement("input");
   submitButton.type = "button";
@@ -363,23 +363,23 @@ async function selecionaImagem(ocorrencia) {
     
 
       case "buraco":
-      imagem = '../images/buraco.svg';
+      imagem = '../images/buraco.png';
       break;
 
       case "lixo":
-      imagem = '../images/lixo.svg';
+      imagem = '../images/lixo.png';
       break;
 
       case "energia":
-      imagem = '../images/energia.svg';
+      imagem = '../images/energia.png';
       break;
 
       case "poste":
-      imagem = '../images/poste.svg';
+      imagem = '../images/poste.png';
       break;
 
     default:
-      imagem = '../images/padrao.svg';
+      imagem = '../images/padrao.png';
       break;
   }
   return imagem;

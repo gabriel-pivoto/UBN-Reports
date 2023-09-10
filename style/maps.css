@@ -56,7 +56,7 @@ section .navbar:last-child{
   top: 3vh;
   right: 6vh;
   z-index: 9999;
-  background-color: #fbfbfb;
+  background-color: #d8c3c3;
   padding: 10px;
   border-radius: 12px;
 }
@@ -90,21 +90,21 @@ section .navbar:last-child{
 }
 .navbar li a:hover {
   color: blue;
-  background-color: rgb(232, 245, 245);
+  background-color: inherit;
 }
 
 .navbar li button {
   font-family: inherit;
   font-weight: inherit;
   border: none;
-  background-color: #fbfbfb;
+  background-color:inherit;
   cursor: pointer;
   font-size: 14px;
 }
 .navbar li button:hover {
   border: none;
   color: blue;
-  background-color: rgb(232, 245, 245);
+  background-color:inherit;
   cursor: pointer;
 }
 
