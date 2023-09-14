@@ -6,6 +6,7 @@ body {
   font-family: Ubuntu, REM;
   font-weight: 800;
   background-color: #f3f3f3;
+  line-height: 1.8em;
 }
 #imagemcidade {
   height: 100%;

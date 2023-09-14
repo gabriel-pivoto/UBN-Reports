@@ -21,24 +21,26 @@ section .navbar:last-child{
   font-family: Ubuntu, REM;
   font-weight: 600;
   position: absolute;
-  top: 10px;
+  top: 12px;
   right: 10px;
   width: 8vh;
   z-index: 9999;
   background-color: transparent;
   border-radius: 45%;
+  
 }
 
 .navbar-toggle {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: transparent;
   cursor: pointer;
   border: none;
   outline: none;
   padding: 0;
+  
 }
 
 .navbar-toggle img {
@@ -56,9 +58,12 @@ section .navbar:last-child{
   top: 3vh;
   right: 6vh;
   z-index: 9999;
-  background-color: #d8c3c3;
+  background-color: rgb(255, 246, 246);
   padding: 10px;
   border-radius: 12px;
+  font-size: 18px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  
 }
 
 .links.active {
@@ -67,10 +72,14 @@ section .navbar:last-child{
 
 .navbar-toggle.active ~ .links {
   display: block;
+  
 }
 .navbar li {
+  
+  line-height: 1.8em;
   list-style-type: none;
   text-align: left;
+  
 }
 
 .navbar li a {
