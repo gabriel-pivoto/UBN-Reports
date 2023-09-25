@@ -362,19 +362,19 @@ async function selecionaImagem(ocorrencia) {
   switch (ocorrencia) {
     
 
-      case "buraco":
+      case "Buraco na estrada":
       imagem = '../images/buraco.png';
       break;
 
-      case "lixo":
+      case "Lixo a céu aberto":
       imagem = '../images/lixo.png';
       break;
 
-      case "energia":
+      case "Falta de energia":
       imagem = '../images/energia.png';
       break;
 
-      case "poste":
+      case "Lâmpada do poste queimada":
       imagem = '../images/poste.png';
       break;
 
