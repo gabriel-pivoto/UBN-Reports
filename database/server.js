@@ -52,6 +52,43 @@ app.get("/ocorrencias", async (req, res) => {
   }
 });
 
+//pegar as correspondências no banco de dados das ocorrencias de acordo com a cidade
+app.get("/pegar/ocorrencias/:cidade", async (req, res) => {
+  try {
+    const { cidade } = req.params;
+    const ocorrenciaRef = db.collection("ocorrencias");
+    const docs = await ocorrenciaRef.get();
+    var resposta = "";
+    var contador = 0;
+    var possuiOcorrencia = false;
+
+    docs.forEach((doc) => {
+      if (contador > 0) { resposta += ","; }
+
+      parametro = JSON.stringify(doc.data()['Endereco']);
+
+      reclamacao = JSON.stringify(doc.data()['status']);
+
+      parametroReduzido = parametro.split(',')
+      parametro = parametroReduzido[2].slice(1)
+      if (cidade == parametro) {
+        resposta += JSON.stringify(doc.id) + ":" + reclamacao;
+        possuiOcorrencia = true;
+      }
+      contador++;
+    });
+    resposta = "{" + resposta + "}";
+    if (possuiOcorrencia) {
+      res.status(200).send(JSON.parse(resposta));
+    } else {
+      res.status(201).send();
+    }
+  } catch (err) {
+    res.status(500);
+  }
+});
+
+
 //verificar se o login e senha batem com algum valor já existente no banco de dados, retorna true caso encontre algo e false caso não encontre
 app.get("/login/:cpf/:senha", async (req, res) => {
   try {
