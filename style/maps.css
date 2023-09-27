@@ -21,8 +21,8 @@ section .navbar:last-child{
   font-family: Ubuntu, REM;
   font-weight: 600;
   position: absolute;
-  top: 12px;
-  right: 10px;
+  top: 24px;
+  right: 16px;
   width: 8vh;
   z-index: 9999;
   background-color: transparent;
@@ -58,7 +58,7 @@ section .navbar:last-child{
   top: 3vh;
   right: 6vh;
   z-index: 9999;
-  background-color: rgb(255, 246, 246);
+  background-color: rgb(148, 148, 148);
   padding: 10px;
   border-radius: 12px;
   font-size: 18px;

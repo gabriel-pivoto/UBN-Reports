@@ -6,23 +6,25 @@
     <script src="../javascript/maps.js"></script>
     <link rel="stylesheet" href="../style/maps.css" />
     <link rel="stylesheet" href="../style/profile.css" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   </head>
 
   <body>
-    
     <div class="navbar">
       <div class="navbar-toggle">
         <img
-        src="../style/pinguin.jpg"
-        alt="Menu"
-        class="navbar-icon"
-        id="imagemPerfil2"
+          src="../style/pinguin.jpg"
+          alt="Menu"
+          class="navbar-icon"
+          id="imagemPerfil2"
         />
       </div>
       <ul class="links">
         <li><button class="button-login" onclick="login()">Entrar</button></li>
-        <li><a href="http://127.0.0.1:5500/html/index.html">Página inicial</a></li>
+        <li>
+          <a href="http://127.0.0.1:5500/html/index.html">Página inicial</a>
+        </li>
         <li><a href="http://127.0.0.1:5500/html/AboutUs.html">Sobre nós</a></li>
         <li><button onclick="logout()">Sair</button></li>
       </ul>
@@ -48,36 +50,90 @@
       <img src="../images/imagem_da_cidade.png" alt="">
     </div> -->
     <div id="containersuper">
-      
       <div class="div-main">
-        <img src="../style/pinguin.jpg" alt="sua fotinha bebe" height="80em" width="80em" id="imagemPerfil"  />
+        <img
+          src="../style/pinguin.jpg"
+          alt="sua fotinha bebe"
+          height="80em"
+          width="80em"
+          id="imagemPerfil"
+        />
         <div class="paragraph">
-          <p>Nome: <span id="nome"></span></p>
-          <p>Email: <span id="email"></span></p>
-          <p>CPF: <span id="cpf"></span></p>
-          <p>N° ocorrências Total: <span id="contador">0</span></p>
-          <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+         <p><b> Usuário: </b><span id="nome"></span></p>
+          <p><b>Email: </b><span id="email"></span></p>
+          <p><b>CPF: </b><span id="cpf"></span></p>
+          <p><b>Número de Requisições: </b><span id="contador">0</span></p>
+          <canvas id="myChart" style="width: 100%; max-width: 600px"></canvas>
         </div>
       </div>
       <div>
-        <h2><pre> Requisições                                            Status</pre></h2>
-      
-      <div id="botaoContainer">
-        
-        <!-- Aqui os botões serão criados dinamicamente -->
-        
+        <h2>
+          <pre> <b> Requisições                               Status</b></pre>
+        </h2>
+
+        <div id="botaoContainer">
+          <!-- Aqui os botões serão criados dinamicamente -->
+        </div>
+
+       
+
+
+
       </div>
-    </div>
+
+      <div id="Statusgeral">
+        <div class="conteudo">
+          
+          <img
+          id="img"
+    src="../images/thinking.png"
+    alt="Menu"
+    margin-left="40px";
+    width="90px";
+    height="90px";
+    />
+          <div class="texto">
+            <p id="nota">Sem avaliação</p>
+            <p id="pontuacao1"><span id="pontuacao">0</span>/10</p>
+          </div>
+        </div>
+
+
+        <p style="width: 80%" data-value="80"><b>Requisições Solicitadas: </b><span id="porcentagemSolicitadas"></span></p>
+        <progress id="solicitadas" max="100" value="80" class="html5">
+          
+        </progress>
+
+
+        <p style="width: 80%" data-value="80"><b>Requisições em Análise:</b> <span id="porcentagemAnalise"></span></p>
+        <progress id="analise" max="100" value="80" class="html5">
+          
+        </progress>
+        <p style="width: 80%" data-value="80"><b>Requisições em Progresso: </b><span id="porcentagemProgresso"></span></p>
+        <progress id="progresso" max="100" value="80" class="html5">
+          
+        </progress>
+        <p style="width: 80%" data-value="80"><b>Requisições Finalizadas: </b><span id="porcentagemFinalizadas"></span></p>
+        <progress id="finalizadas" max="100" value="80" class="html5">
+      
+        </progress>
+      </div>
+      
       <dialog id="problema">
         <h2>Ocorrencia<button onclick="Fechar()">X</button></h2>
         <p>Ocorrencia: <span id="ocorrencia-dialog"></span></p>
         <p>Endereço: <span id="endereco-dialog"></span></p>
         <p id="descricao">Descricao: <span id="descricao-dialog"></span></p>
-        <p>Imagem: </p><img width="200" height="200" id="imagem" src="" alt="imagem ocorrencia">
+        <p>Imagem:</p>
+        <img
+          width="200"
+          height="200"
+          id="imagem"
+          src=""
+          alt="imagem ocorrencia"
+        />
         <p>Status: <span id="status-dialog"></span></p>
-  
       </dialog>
     </div>
-    
   </body>
 </html>

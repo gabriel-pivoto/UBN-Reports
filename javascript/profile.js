@@ -2,6 +2,7 @@ const req = new XMLHttpRequest();
 const isLoggedIn = localStorage.getItem("isLoggedIn");
 const userCPF = localStorage.getItem("userCPF");
 const senha = localStorage.getItem("userCPF");
+let x = 0;
 const statusRequisições = [
   "Solicitada",
   "Em Analise",
@@ -9,6 +10,7 @@ const statusRequisições = [
   "Finalizada",
 ];
 let numeroStatusRequisições = [0, 0, 0, 0];
+let numeroStatusRequisiçõesCidade = [0, 0, 0, 0];
 let contador1 = 0;
 
 function historicodereq() {
@@ -25,11 +27,12 @@ function historicodereq() {
     if (req.status === 200) {
       const responseObj = JSON.parse(req.response);
 
-      console.log(responseObj);
+      // console.log(responseObj);
       if (JSON.parse(req.response)) {
         criarBotoes(responseObj);
       }
       perfil();
+      
     } else {
       console.log("Erro na requisição. Código de status:", req.status);
       alert("Preencha todos os campos corretamente!");
@@ -44,9 +47,9 @@ function criarBotoes(responseObj) {
 
   // Limpa o conteúdo da div, caso já existam botões criados anteriormente
   botaoContainer.innerHTML = "";
-
   // Itera sobre o array de elementos
   responseObj.forEach((elemento, index) => {
+    
     contador1 += 1;
     const contadorreq = document.getElementById("contador");
     contadorreq.textContent = contador1;
@@ -72,7 +75,14 @@ function criarBotoes(responseObj) {
     botao.style.display = 'flex';
     botao.style.justifyContent = 'center';
     botao.style.alignItems = 'center';
-
+    
+    if(x == 0){
+      botao.style.backgroundColor = 'rgb(148, 148, 148)';
+      x = 1;
+    }else if(x == 1){
+      botao.style.backgroundColor = 'white';
+      x = 0;
+    }
 const statusElement = document.createElement('span');
 statusElement.innerText = elemento.status;
 statusElement.style.marginLeft = 'auto';
@@ -87,7 +97,7 @@ botao.appendChild(statusElement);
       let enderecoreq = document.getElementById("endereco-dialog");
       enderecoreq.textContent = elemento.Endereco;
 
-      console.log(elemento);
+      // console.log(elemento);
 
       let lngreq = document.getElementById("descricao-dialog");
       lngreq.textContent = elemento.descricao;
@@ -129,7 +139,7 @@ function perfil() {
   requisicao.onload = function () {
     if (requisicao.status === 200) {
       const responseObj = JSON.parse(requisicao.response);
-      console.log(responseObj.imagem);
+      
 
       const nome = document.getElementById("nome");
       nome.textContent = responseObj.user;
@@ -165,6 +175,8 @@ function perfil() {
             display: true,
             text: "Suas Requisições",
             fontColor: "Black",
+            fontSize: 15,
+            
           },
           legend: {
             display: true,
@@ -190,4 +202,87 @@ function perfil() {
     }
   };
   requisicao.send();
+}
+
+StatusCidade();
+function StatusCidade(){
+
+  const requisicao = new XMLHttpRequest();
+  requisicao.open("GET", "http://localhost:5000/pegar/ocorrencias/Santa Rita do Sapucaí - MG");
+  requisicao.setRequestHeader("Content-type", "application/json");
+
+  requisicao.onload = function () {
+    const responseObj = JSON.parse(requisicao.response);
+    
+    a(responseObj);
+    
+
+    if (requisicao.status === 200) {
+      
+    } else {
+      console.log("Erro na requisição. Código de status:", requisicao.status);
+    }
+  };
+  requisicao.send();
+}
+
+function a(responseObj){
+  let soma = 0;
+  Object.values(responseObj).forEach((elemento) => {
+ 
+    if (elemento == "Solicitada") {
+      numeroStatusRequisiçõesCidade[0] += 1;
+    } else if (elemento == "Em Analise") {
+      numeroStatusRequisiçõesCidade[1] += 1;
+    } else if (elemento == "Em Progresso") {
+      numeroStatusRequisiçõesCidade[2] += 1;
+    } else if (elemento == "Finalizada") {
+      numeroStatusRequisiçõesCidade[3] += 1;
+    }
+
+
+    
+    console.log(numeroStatusRequisiçõesCidade);
+   
+  });
+  soma = numeroStatusRequisiçõesCidade[0] + numeroStatusRequisiçõesCidade[1] + numeroStatusRequisiçõesCidade[2] + numeroStatusRequisiçõesCidade[3];
+
+  document.getElementById("solicitadas").value = (numeroStatusRequisiçõesCidade[0]/soma)*100;
+  document.getElementById("porcentagemSolicitadas").textContent = parseFloat([(numeroStatusRequisiçõesCidade[0]/soma)*100]).toFixed(2) + "%";
+  
+  document.getElementById("analise").value = (numeroStatusRequisiçõesCidade[1]/soma)*100;
+  document.getElementById("porcentagemAnalise").textContent = parseFloat([(numeroStatusRequisiçõesCidade[1]/soma)*100]).toFixed(2) + "%";
+
+  document.getElementById("progresso").value = (numeroStatusRequisiçõesCidade[2]/soma)*100;
+  document.getElementById("porcentagemProgresso").textContent = parseFloat([(numeroStatusRequisiçõesCidade[2]/soma)*100]).toFixed(2) + "%";
+
+  document.getElementById("finalizadas").value = (numeroStatusRequisiçõesCidade[3]/soma)*100;
+  document.getElementById("porcentagemFinalizadas").textContent = parseFloat([(numeroStatusRequisiçõesCidade[3]/soma)*100]).toFixed(2) + "%";
+
+ if([(numeroStatusRequisiçõesCidade[0]/soma)*100] >= 70 && ((numeroStatusRequisiçõesCidade[3]/soma)*100) <= 60){
+    document.getElementById("pontuacao").textContent = "1";
+    document.getElementById("nota").textContent = "Péssimo";
+    document.getElementById("img").setAttribute("src", "../images/angry.png");
+
+ }
+else if([(numeroStatusRequisiçõesCidade[0]/soma)*100] >= 40 && ((numeroStatusRequisiçõesCidade[3]/soma)*100) <= 60){
+    document.getElementById("pontuacao").textContent = "3";
+    document.getElementById("nota").textContent = "Ruim";
+    document.getElementById("img").setAttribute("src", "../images/sad.png");
+  }
+  else if([(numeroStatusRequisiçõesCidade[0]/soma)*100] <= 40 && ((numeroStatusRequisiçõesCidade[3]/soma)*100) <= 60){
+    document.getElementById("pontuacao").textContent = "6";
+    document.getElementById("nota").textContent = "Ruim";
+    document.getElementById("img").setAttribute("src", "../images/sad.png");
+  }
+  else if([(numeroStatusRequisiçõesCidade[0]/soma)*100] <= 20 && ((numeroStatusRequisiçõesCidade[3]/soma)*100) >= 60){
+    document.getElementById("pontuacao").textContent = "8";
+    document.getElementById("nota").textContent = "Bom";
+    document.getElementById("img").setAttribute("src", "../images/smiling.png");
+  }
+  else if([(numeroStatusRequisiçõesCidade[0]/soma)*100] <= 20 && ((numeroStatusRequisiçõesCidade[3]/soma)*100) >= 100){
+    document.getElementById("pontuacao").textContent = "10";
+    document.getElementById("nota").textContent = "Ótimo";
+    document.getElementById("img").setAttribute("src", "../images/happy.png");
+  }
 }

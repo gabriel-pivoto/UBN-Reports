@@ -1,37 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=REM:wght@200&family=Ubuntu:wght@300&display=swap');
-
+@import url('https://fonts.googleapis.com/css?family=Expletus+Sans');
 body {
   margin: 0;
   padding: 0;
   font-family: Ubuntu, REM;
-  font-weight: 800;
-  background-color: #f3f3f3;
+  font-weight: 400;
+  background-color: #efefee;
   line-height: 1.8em;
 }
-#imagemcidade {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  margin: 0px;
+b{
+  font-weight: 900;
 }
-#imagemcidade img{
-  height: 100%;
-  width: 100%;
-  margin: 0px;
-}
-
 #containersuper {
+  margin-top: 0;
+  padding-top: 0;
+  height: 80%;
+  padding: 20px;
   position: relative;
   z-index: 999;
   display: flex;
   flex-direction: row;
+  
 }
 
 .div-main {
-  background-color: #f3f3f3;;
+  
+  
+  background-color: #fff;
   display: flex;
   flex-direction:column;
   justify-content: flex-start; 
@@ -39,15 +34,16 @@ body {
   padding: 10px;
   text-align: left;
   margin-right: 10px;
-  border-right: 2px solid rgb(13, 231, 243)
+  border: 2px solid rgb(35, 35, 35);
+  color: black;
 }
 
 .div-main img {
   
   border-radius: 50%;
-  height: 180px;
-  width: 180px;
-  margin-left: 25%;
+  height: 150px;
+  width: 150px;
+  margin-left: 30%;
   flex-shrink: 0; /* Prevent image from shrinking */
 }
 
@@ -61,7 +57,7 @@ body {
 
 .paragraph p {
   margin: 10px 10px;
-  color: black;
+  color: inherit;
   align-self: flex-start;
 }
 
@@ -106,13 +102,14 @@ body {
   margin-left: auto;
 }
 #problema img {
-  margin-left: 10px;
+  margin-left: 9px;
   align-items: center;
   align-self: center;
 }
 
 
 #botaoContainer {
+  padding: 20px;
   float:inline-start;
   display: flex;
   flex-direction: column;
@@ -144,4 +141,85 @@ body {
 #botao{
   font-family: inherit;
   font-weight: inherit;
+}
+
+/* Styling an indeterminate progress bar */
+
+progress:not(value) {
+  /* Add your styles here. As part of this walkthrough we will focus only on determinate progress bars. */
+}
+
+/* Styling the determinate progress element */
+
+progress[value] {
+  /* Get rid of the default appearance */
+  appearance: none;
+  
+  /* This unfortunately leaves a trail of border behind in Firefox and Opera. We can remove that by setting the border to none. */
+  border: none;
+  
+  /* Add dimensions */
+  width: 15em; height: 1em;
+  
+  /* Although firefox doesn't provide any additional pseudo class to style the progress element container, any style applied here works on the container. */
+    background-color: whiteSmoke;
+    border-radius: 3px;
+    box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+  
+  /* Of all IE, only IE10 supports progress element that too partially. It only allows to change the background-color of the progress value using the 'color' attribute. */
+  color: royalblue;
+  
+  position: relative;
+  margin: 0 0 1.5em; 
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: whiteSmoke;
+  border-radius: 3px;
+  box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+}
+
+progress[value]::-webkit-progress-value {
+  position: relative;
+  
+  background-size: 35px 20px, 100% 100%, 100% 100%;
+  border-radius:3px;
+  
+  /* Let's animate this */
+  animation: animate-stripes 5s linear infinite;
+}
+
+#Statusgeral {
+  border: 2px solid rgb(35, 35, 35);
+  color: black;
+  background-color: rgb(255, 255, 255);
+  
+  margin-left: 10px;
+  width: 320px;
+  float: right;
+  padding: 15px;
+}
+
+
+.conteudo {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: space-between;
+  width: 190px;
+}
+
+
+#nota {
+  font-size: 30px; /* Definimos o tamanho da fonte para 20px */
+  font-weight: 900; /* Definimos o estilo da fonte como negrito */
+}
+#pontuacao, #pontuacao1{
+  font-size: 20px;
+  margin-left: 2px;
+  font-weight: 900;
+}
+
+h2 pre b {
+  font-size: 25px;
 }
